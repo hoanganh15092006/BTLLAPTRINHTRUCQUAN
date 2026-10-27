@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Data;
 using System.Data.SqlClient;
 using System.Drawing;
@@ -7,12 +7,15 @@ using System.Windows.Forms;
 
 namespace QLBanMayViTinh.Classes
 {
-
     public static class Functions
     {
-
         public static string ConnString = @"Data Source=.\SQLEXPRESS01;Initial Catalog=QLBanMayViTinh;Integrated Security=True";
         public static SqlConnection Conn = null;
+
+        public static string CurrentUsername = "admin";
+        public static string CurrentFullName = "Quản Trị Viên";
+        public static string CurrentRole = "Admin";
+        public static string CurrentMaNV = "NV01";
 
         public static void Connect()
         {
@@ -41,6 +44,7 @@ namespace QLBanMayViTinh.Classes
 
                     Conn = testConn;
                     ConnString = testStr;
+                    EnsureSystemTables();
                     return;
                 }
                 catch (Exception ex)
@@ -54,6 +58,114 @@ namespace QLBanMayViTinh.Classes
                             "Vui lòng đảm bảo SQL Server đã bật và CSDL QLBanMayViTinh đã được tạo.\n" +
                             "Chi tiết lỗi: " + (lastException != null ? lastException.Message : ""),
                             "Lỗi Kết Nối CSDL", MessageBoxButtons.OK, MessageBoxIcon.Error);
+        }
+
+        public static void EnsureSystemTables()
+        {
+            if (Conn == null || Conn.State != ConnectionState.Open)
+                return;
+
+            try
+            {
+                string sqlCheckTables = @"
+                IF NOT EXISTS (SELECT 1 FROM sys.tables WHERE name = 'tblTaiKhoan')
+                BEGIN
+                    CREATE TABLE tblTaiKhoan (
+                        TenDangNhap NVARCHAR(50) NOT NULL PRIMARY KEY,
+                        MatKhauHash NVARCHAR(255) NOT NULL,
+                        Salt NVARCHAR(100) NOT NULL,
+                        MaNV NVARCHAR(20) NULL,
+                        VaiTro NVARCHAR(50) NOT NULL DEFAULT 'BanHang',
+                        TrangThai NVARCHAR(50) NOT NULL DEFAULT N'Hoạt động',
+                        NgayTao DATETIME NOT NULL DEFAULT GETDATE()
+                    );
+                END;
+
+                IF NOT EXISTS (SELECT 1 FROM sys.tables WHERE name = 'tblNhatKyHoatDong')
+                BEGIN
+                    CREATE TABLE tblNhatKyHoatDong (
+                        Id INT IDENTITY(1,1) PRIMARY KEY,
+                        TenDangNhap NVARCHAR(50) NULL,
+                        HanhDong NVARCHAR(100) NOT NULL,
+                        ThoiGian DATETIME NOT NULL DEFAULT GETDATE(),
+                        ChiTiet NVARCHAR(500) NULL
+                    );
+                END;
+
+                IF NOT EXISTS (SELECT 1 FROM sys.tables WHERE name = 'tblCauHinhHeThong')
+                BEGIN
+                    CREATE TABLE tblCauHinhHeThong (
+                        KeyName NVARCHAR(100) NOT NULL PRIMARY KEY,
+                        KeyValue NVARCHAR(1000) NULL
+                    );
+                END;";
+
+                using (SqlCommand cmd = new SqlCommand(sqlCheckTables, Conn))
+                {
+                    cmd.ExecuteNonQuery();
+                }
+
+                string countUsers = "SELECT COUNT(*) FROM tblTaiKhoan";
+                int count = 0;
+                using (SqlCommand cmd = new SqlCommand(countUsers, Conn))
+                {
+                    object obj = cmd.ExecuteScalar();
+                    if (obj != null) int.TryParse(obj.ToString(), out count);
+                }
+
+                if (count == 0)
+                {
+                    string salt;
+                    string hash = SecurityHelper.HashPassword("Admin@123", out salt);
+                    string insertAdmin = string.Format(
+                        "INSERT INTO tblTaiKhoan (TenDangNhap, MatKhauHash, Salt, MaNV, VaiTro, TrangThai, NgayTao) " +
+                        "VALUES (N'admin', N'{0}', N'{1}', N'NV01', 'Admin', N'Hoạt động', GETDATE())",
+                        hash, salt);
+
+                    using (SqlCommand cmd = new SqlCommand(insertAdmin, Conn))
+                    {
+                        cmd.ExecuteNonQuery();
+                    }
+
+                    string staffSalt;
+                    string staffHash = SecurityHelper.HashPassword("Staff@123", out staffSalt);
+                    string insertStaff = string.Format(
+                        "INSERT INTO tblTaiKhoan (TenDangNhap, MatKhauHash, Salt, MaNV, VaiTro, TrangThai, NgayTao) " +
+                        "VALUES (N'banhang', N'{0}', N'{1}', N'NV02', 'BanHang', N'Hoạt động', GETDATE()), " +
+                        "(N'thukho', N'{0}', N'{1}', N'NV03', 'ThuKho', N'Hoạt động', GETDATE())",
+                        staffHash, staffSalt);
+
+                    using (SqlCommand cmd = new SqlCommand(insertStaff, Conn))
+                    {
+                        cmd.ExecuteNonQuery();
+                    }
+                }
+            }
+            catch
+            {
+            }
+        }
+
+        public static void LogAction(string action, string detail)
+        {
+            try
+            {
+                Connect();
+                if (Conn == null || Conn.State != ConnectionState.Open) return;
+
+                string user = string.IsNullOrEmpty(CurrentUsername) ? "system" : CurrentUsername;
+                string sql = "INSERT INTO tblNhatKyHoatDong (TenDangNhap, HanhDong, ThoiGian, ChiTiet) VALUES (@u, @a, GETDATE(), @d)";
+                using (SqlCommand cmd = new SqlCommand(sql, Conn))
+                {
+                    cmd.Parameters.AddWithValue("@u", user);
+                    cmd.Parameters.AddWithValue("@a", action ?? "");
+                    cmd.Parameters.AddWithValue("@d", detail ?? "");
+                    cmd.ExecuteNonQuery();
+                }
+            }
+            catch
+            {
+            }
         }
 
         public static void Disconnect()

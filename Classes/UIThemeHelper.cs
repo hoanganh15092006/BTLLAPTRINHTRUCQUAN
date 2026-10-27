@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Reflection;
@@ -6,18 +6,18 @@ using System.Windows.Forms;
 
 namespace QLBanMayViTinh.Classes
 {
-
     public static class UIThemeHelper
     {
+        public static bool IsDarkMode = false;
 
-        public static readonly Color ColorBackground = Color.FromArgb(241, 245, 249);
-        public static readonly Color ColorCard = Color.White;
-        public static readonly Color ColorBorder = Color.FromArgb(226, 232, 240);
-        public static readonly Color ColorBorderFocus = Color.FromArgb(99, 102, 241);
+        public static Color ColorBackground => IsDarkMode ? Color.FromArgb(30, 41, 59) : Color.FromArgb(241, 245, 249);
+        public static Color ColorCard => IsDarkMode ? Color.FromArgb(51, 65, 85) : Color.White;
+        public static Color ColorBorder => IsDarkMode ? Color.FromArgb(71, 85, 105) : Color.FromArgb(226, 232, 240);
+        public static Color ColorBorderFocus => Color.FromArgb(99, 102, 241);
 
-        public static readonly Color ColorTextPrimary = Color.FromArgb(15, 23, 42);
-        public static readonly Color ColorTextSecondary = Color.FromArgb(100, 116, 139);
-        public static readonly Color ColorTextMuted = Color.FromArgb(148, 163, 184);
+        public static Color ColorTextPrimary => IsDarkMode ? Color.FromArgb(248, 250, 252) : Color.FromArgb(15, 23, 42);
+        public static Color ColorTextSecondary => IsDarkMode ? Color.FromArgb(203, 213, 225) : Color.FromArgb(100, 116, 139);
+        public static Color ColorTextMuted => Color.FromArgb(148, 163, 184);
 
         public static readonly Color ColorSidebar = Color.FromArgb(15, 23, 42);
         public static readonly Color ColorSidebarLogo = Color.FromArgb(10, 15, 30);
@@ -39,11 +39,11 @@ namespace QLBanMayViTinh.Classes
         public static readonly Color BtnInExcelColor = Color.FromArgb(5, 150, 105);
         public static readonly Color BtnDongColor = Color.FromArgb(71, 85, 105);
 
-        public static readonly Color ColorHeaderGrid = Color.FromArgb(30, 41, 59);
-        public static readonly Color ColorRowEven = Color.White;
-        public static readonly Color ColorRowOdd = Color.FromArgb(248, 250, 252);
-        public static readonly Color ColorRowSelected = Color.FromArgb(224, 231, 255);
-        public static readonly Color ColorRowSelectedText = Color.FromArgb(30, 27, 75);
+        public static Color ColorHeaderGrid => IsDarkMode ? Color.FromArgb(15, 23, 42) : Color.FromArgb(30, 41, 59);
+        public static Color ColorRowEven => IsDarkMode ? Color.FromArgb(51, 65, 85) : Color.White;
+        public static Color ColorRowOdd => IsDarkMode ? Color.FromArgb(40, 53, 72) : Color.FromArgb(248, 250, 252);
+        public static Color ColorRowSelected => IsDarkMode ? Color.FromArgb(67, 56, 202) : Color.FromArgb(224, 231, 255);
+        public static Color ColorRowSelectedText => IsDarkMode ? Color.White : Color.FromArgb(30, 27, 75);
 
         public static void SetDoubleBuffered(Control control)
         {
@@ -107,7 +107,7 @@ namespace QLBanMayViTinh.Classes
             txt.BorderStyle = BorderStyle.FixedSingle;
             txt.Font = new Font("Segoe UI", 9.5F);
             txt.ForeColor = ColorTextPrimary;
-            txt.BackColor = Color.White;
+            txt.BackColor = IsDarkMode ? Color.FromArgb(40, 53, 72) : Color.White;
         }
 
         public static void StyleComboBox(ComboBox cbo)
@@ -116,7 +116,7 @@ namespace QLBanMayViTinh.Classes
             cbo.FlatStyle = FlatStyle.Flat;
             cbo.Font = new Font("Segoe UI", 9.5F);
             cbo.ForeColor = ColorTextPrimary;
-            cbo.BackColor = Color.White;
+            cbo.BackColor = IsDarkMode ? Color.FromArgb(40, 53, 72) : Color.White;
             cbo.DropDownHeight = 220;
         }
 
@@ -125,10 +125,10 @@ namespace QLBanMayViTinh.Classes
             if (dgv == null) return;
             SetDoubleBuffered(dgv);
 
-            dgv.BackgroundColor = Color.White;
+            dgv.BackgroundColor = ColorCard;
             dgv.BorderStyle = BorderStyle.None;
             dgv.CellBorderStyle = DataGridViewCellBorderStyle.SingleHorizontal;
-            dgv.GridColor = Color.FromArgb(241, 245, 249);
+            dgv.GridColor = ColorBorder;
 
             dgv.EnableHeadersVisualStyles = false;
             dgv.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.None;
@@ -147,7 +147,7 @@ namespace QLBanMayViTinh.Classes
             dgv.DefaultCellStyle.Padding = new Padding(6, 2, 6, 2);
 
             dgv.AlternatingRowsDefaultCellStyle.BackColor = ColorRowOdd;
-            dgv.RowTemplate.Height = 32;
+            dgv.RowTemplate.Height = 34;
             dgv.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dgv.MultiSelect = false;
             dgv.AllowUserToResizeRows = false;

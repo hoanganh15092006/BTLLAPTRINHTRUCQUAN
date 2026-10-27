@@ -47,6 +47,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Classes\Functions.cs" />
+    <Compile Include="Classes\SecurityHelper.cs" />
     <Compile Include="Classes\UIThemeHelper.cs" />
     <Compile Include="Testing\SelfTestSuite.cs" />
     <Compile Include="Forms\frmMain.cs">
@@ -85,6 +86,54 @@
     <Compile Include="Forms\frmBaoCaoThongKe.Designer.cs">
       <DependentUpon>frmBaoCaoThongKe.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\frmDangNhap.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\frmDangNhap.Designer.cs">
+      <DependentUpon>frmDangNhap.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\frmDangKy.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\frmDangKy.Designer.cs">
+      <DependentUpon>frmDangKy.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\frmQuenMatKhau.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\frmQuenMatKhau.Designer.cs">
+      <DependentUpon>frmQuenMatKhau.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\frmHoSoCaNhan.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\frmHoSoCaNhan.Designer.cs">
+      <DependentUpon>frmHoSoCaNhan.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\frmQuanLyNguoiDung.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\frmQuanLyNguoiDung.Designer.cs">
+      <DependentUpon>frmQuanLyNguoiDung.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\frmDanhMucHeThong.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\frmDanhMucHeThong.Designer.cs">
+      <DependentUpon>frmDanhMucHeThong.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\frmCaiDat.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\frmCaiDat.Designer.cs">
+      <DependentUpon>frmCaiDat.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\frmNhatKyHoatDong.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\frmNhatKyHoatDong.Designer.cs">
+      <DependentUpon>frmNhatKyHoatDong.cs</DependentUpon>
+    </Compile>
     <Compile Include="Program.cs" />
     <EmbeddedResource Include="Forms\frmMain.resx">
       <DependentUpon>frmMain.cs</DependentUpon>
@@ -103,6 +152,30 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\frmBaoCaoThongKe.resx">
       <DependentUpon>frmBaoCaoThongKe.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\frmDangNhap.resx">
+      <DependentUpon>frmDangNhap.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\frmDangKy.resx">
+      <DependentUpon>frmDangKy.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\frmQuenMatKhau.resx">
+      <DependentUpon>frmQuenMatKhau.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\frmHoSoCaNhan.resx">
+      <DependentUpon>frmHoSoCaNhan.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\frmQuanLyNguoiDung.resx">
+      <DependentUpon>frmQuanLyNguoiDung.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\frmDanhMucHeThong.resx">
+      <DependentUpon>frmDanhMucHeThong.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\frmCaiDat.resx">
+      <DependentUpon>frmCaiDat.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\frmNhatKyHoatDong.resx">
+      <DependentUpon>frmNhatKyHoatDong.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

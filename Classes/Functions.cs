@@ -25,7 +25,8 @@ namespace QLBanMayViTinh.Classes
                 @".\SQLEXPRESS",
                 @".",
                 @"localhost",
-                @"(local)"
+                @"(local)",
+                @"DESKTOP-HQLKIT4\EXALAPTOP"
             };
 
             string dbName = "QLBanMayViTinh";
@@ -49,11 +50,13 @@ namespace QLBanMayViTinh.Classes
                 }
             }
 
-            MessageBox.Show("Không thể kết nối đến CSDL SQL Server '" + dbName + "'!\n" +
-                            "Hệ thống đã thử các instance (.\\SQLEXPRESS01, .\\SQLEXPRESS, ., localhost) nhưng không thành công.\n\n" +
-                            "Vui lòng đảm bảo SQL Server đã bật và CSDL QLBanMayViTinh đã được tạo.\n" +
-                            "Chi tiết lỗi: " + (lastException != null ? lastException.Message : ""),
-                            "Lỗi Kết Nối CSDL", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            MessageBox.Show(
+                "Không thể kết nối đến CSDL SQL Server '" + dbName + "'!\n" +
+                "Hệ thống đã thử các instance (.\\SQLEXPRESS01, .\\SQLEXPRESS, ., localhost) nhưng không thành công.\n\n" +
+                "Vui lòng đảm bảo SQL Server đã bật và CSDL QLBanMayViTinh đã được tạo.\n\n" +
+                "Chi tiết lỗi: " + (lastException != null ? lastException.Message : ""),
+                "Lỗi Kết Nối CSDL", MessageBoxButtons.OK, MessageBoxIcon.Error
+                );
         }
 
         public static void Disconnect()
@@ -82,8 +85,12 @@ namespace QLBanMayViTinh.Classes
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Lỗi thực thi truy vấn lấy dữ liệu:\n" + ex.Message + "\nSQL: " + sql,
-                                "Lỗi Truy Vấn", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(
+                    "Lỗi thực thi truy vấn lấy dữ liệu:\n" + ex.Message + "\nSQL: " + sql,
+                    "Lỗi Truy Vấn", 
+                    MessageBoxButtons.OK, 
+                    MessageBoxIcon.Error
+                    );
             }
             return table;
         }
@@ -102,8 +109,12 @@ namespace QLBanMayViTinh.Classes
             {
                 if (showMessageBox)
                 {
-                    MessageBox.Show("Lỗi thực thi câu lệnh SQL:\n" + ex.Message + "\nSQL: " + sql,
-                                    "Lỗi SQL", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show(
+                        "Lỗi thực thi câu lệnh SQL:\n" + ex.Message + "\nSQL: " + sql,
+                        "Lỗi SQL", 
+                        MessageBoxButtons.OK, 
+                        MessageBoxIcon.Error
+                        );
                 }
                 throw;
             }
@@ -123,17 +134,31 @@ namespace QLBanMayViTinh.Classes
             {
                 if (ex.Number == 547)
                 {
-                    MessageBox.Show("Dữ liệu này đang được tham chiếu ở bảng khác, bạn không thể xóa!",
-                                    "Cảnh Báo Ràng Buộc", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    MessageBox.Show(
+                        "Dữ liệu này đang được tham chiếu ở bảng khác, bạn không thể xóa!",
+                        "Cảnh Báo Ràng Buộc", 
+                        MessageBoxButtons.OK, 
+                        MessageBoxIcon.Warning
+                        );
                 }
                 else
                 {
-                    MessageBox.Show("Lỗi xóa dữ liệu: " + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show(
+                        "Lỗi xóa dữ liệu: " + ex.Message, 
+                        "Lỗi", 
+                        MessageBoxButtons.OK, 
+                        MessageBoxIcon.Error
+                        );
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Lỗi: " + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(
+                    "Lỗi: " + ex.Message, 
+                    "Lỗi",
+                    MessageBoxButtons.OK, 
+                    MessageBoxIcon.Error
+                    );
             }
         }
 
@@ -154,7 +179,12 @@ namespace QLBanMayViTinh.Classes
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Lỗi kiểm tra khóa: " + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(
+                    "Lỗi kiểm tra khóa: " + ex.Message,
+                    "Lỗi",
+                    MessageBoxButtons.OK, 
+                    MessageBoxIcon.Error
+                    );
             }
             return exists;
         }
@@ -178,7 +208,12 @@ namespace QLBanMayViTinh.Classes
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Lỗi lấy giá trị trường: " + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(
+                    "Lỗi lấy giá trị trường: " + ex.Message,
+                    "Lỗi",
+                    MessageBoxButtons.OK, 
+                    MessageBoxIcon.Error
+                    );
             }
             return ma;
         }
@@ -195,7 +230,12 @@ namespace QLBanMayViTinh.Classes
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Lỗi nạp ComboBox: " + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(
+                    "Lỗi nạp ComboBox: " + ex.Message, 
+                    "Lỗi", 
+                    MessageBoxButtons.OK, 
+                    MessageBoxIcon.Error
+                    );
             }
         }
 
@@ -251,8 +291,10 @@ namespace QLBanMayViTinh.Classes
         public static string ChuyenSoSangChu(double gSo)
         {
             if (gSo == 0) return "Không đồng";
+
             string[] chuSo = new string[10] { "không", "một", "hai", "ba", "bốn", "năm", "sáu", "bảy", "tám", "chín" };
             string[] tien = new string[6] { "", " nghìn", " triệu", " tỷ", " nghìn tỷ", " triệu tỷ" };
+
             int i, donvi, chuc, tram;
             string s = " ", tach = "";
             double so = Math.Abs(gSo);

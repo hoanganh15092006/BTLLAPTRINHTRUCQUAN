@@ -110,8 +110,7 @@ namespace QLBanMayViTinh.Forms
             this.lblSub.Name = "lblSub";
             this.lblSub.Size = new System.Drawing.Size(700, 20);
             this.lblSub.TabIndex = 1;
-            this.lblSub.Text = "Quản lý tập trung các danh mục đối tác, nhân sự và linh kiện máy tính dùng chung " +
-    "trong CSDL 3NF";
+            this.lblSub.Text = "Quản lý tập trung các danh mục đối tác, nhân sự và linh kiện máy tính dùng chung trong CSDL 3NF";
             this.lblTitle.Font = new System.Drawing.Font("Segoe UI", 16F, System.Drawing.FontStyle.Bold);
             this.lblTitle.ForeColor = System.Drawing.Color.FromArgb(15, 23, 42);
             this.lblTitle.Location = new System.Drawing.Point(22, 10);

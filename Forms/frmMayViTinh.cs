@@ -1,4 +1,5 @@
-﻿using System;
+using System;
+using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.IO;
@@ -18,6 +19,9 @@ namespace QLBanMayViTinh.Forms
 
         private void frmMayViTinh_Load(object sender, EventArgs e)
         {
+            if (this.DesignMode || LicenseManager.UsageMode == LicenseUsageMode.Designtime)
+                return;
+
             UIThemeHelper.StyleCard(pnlHardwareCard);
             UIThemeHelper.StyleCard(pnlMediaCard);
             UIThemeHelper.StyleCard(pnlToolbar);

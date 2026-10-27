@@ -38,11 +38,13 @@ namespace QLBanMayViTinh.Forms
 
             UpdateClock();
             InitSidebarButtons();
+            ApplyBentoStyles();
             ApplyRBAC();
 
             lblUserRole.Text = "👤 " + Functions.CurrentFullName + " (" + Functions.CurrentRole + ")";
 
-            btnNavDashboard.PerformClick();
+            ShowDashboard();
+            ActivateSidebarButton(btnNavDashboard);
         }
 
         private void ApplyRBAC()
@@ -53,12 +55,31 @@ namespace QLBanMayViTinh.Forms
                 btnNavHDNhap.Visible = false;
                 btnNavNguoiDung.Visible = false;
                 btnNavCaiDat.Visible = false;
+                btnBentoHDNhap.Enabled = false;
             }
             else if (role == "ThuKho")
             {
                 btnNavHDBan.Visible = false;
                 btnNavNguoiDung.Visible = false;
+                btnBentoHDBan.Enabled = false;
             }
+        }
+
+        private void ApplyBentoStyles()
+        {
+            UIThemeHelper.StyleCard(pnlBentoStock);
+            UIThemeHelper.StyleCard(pnlBentoSec);
+            UIThemeHelper.StyleCard(pnlBentoActions);
+            UIThemeHelper.StyleCard(pnlBentoAlerts);
+            UIThemeHelper.StyleCard(pnlBentoGridCard);
+
+            UIThemeHelper.StyleButton(btnBentoHDBan, UIThemeHelper.ColorPrimary, Color.White);
+            UIThemeHelper.StyleButton(btnBentoHDNhap, Color.FromArgb(16, 185, 129), Color.White);
+            UIThemeHelper.StyleButton(btnBentoMayTinh, Color.FromArgb(2, 132, 199), Color.White);
+            UIThemeHelper.StyleButton(btnBentoBaoCao, Color.FromArgb(124, 58, 237), Color.White);
+            UIThemeHelper.StyleButton(btnBentoRefresh, Color.FromArgb(100, 116, 139), Color.White);
+
+            UIThemeHelper.StyleDataGridView(dgvBentoOverview);
         }
 
         private void InitSidebarButtons()
@@ -132,15 +153,16 @@ namespace QLBanMayViTinh.Forms
             {
                 currentChildForm.Close();
                 currentChildForm.Dispose();
+                currentChildForm = null;
             }
+
+            pnlBentoDashboard.Visible = false;
 
             currentChildForm = childForm;
             childForm.TopLevel = false;
             childForm.FormBorderStyle = FormBorderStyle.None;
             childForm.Dock = DockStyle.Fill;
-            pnlContent.Controls.Clear();
             pnlContent.Controls.Add(childForm);
-            pnlContent.Tag = childForm;
             childForm.BringToFront();
             childForm.Show();
 
@@ -157,92 +179,95 @@ namespace QLBanMayViTinh.Forms
                 currentChildForm = null;
             }
 
-            pnlContent.Controls.Clear();
-            lblTitle.Text = "📊  TỔNG QUAN HỆ THỐNG (DASHBOARD)";
-            lblSubTitle.Text = "Bảng điều khiển kinh doanh, số liệu thống kê thời gian thực và cảnh báo tồn kho";
+            pnlBentoDashboard.Visible = true;
+            pnlBentoDashboard.BringToFront();
 
-            Panel pnlDash = new Panel();
-            pnlDash.Dock = DockStyle.Fill;
-            pnlDash.AutoScroll = true;
-            pnlDash.BackColor = UIThemeHelper.ColorBackground;
+            lblTitle.Text = "BENTO GRID DASHBOARD - HỆ THỐNG PC STORE PRO";
+            lblSubTitle.Text = "Tổng quan kinh doanh, kho hàng trực quan, cảnh báo tự động và điều hành nhanh";
 
-            decimal totalRevenue = 0;
-            string revStr = Functions.GetFieldValues("SELECT ISNULL(SUM(TongTien), 0) FROM HoaDonBan");
-            decimal.TryParse(revStr, out totalRevenue);
+            RefreshBentoData();
+        }
 
-            int orderCount = 0;
-            string ordStr = Functions.GetFieldValues("SELECT COUNT(*) FROM HoaDonBan");
-            int.TryParse(ordStr, out orderCount);
+        private void RefreshBentoData()
+        {
+            try
+            {
+                DataTable dtRev = Functions.GetDataToTable("SELECT ISNULL(SUM(TongTien), 0) AS Revenue, COUNT(*) AS OrderCount FROM HoaDonBan");
+                if (dtRev.Rows.Count > 0)
+                {
+                    decimal rev = Convert.ToDecimal(dtRev.Rows[0]["Revenue"]);
+                    int count = Convert.ToInt32(dtRev.Rows[0]["OrderCount"]);
+                    decimal profit = rev * 0.1m;
 
-            int productCount = 0;
-            string prdStr = Functions.GetFieldValues("SELECT COUNT(*) FROM MayViTinh");
-            int.TryParse(prdStr, out productCount);
+                    lblHeroRevenue.Text = string.Format("₫ {0:N0}", rev);
+                    lblHeroProfit.Text = string.Format("Lợi nhuận ước tính (10%): ₫ {0:N0}", profit);
+                    lblHeroTrend.Text = string.Format("▲ Tăng trưởng ổn định • {0} hóa đơn đã hoàn tất", count);
+                }
 
-            int lowStockCount = 0;
-            string lowStr = Functions.GetFieldValues("SELECT COUNT(*) FROM MayViTinh WHERE SoLuong <= 5");
-            int.TryParse(lowStr, out lowStockCount);
+                DataTable dtStock = Functions.GetDataToTable("SELECT COUNT(*) AS ModelCount, ISNULL(SUM(SoLuong), 0) AS TotalUnits, ISNULL(SUM(SoLuong * GiaBan), 0) AS Valuation FROM MayViTinh");
+                if (dtStock.Rows.Count > 0)
+                {
+                    int models = Convert.ToInt32(dtStock.Rows[0]["ModelCount"]);
+                    int units = Convert.ToInt32(dtStock.Rows[0]["TotalUnits"]);
+                    decimal val = Convert.ToDecimal(dtStock.Rows[0]["Valuation"]);
 
-            Panel card1 = UIThemeHelper.CreateKpiCard("Doanh Thu Bán Hàng", string.Format("{0:N0} đ", totalRevenue), "Tổng tiền bán thực tế", Color.FromArgb(79, 70, 229), "💰", 240, 85);
-            Panel card2 = UIThemeHelper.CreateKpiCard("Tổng Đơn Hàng", orderCount + " Đơn", "Đã thanh toán thành công", Color.FromArgb(16, 185, 129), "🧾", 240, 85);
-            Panel card3 = UIThemeHelper.CreateKpiCard("Mẫu Máy Vi Tính", productCount + " Mẫu", "Trong danh mục sản phẩm", Color.FromArgb(14, 165, 233), "🖥️", 240, 85);
-            Panel card4 = UIThemeHelper.CreateKpiCard("Cảnh Báo Tồn Kho", lowStockCount + " Máy", "Cần nhập thêm hàng (<=5)", Color.FromArgb(239, 68, 68), "⚠️", 240, 85);
+                    lblStockTotalModels.Text = models + " Dòng Máy";
+                    lblStockTotalUnits.Text = "Tổng tồn kho: " + units + " chiếc";
+                    lblStockValuation.Text = string.Format("Định giá: ₫ {0:N0}", val);
+                }
 
-            card1.Location = new Point(20, 20);
-            card2.Location = new Point(275, 20);
-            card3.Location = new Point(530, 20);
-            card4.Location = new Point(785, 20);
+                if (Functions.Conn != null && Functions.Conn.State == ConnectionState.Open)
+                {
+                    lblSecDbName.Text = "CSDL: " + Functions.Conn.Database;
+                }
 
-            pnlDash.Controls.Add(card1);
-            pnlDash.Controls.Add(card2);
-            pnlDash.Controls.Add(card3);
-            pnlDash.Controls.Add(card4);
+                DataTable dtLowStock = Functions.GetDataToTable("SELECT COUNT(*) FROM MayViTinh WHERE SoLuong <= 5");
+                if (dtLowStock.Rows.Count > 0)
+                {
+                    int lowCount = Convert.ToInt32(dtLowStock.Rows[0][0]);
+                    lblLowStockAlert.Text = "⚠️ Cảnh báo tồn kho: " + lowCount + " sản phẩm có tồn kho <= 5 chiếc";
+                }
 
-            Panel pnlTableCard = new Panel();
-            pnlTableCard.Location = new Point(20, 125);
-            pnlTableCard.Size = new Size(1005, 520);
-            pnlTableCard.BackColor = Color.White;
-            UIThemeHelper.StyleCard(pnlTableCard);
+                DataTable dtTopStaff = Functions.GetDataToTable(
+                    @"SELECT TOP 1 nv.TenNV, ISNULL(SUM(hdb.TongTien), 0) AS DoanhThu, COUNT(hdb.MaHDB) AS SoDon
+                      FROM NhanVien nv
+                      JOIN HoaDonBan hdb ON nv.MaNV = hdb.MaNV
+                      GROUP BY nv.TenNV
+                      ORDER BY DoanhThu DESC");
 
-            Label lblTableTitle = new Label();
-            lblTableTitle.Text = "🔥 MÁY VI TÍNH SẮP HẾT HÀNG & MỚI NHẬP TRÊN HỆ THỐNG";
-            lblTableTitle.Font = new Font("Segoe UI", 11F, FontStyle.Bold);
-            lblTableTitle.ForeColor = Color.FromArgb(15, 23, 42);
-            lblTableTitle.Dock = DockStyle.Top;
-            lblTableTitle.Height = 40;
-            lblTableTitle.Padding = new Padding(15, 10, 0, 0);
+                if (dtTopStaff.Rows.Count > 0)
+                {
+                    string staffName = dtTopStaff.Rows[0]["TenNV"].ToString();
+                    decimal staffRev = Convert.ToDecimal(dtTopStaff.Rows[0]["DoanhThu"]);
+                    int staffOrders = Convert.ToInt32(dtTopStaff.Rows[0]["SoDon"]);
+                    lblTopStaffTitle.Text = "🏆 Top 1 Nhân Viên: " + staffName;
+                    lblTopStaffVal.Text = string.Format("Doanh thu: ₫ {0:N0} • {1} đơn", staffRev, staffOrders);
+                }
 
-            DataGridView dgvOverview = new DataGridView();
-            dgvOverview.Dock = DockStyle.Fill;
-            dgvOverview.AllowUserToAddRows = false;
-            dgvOverview.AllowUserToDeleteRows = false;
-            dgvOverview.ReadOnly = true;
-            UIThemeHelper.StyleDataGridView(dgvOverview);
+                DataTable dtOverview = Functions.GetDataToTable(
+                    @"SELECT m.MaMayVT, m.TenMayVT, l.TenLoai, h.TenHangSX, m.SoLuong, m.GiaNhap, m.GiaBan,
+                             CASE WHEN m.SoLuong <= 5 THEN N'CẦN NHẬP (<=5)' ELSE N'SẴN SÀNG' END AS TrangThai
+                      FROM MayViTinh m
+                      LEFT JOIN LoaiMay l ON m.MaLoai = l.MaLoai
+                      LEFT JOIN HangSanXuat h ON m.MaHangSX = h.MaHangSX
+                      ORDER BY m.SoLuong ASC");
 
-            DataTable dtOverview = Functions.GetDataToTable(
-                @"SELECT m.MaMayVT, m.TenMayVT, l.TenLoai, h.TenHangSX, m.SoLuong, m.GiaNhap, m.GiaBan
-                  FROM MayViTinh m
-                  LEFT JOIN LoaiMay l ON m.MaLoai = l.MaLoai
-                  LEFT JOIN HangSanXuat h ON m.MaHangSX = h.MaHangSX
-                  ORDER BY m.SoLuong ASC");
+                dgvBentoOverview.DataSource = dtOverview;
 
-            dgvOverview.DataSource = dtOverview;
+                if (dgvBentoOverview.Columns.Contains("MaMayVT")) dgvBentoOverview.Columns["MaMayVT"].HeaderText = "Mã Máy";
+                if (dgvBentoOverview.Columns.Contains("TenMayVT")) dgvBentoOverview.Columns["TenMayVT"].HeaderText = "Tên Máy Vi Tính";
+                if (dgvBentoOverview.Columns.Contains("TenLoai")) dgvBentoOverview.Columns["TenLoai"].HeaderText = "Loại Máy";
+                if (dgvBentoOverview.Columns.Contains("TenHangSX")) dgvBentoOverview.Columns["TenHangSX"].HeaderText = "Hãng Sản Xuất";
+                if (dgvBentoOverview.Columns.Contains("SoLuong")) dgvBentoOverview.Columns["SoLuong"].HeaderText = "Tồn Kho";
+                if (dgvBentoOverview.Columns.Contains("GiaNhap")) dgvBentoOverview.Columns["GiaNhap"].HeaderText = "Giá Nhập";
+                if (dgvBentoOverview.Columns.Contains("GiaBan")) dgvBentoOverview.Columns["GiaBan"].HeaderText = "Giá Bán (110%)";
+                if (dgvBentoOverview.Columns.Contains("TrangThai")) dgvBentoOverview.Columns["TrangThai"].HeaderText = "Tình Trạng";
 
-            if (dgvOverview.Columns.Contains("MaMayVT")) dgvOverview.Columns["MaMayVT"].HeaderText = "Mã Máy";
-            if (dgvOverview.Columns.Contains("TenMayVT")) dgvOverview.Columns["TenMayVT"].HeaderText = "Tên Máy Vi Tính";
-            if (dgvOverview.Columns.Contains("TenLoai")) dgvOverview.Columns["TenLoai"].HeaderText = "Loại Máy";
-            if (dgvOverview.Columns.Contains("TenHangSX")) dgvOverview.Columns["TenHangSX"].HeaderText = "Hãng Sản Xuất";
-            if (dgvOverview.Columns.Contains("SoLuong")) dgvOverview.Columns["SoLuong"].HeaderText = "Tồn Kho";
-            if (dgvOverview.Columns.Contains("GiaNhap")) dgvOverview.Columns["GiaNhap"].HeaderText = "Giá Nhập";
-            if (dgvOverview.Columns.Contains("GiaBan")) dgvOverview.Columns["GiaBan"].HeaderText = "Giá Bán";
-
-            UIThemeHelper.FormatCurrencyColumns(dgvOverview, "GiaNhap", "GiaBan");
-
-            pnlTableCard.Controls.Add(dgvOverview);
-            pnlTableCard.Controls.Add(lblTableTitle);
-
-            pnlDash.Controls.Add(pnlTableCard);
-
-            pnlContent.Controls.Add(pnlDash);
+                UIThemeHelper.FormatCurrencyColumns(dgvBentoOverview, "GiaNhap", "GiaBan");
+            }
+            catch
+            {
+            }
         }
 
         private void btnNavDashboard_Click(object sender, EventArgs e)
@@ -339,14 +364,39 @@ namespace QLBanMayViTinh.Forms
             }
         }
 
+        private void btnBentoHDBan_Click(object sender, EventArgs e)
+        {
+            btnNavHDBan.PerformClick();
+        }
+
+        private void btnBentoHDNhap_Click(object sender, EventArgs e)
+        {
+            btnNavHDNhap.PerformClick();
+        }
+
+        private void btnBentoMayTinh_Click(object sender, EventArgs e)
+        {
+            btnNavMayTinh.PerformClick();
+        }
+
+        private void btnBentoBaoCao_Click(object sender, EventArgs e)
+        {
+            btnNavBaoCao.PerformClick();
+        }
+
+        private void btnBentoRefresh_Click(object sender, EventArgs e)
+        {
+            RefreshBentoData();
+        }
+
         private void btnToggleTheme_Click(object sender, EventArgs e)
         {
             UIThemeHelper.IsDarkMode = !UIThemeHelper.IsDarkMode;
             btnToggleTheme.Text = UIThemeHelper.IsDarkMode ? "☀️ Light" : "🌙 Dark";
-            if (currentChildForm == null)
-            {
-                ShowDashboard();
-            }
+
+            pnlBentoDashboard.BackColor = UIThemeHelper.ColorBackground;
+            pnlContent.BackColor = UIThemeHelper.ColorBackground;
+            ApplyBentoStyles();
         }
 
         private void btnThoat_Click(object sender, EventArgs e)

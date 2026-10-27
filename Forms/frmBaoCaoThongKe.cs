@@ -1,4 +1,5 @@
-﻿using System;
+using System;
+using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.IO;
@@ -19,6 +20,9 @@ namespace QLBanMayViTinh.Forms
 
         private void frmBaoCaoThongKe_Load(object sender, EventArgs e)
         {
+            if (this.DesignMode || LicenseManager.UsageMode == LicenseUsageMode.Designtime)
+                return;
+
             UIThemeHelper.StyleCard(card1, Color.FromArgb(79, 70, 229));
             UIThemeHelper.StyleCard(card2, Color.FromArgb(2, 132, 199));
             UIThemeHelper.StyleCard(card3, Color.FromArgb(16, 185, 129));

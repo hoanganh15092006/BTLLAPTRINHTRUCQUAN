@@ -53,8 +53,7 @@ namespace QLBanMayViTinh.Forms
             this.lblSub.Name = "lblSub";
             this.lblSub.Size = new System.Drawing.Size(700, 20);
             this.lblSub.TabIndex = 1;
-            this.lblSub.Text = "Theo dõi nhật ký đăng nhập, cập nhật CSDL và giám sát tự động cảnh báo tồn kho th" +
-    "ấp";
+            this.lblSub.Text = "Theo dõi nhật ký đăng nhập, cập nhật CSDL và giám sát tự động cảnh báo tồn kho thấp";
             this.lblTitle.Font = new System.Drawing.Font("Segoe UI", 16F, System.Drawing.FontStyle.Bold);
             this.lblTitle.ForeColor = System.Drawing.Color.FromArgb(15, 23, 42);
             this.lblTitle.Location = new System.Drawing.Point(22, 10);

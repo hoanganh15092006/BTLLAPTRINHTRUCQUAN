@@ -63,8 +63,7 @@ namespace QLBanMayViTinh.Forms
             this.lblSub.Name = "lblSub";
             this.lblSub.Size = new System.Drawing.Size(700, 20);
             this.lblSub.TabIndex = 1;
-            this.lblSub.Text = "Cấu hình kết nối SQL Server mã hóa AES-256, tùy chỉnh chủ đề giao diện và thông t" +
-    "in hóa đơn bán lẻ";
+            this.lblSub.Text = "Cấu hình kết nối SQL Server mã hóa AES-256, tùy chỉnh chủ đề giao diện và thông tin hóa đơn bán lẻ";
             this.lblTitle.Font = new System.Drawing.Font("Segoe UI", 16F, System.Drawing.FontStyle.Bold);
             this.lblTitle.ForeColor = System.Drawing.Color.FromArgb(15, 23, 42);
             this.lblTitle.Location = new System.Drawing.Point(22, 10);
@@ -235,8 +234,7 @@ namespace QLBanMayViTinh.Forms
             this.txtLoiChao.Name = "txtLoiChao";
             this.txtLoiChao.Size = new System.Drawing.Size(425, 175);
             this.txtLoiChao.TabIndex = 8;
-            this.txtLoiChao.Text = "Cảm ơn Quý Khách đã tin tưởng mua hàng!\nChính sách bảo hành: Đổi mới trong 30 ng" +
-    "ày nếu có lỗi kỹ thuật.\nBảo hành chính hãng 12-36 tháng theo serial máy.";
+            this.txtLoiChao.Text = "Cảm ơn Quý Khách đã tin tưởng mua hàng!\r\nChính sách bảo hành: Đổi mới trong 30 ngày nếu có lỗi kỹ thuật.\r\nBảo hành chính hãng 12-36 tháng theo serial máy.";
             this.lblLoiChao.AutoSize = true;
             this.lblLoiChao.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
             this.lblLoiChao.Location = new System.Drawing.Point(30, 255);

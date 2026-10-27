@@ -63,8 +63,7 @@ namespace QLBanMayViTinh.Forms
             this.lblSub.Name = "lblSub";
             this.lblSub.Size = new System.Drawing.Size(600, 20);
             this.lblSub.TabIndex = 1;
-            this.lblSub.Text = "Xem và cập nhật thông tin cá nhân nhân viên, đổi mật khẩu bảo mật và nhật ký hoạ" +
-    "t động";
+            this.lblSub.Text = "Xem và cập nhật thông tin cá nhân nhân viên, đổi mật khẩu bảo mật và nhật ký hoạt động";
             this.lblTitle.Font = new System.Drawing.Font("Segoe UI", 16F, System.Drawing.FontStyle.Bold);
             this.lblTitle.ForeColor = System.Drawing.Color.FromArgb(15, 23, 42);
             this.lblTitle.Location = new System.Drawing.Point(22, 10);

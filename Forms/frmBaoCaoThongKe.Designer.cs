@@ -1,4 +1,4 @@
-﻿namespace QLBanMayViTinh.Forms
+namespace QLBanMayViTinh.Forms
 {
     partial class frmBaoCaoThongKe
     {
@@ -247,7 +247,7 @@
             this.rdoTonKho.ForeColor = System.Drawing.Color.FromArgb(15, 23, 42);
             this.rdoTonKho.Location = new System.Drawing.Point(4, 6);
             this.rdoTonKho.Size = new System.Drawing.Size(225, 24);
-            this.rdoTonKho.Text = "📦 Tồn Kho Theo Loại (YC8)";
+            this.rdoTonKho.Text = "📦 Sản Phẩm Tồn Kho (YC6)";
             this.rdoTonKho.UseVisualStyleBackColor = true;
             this.rdoTonKho.CheckedChanged += new System.EventHandler(this.rdoTonKho_CheckedChanged);
 
@@ -255,7 +255,7 @@
             this.rdoNhapHang.ForeColor = System.Drawing.Color.FromArgb(15, 23, 42);
             this.rdoNhapHang.Location = new System.Drawing.Point(240, 6);
             this.rdoNhapHang.Size = new System.Drawing.Size(235, 24);
-            this.rdoNhapHang.Text = "📥 Nhập Hàng Theo Quý/Năm (YC6)";
+            this.rdoNhapHang.Text = "📥 HĐ Nhập Hàng Theo Quý/Năm (YC7)";
             this.rdoNhapHang.UseVisualStyleBackColor = true;
             this.rdoNhapHang.CheckedChanged += new System.EventHandler(this.rdoNhapHang_CheckedChanged);
 
@@ -263,7 +263,7 @@
             this.rdoBanHang.ForeColor = System.Drawing.Color.FromArgb(15, 23, 42);
             this.rdoBanHang.Location = new System.Drawing.Point(485, 6);
             this.rdoBanHang.Size = new System.Drawing.Size(235, 24);
-            this.rdoBanHang.Text = "📤 Bán Hàng Theo Quý/Năm (YC7)";
+            this.rdoBanHang.Text = "📤 HĐ Bán Hàng Theo Quý/Năm (YC8)";
             this.rdoBanHang.UseVisualStyleBackColor = true;
             this.rdoBanHang.CheckedChanged += new System.EventHandler(this.rdoBanHang_CheckedChanged);
 

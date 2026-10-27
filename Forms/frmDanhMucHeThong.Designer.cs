@@ -1,4 +1,4 @@
-namespace QLBanMayViTinh.Forms
+﻿namespace QLBanMayViTinh.Forms
 {
     partial class frmDanhMucHeThong
     {

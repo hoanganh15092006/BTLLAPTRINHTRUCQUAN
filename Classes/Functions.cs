@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Data;
 using System.Data.SqlClient;
 using System.Drawing;
@@ -7,20 +7,13 @@ using System.Windows.Forms;
 
 namespace QLBanMayViTinh.Classes
 {
-    /// <summary>
-    /// Class tiện ích dùng chung xử lý ADO.NET thuần (System.Data.SqlClient),
-    /// chuỗi kết nối SQL Server, các hàm truy vấn, điền ComboBox, sinh mã tự động,
-    /// chuyển số thành chữ tiếng Việt và xử lý ảnh mượt mà không khóa file.
-    /// </summary>
+
     public static class Functions
     {
-        // Chuỗi kết nối SQL Server. Tự động nhận diện instance đang chạy
+
         public static string ConnString = @"Data Source=.\SQLEXPRESS01;Initial Catalog=QLBanMayViTinh;Integrated Security=True";
         public static SqlConnection Conn = null;
 
-        /// <summary>
-        /// Mở kết nối tới CSDL SQL Server với cơ chế tự động dò tìm Instance
-        /// </summary>
         public static void Connect()
         {
             if (Conn != null && Conn.State == ConnectionState.Open)
@@ -63,9 +56,6 @@ namespace QLBanMayViTinh.Classes
                             "Lỗi Kết Nối CSDL", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
 
-        /// <summary>
-        /// Đóng kết nối CSDL
-        /// </summary>
         public static void Disconnect()
         {
             if (Conn != null && Conn.State == ConnectionState.Open)
@@ -76,9 +66,6 @@ namespace QLBanMayViTinh.Classes
             }
         }
 
-        /// <summary>
-        /// Lấy dữ liệu từ câu lệnh SQL SELECT trả về đối tượng DataTable
-        /// </summary>
         public static DataTable GetDataToTable(string sql)
         {
             DataTable table = new DataTable();
@@ -101,9 +88,6 @@ namespace QLBanMayViTinh.Classes
             return table;
         }
 
-        /// <summary>
-        /// Thực thi câu lệnh SQL INSERT, UPDATE hoặc DELETE
-        /// </summary>
         public static void RunSQL(string sql, bool showMessageBox = true)
         {
             try
@@ -125,9 +109,6 @@ namespace QLBanMayViTinh.Classes
             }
         }
 
-        /// <summary>
-        /// Thực thi câu lệnh SQL xóa dữ liệu có kiểm tra ràng buộc khóa ngoại
-        /// </summary>
         public static void RunSqlDel(string sql)
         {
             try
@@ -140,7 +121,7 @@ namespace QLBanMayViTinh.Classes
             }
             catch (SqlException ex)
             {
-                if (ex.Number == 547) // Foreign key constraint violation
+                if (ex.Number == 547)
                 {
                     MessageBox.Show("Dữ liệu này đang được tham chiếu ở bảng khác, bạn không thể xóa!",
                                     "Cảnh Báo Ràng Buộc", MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -156,9 +137,6 @@ namespace QLBanMayViTinh.Classes
             }
         }
 
-        /// <summary>
-        /// Kiểm tra sự tồn tại của khóa chính (Return true nếu đã tồn tại)
-        /// </summary>
         public static bool CheckKey(string sql)
         {
             bool exists = false;
@@ -181,9 +159,6 @@ namespace QLBanMayViTinh.Classes
             return exists;
         }
 
-        /// <summary>
-        /// Lấy giá trị của 1 ô (cột đầu tiên của dòng đầu tiên) từ câu lệnh SELECT
-        /// </summary>
         public static string GetFieldValues(string sql)
         {
             string ma = "";
@@ -208,18 +183,15 @@ namespace QLBanMayViTinh.Classes
             return ma;
         }
 
-        /// <summary>
-        /// Đổ dữ liệu vào ComboBox từ câu lệnh SQL
-        /// </summary>
         public static void FillCombo(string sql, ComboBox cbo, string ma, string ten)
         {
             try
             {
                 DataTable table = GetDataToTable(sql);
                 cbo.DataSource = table;
-                cbo.ValueMember = ma;     // Trường lưu trữ giá trị mã
-                cbo.DisplayMember = ten;  // Trường hiển thị tên cho người dùng
-                cbo.SelectedIndex = -1;   // Mặc định không chọn dòng nào
+                cbo.ValueMember = ma;
+                cbo.DisplayMember = ten;
+                cbo.SelectedIndex = -1;
             }
             catch (Exception ex)
             {
@@ -227,19 +199,12 @@ namespace QLBanMayViTinh.Classes
             }
         }
 
-        /// <summary>
-        /// Tự sinh mã khóa chính theo tiền tố kết hợp ngày giờ: TIÊN_TỐ_ddMMyyyy_HHmmss
-        /// Ví dụ: HDN_25102026_140510
-        /// </summary>
         public static string CreateKey(string prefix)
         {
             string key = prefix + "_" + DateTime.Now.ToString("ddMMyyyy_HHmmss");
             return key;
         }
 
-        /// <summary>
-        /// Đọc ảnh từ file một cách an toàn (tránh lỗi khóa file GDI+ trong C#)
-        /// </summary>
         public static Image LoadImageWithoutLock(string filePath)
         {
             if (string.IsNullOrEmpty(filePath) || !File.Exists(filePath))
@@ -263,9 +228,6 @@ namespace QLBanMayViTinh.Classes
             }
         }
 
-        /// <summary>
-        /// Chỉ cho phép nhập số nguyên trong ô TextBox (sự kiện KeyPress)
-        /// </summary>
         public static void OnlyInteger(KeyPressEventArgs e)
         {
             if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar))
@@ -274,9 +236,6 @@ namespace QLBanMayViTinh.Classes
             }
         }
 
-        /// <summary>
-        /// Chỉ cho phép nhập số thực/tiền tệ (cho phép nhập dấu chấm hoặc phẩy thập phân)
-        /// </summary>
         public static void OnlyDecimal(KeyPressEventArgs e, string currentText)
         {
             if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar) && (e.KeyChar != '.') && (e.KeyChar != ','))
@@ -289,9 +248,6 @@ namespace QLBanMayViTinh.Classes
             }
         }
 
-        /// <summary>
-        /// Chuyển đổi số tiền thành chữ tiếng Việt chuẩn (dùng cho in hóa đơn)
-        /// </summary>
         public static string ChuyenSoSangChu(double gSo)
         {
             if (gSo == 0) return "Không đồng";

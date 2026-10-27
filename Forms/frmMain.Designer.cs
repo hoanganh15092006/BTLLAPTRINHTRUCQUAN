@@ -1,21 +1,8 @@
-namespace QLBanMayViTinh.Forms
+﻿namespace QLBanMayViTinh.Forms
 {
     partial class frmMain
     {
         private System.ComponentModel.IContainer components = null;
-        private System.Windows.Forms.Panel pnlSidebar;
-        private System.Windows.Forms.Panel pnlLogo;
-        private System.Windows.Forms.Label lblLogoText;
-        private System.Windows.Forms.Button btnNavMayTinh;
-        private System.Windows.Forms.Button btnNavHDNhap;
-        private System.Windows.Forms.Button btnNavHDBan;
-        private System.Windows.Forms.Button btnNavTimKiem;
-        private System.Windows.Forms.Button btnNavBaoCao;
-        private System.Windows.Forms.Button btnNavAutoTest;
-        private System.Windows.Forms.Button btnThoat;
-        private System.Windows.Forms.Panel pnlHeader;
-        private System.Windows.Forms.Label lblTitle;
-        private System.Windows.Forms.Panel pnlContent;
 
         protected override void Dispose(bool disposing)
         {
@@ -26,202 +13,298 @@ namespace QLBanMayViTinh.Forms
             base.Dispose(disposing);
         }
 
+        #region Windows Form Designer generated code
+
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.pnlSidebar = new System.Windows.Forms.Panel();
-            this.pnlLogo = new System.Windows.Forms.Panel();
-            this.lblLogoText = new System.Windows.Forms.Label();
-            this.btnNavMayTinh = new System.Windows.Forms.Button();
-            this.btnNavHDNhap = new System.Windows.Forms.Button();
-            this.btnNavHDBan = new System.Windows.Forms.Button();
-            this.btnNavTimKiem = new System.Windows.Forms.Button();
-            this.btnNavBaoCao = new System.Windows.Forms.Button();
-            this.btnNavAutoTest = new System.Windows.Forms.Button();
+            this.pnlUserCard = new System.Windows.Forms.Panel();
+            this.lblUserStatus = new System.Windows.Forms.Label();
+            this.lblUserRole = new System.Windows.Forms.Label();
             this.btnThoat = new System.Windows.Forms.Button();
+            this.btnNavAutoTest = new System.Windows.Forms.Button();
+            this.lblCat4 = new System.Windows.Forms.Label();
+            this.btnNavBaoCao = new System.Windows.Forms.Button();
+            this.btnNavTimKiem = new System.Windows.Forms.Button();
+            this.lblCat3 = new System.Windows.Forms.Label();
+            this.btnNavHDBan = new System.Windows.Forms.Button();
+            this.btnNavHDNhap = new System.Windows.Forms.Button();
+            this.lblCat2 = new System.Windows.Forms.Label();
+            this.btnNavMayTinh = new System.Windows.Forms.Button();
+            this.lblCat1 = new System.Windows.Forms.Label();
+            this.pnlLogo = new System.Windows.Forms.Panel();
+            this.lblLogoSub = new System.Windows.Forms.Label();
+            this.lblLogoText = new System.Windows.Forms.Label();
             this.pnlHeader = new System.Windows.Forms.Panel();
+            this.lblDbStatus = new System.Windows.Forms.Label();
+            this.lblClock = new System.Windows.Forms.Label();
+            this.lblSubTitle = new System.Windows.Forms.Label();
             this.lblTitle = new System.Windows.Forms.Label();
             this.pnlContent = new System.Windows.Forms.Panel();
+            this.timerClock = new System.Windows.Forms.Timer(this.components);
             this.pnlSidebar.SuspendLayout();
+            this.pnlUserCard.SuspendLayout();
             this.pnlLogo.SuspendLayout();
             this.pnlHeader.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // pnlSidebar
-            // 
-            this.pnlSidebar.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(24)))), ((int)(((byte)(24)))), ((int)(((byte)(27)))));
+            this.pnlSidebar.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(15)))), ((int)(((byte)(23)))), ((int)(((byte)(42)))));
+            this.pnlSidebar.Controls.Add(this.pnlUserCard);
             this.pnlSidebar.Controls.Add(this.btnThoat);
             this.pnlSidebar.Controls.Add(this.btnNavAutoTest);
+            this.pnlSidebar.Controls.Add(this.lblCat4);
             this.pnlSidebar.Controls.Add(this.btnNavBaoCao);
             this.pnlSidebar.Controls.Add(this.btnNavTimKiem);
+            this.pnlSidebar.Controls.Add(this.lblCat3);
             this.pnlSidebar.Controls.Add(this.btnNavHDBan);
             this.pnlSidebar.Controls.Add(this.btnNavHDNhap);
+            this.pnlSidebar.Controls.Add(this.lblCat2);
             this.pnlSidebar.Controls.Add(this.btnNavMayTinh);
+            this.pnlSidebar.Controls.Add(this.lblCat1);
             this.pnlSidebar.Controls.Add(this.pnlLogo);
             this.pnlSidebar.Dock = System.Windows.Forms.DockStyle.Left;
             this.pnlSidebar.Location = new System.Drawing.Point(0, 0);
             this.pnlSidebar.Name = "pnlSidebar";
-            this.pnlSidebar.Size = new System.Drawing.Size(250, 750);
+            this.pnlSidebar.Size = new System.Drawing.Size(260, 780);
             this.pnlSidebar.TabIndex = 0;
-            // 
-            // pnlLogo
-            // 
-            this.pnlLogo.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(15)))), ((int)(((byte)(23)))), ((int)(((byte)(42)))));
+            this.pnlLogo.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(10)))), ((int)(((byte)(15)))), ((int)(((byte)(30)))));
+            this.pnlLogo.Controls.Add(this.lblLogoSub);
             this.pnlLogo.Controls.Add(this.lblLogoText);
             this.pnlLogo.Dock = System.Windows.Forms.DockStyle.Top;
             this.pnlLogo.Location = new System.Drawing.Point(0, 0);
             this.pnlLogo.Name = "pnlLogo";
-            this.pnlLogo.Size = new System.Drawing.Size(250, 75);
+            this.pnlLogo.Size = new System.Drawing.Size(260, 80);
             this.pnlLogo.TabIndex = 0;
-            // 
-            // lblLogoText
-            // 
-            this.lblLogoText.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblLogoText.Font = new System.Drawing.Font("Segoe UI", 12.5F, System.Drawing.FontStyle.Bold);
-            this.lblLogoText.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(129)))), ((int)(((byte)(140)))), ((int)(((byte)(248)))));
-            this.lblLogoText.Location = new System.Drawing.Point(0, 0);
+            this.lblLogoText.Font = new System.Drawing.Font("Segoe UI", 13F, System.Drawing.FontStyle.Bold);
+            this.lblLogoText.ForeColor = System.Drawing.Color.White;
+            this.lblLogoText.Location = new System.Drawing.Point(12, 14);
             this.lblLogoText.Name = "lblLogoText";
-            this.lblLogoText.Size = new System.Drawing.Size(250, 75);
+            this.lblLogoText.Size = new System.Drawing.Size(236, 30);
             this.lblLogoText.TabIndex = 0;
-            this.lblLogoText.Text = "💻 PC STORE PRO\r\nQuản Lý Máy Vi Tính";
-            this.lblLogoText.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // btnNavMayTinh
-            // 
+            this.lblLogoText.Text = "💻 PC STORE PRO";
+            this.lblLogoText.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.lblLogoSub.Font = new System.Drawing.Font("Segoe UI", 8.5F);
+            this.lblLogoSub.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(148)))), ((int)(((byte)(163)))), ((int)(((byte)(184)))));
+            this.lblLogoSub.Location = new System.Drawing.Point(14, 44);
+            this.lblLogoSub.Name = "lblLogoSub";
+            this.lblLogoSub.Size = new System.Drawing.Size(234, 22);
+            this.lblLogoSub.TabIndex = 1;
+            this.lblLogoSub.Text = "Hệ Thống Quản Lý Bán Máy Vi Tính";
+            this.lblLogoSub.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.lblCat1.Dock = System.Windows.Forms.DockStyle.Top;
+            this.lblCat1.Font = new System.Drawing.Font("Segoe UI", 8F, System.Drawing.FontStyle.Bold);
+            this.lblCat1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(148)))), ((int)(((byte)(163)))), ((int)(((byte)(184)))));
+            this.lblCat1.Location = new System.Drawing.Point(0, 80);
+            this.lblCat1.Name = "lblCat1";
+            this.lblCat1.Padding = new System.Windows.Forms.Padding(18, 12, 0, 4);
+            this.lblCat1.Size = new System.Drawing.Size(260, 32);
+            this.lblCat1.TabIndex = 2;
+            this.lblCat1.Text = "DANH MỤC & KHO";
             this.btnNavMayTinh.Dock = System.Windows.Forms.DockStyle.Top;
-            this.btnNavMayTinh.Height = 52;
-            this.btnNavMayTinh.Location = new System.Drawing.Point(0, 75);
+            this.btnNavMayTinh.Location = new System.Drawing.Point(0, 112);
             this.btnNavMayTinh.Name = "btnNavMayTinh";
-            this.btnNavMayTinh.Size = new System.Drawing.Size(250, 52);
-            this.btnNavMayTinh.TabIndex = 1;
-            this.btnNavMayTinh.Text = "🖥️  Máy Vi Tính";
+            this.btnNavMayTinh.Size = new System.Drawing.Size(260, 48);
+            this.btnNavMayTinh.TabIndex = 3;
+            this.btnNavMayTinh.Text = "🖥️  Quản Lý Máy Vi Tính";
             this.btnNavMayTinh.UseVisualStyleBackColor = true;
             this.btnNavMayTinh.Click += new System.EventHandler(this.btnNavMayTinh_Click);
-            // 
-            // btnNavHDNhap
-            // 
+            this.lblCat2.Dock = System.Windows.Forms.DockStyle.Top;
+            this.lblCat2.Font = new System.Drawing.Font("Segoe UI", 8F, System.Drawing.FontStyle.Bold);
+            this.lblCat2.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(148)))), ((int)(((byte)(163)))), ((int)(((byte)(184)))));
+            this.lblCat2.Location = new System.Drawing.Point(0, 160);
+            this.lblCat2.Name = "lblCat2";
+            this.lblCat2.Padding = new System.Windows.Forms.Padding(18, 14, 0, 4);
+            this.lblCat2.Size = new System.Drawing.Size(260, 34);
+            this.lblCat2.TabIndex = 4;
+            this.lblCat2.Text = "GIAO DỊCH KINH DOANH";
             this.btnNavHDNhap.Dock = System.Windows.Forms.DockStyle.Top;
-            this.btnNavHDNhap.Height = 52;
-            this.btnNavHDNhap.Location = new System.Drawing.Point(0, 127);
+            this.btnNavHDNhap.Location = new System.Drawing.Point(0, 194);
             this.btnNavHDNhap.Name = "btnNavHDNhap";
-            this.btnNavHDNhap.Size = new System.Drawing.Size(250, 52);
-            this.btnNavHDNhap.TabIndex = 2;
-            this.btnNavHDNhap.Text = "📥  Hóa Đơn Nhập";
+            this.btnNavHDNhap.Size = new System.Drawing.Size(260, 48);
+            this.btnNavHDNhap.TabIndex = 5;
+            this.btnNavHDNhap.Text = "📥  Hóa Đơn Nhập Hàng";
             this.btnNavHDNhap.UseVisualStyleBackColor = true;
             this.btnNavHDNhap.Click += new System.EventHandler(this.btnNavHDNhap_Click);
-            // 
-            // btnNavHDBan
-            // 
             this.btnNavHDBan.Dock = System.Windows.Forms.DockStyle.Top;
-            this.btnNavHDBan.Height = 52;
-            this.btnNavHDBan.Location = new System.Drawing.Point(0, 179);
+            this.btnNavHDBan.Location = new System.Drawing.Point(0, 242);
             this.btnNavHDBan.Name = "btnNavHDBan";
-            this.btnNavHDBan.Size = new System.Drawing.Size(250, 52);
-            this.btnNavHDBan.TabIndex = 3;
-            this.btnNavHDBan.Text = "📤  Hóa Đơn Bán";
+            this.btnNavHDBan.Size = new System.Drawing.Size(260, 48);
+            this.btnNavHDBan.TabIndex = 6;
+            this.btnNavHDBan.Text = "📤  Hóa Đơn Bán Hàng (POS)";
             this.btnNavHDBan.UseVisualStyleBackColor = true;
             this.btnNavHDBan.Click += new System.EventHandler(this.btnNavHDBan_Click);
-            // 
-            // btnNavTimKiem
-            // 
+            this.lblCat3.Dock = System.Windows.Forms.DockStyle.Top;
+            this.lblCat3.Font = new System.Drawing.Font("Segoe UI", 8F, System.Drawing.FontStyle.Bold);
+            this.lblCat3.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(148)))), ((int)(((byte)(163)))), ((int)(((byte)(184)))));
+            this.lblCat3.Location = new System.Drawing.Point(0, 290);
+            this.lblCat3.Name = "lblCat3";
+            this.lblCat3.Padding = new System.Windows.Forms.Padding(18, 14, 0, 4);
+            this.lblCat3.Size = new System.Drawing.Size(260, 34);
+            this.lblCat3.TabIndex = 7;
+            this.lblCat3.Text = "TRA CỨU & BÁO CÁO";
             this.btnNavTimKiem.Dock = System.Windows.Forms.DockStyle.Top;
-            this.btnNavTimKiem.Height = 52;
-            this.btnNavTimKiem.Location = new System.Drawing.Point(0, 231);
+            this.btnNavTimKiem.Location = new System.Drawing.Point(0, 324);
             this.btnNavTimKiem.Name = "btnNavTimKiem";
-            this.btnNavTimKiem.Size = new System.Drawing.Size(250, 52);
-            this.btnNavTimKiem.TabIndex = 4;
-            this.btnNavTimKiem.Text = "🔍  Tìm Kiếm (YC 4-5)";
+            this.btnNavTimKiem.Size = new System.Drawing.Size(260, 48);
+            this.btnNavTimKiem.TabIndex = 8;
+            this.btnNavTimKiem.Text = "🔍  Tra Cứu & Tìm Kiếm";
             this.btnNavTimKiem.UseVisualStyleBackColor = true;
             this.btnNavTimKiem.Click += new System.EventHandler(this.btnNavTimKiem_Click);
-            // 
-            // btnNavBaoCao
-            // 
             this.btnNavBaoCao.Dock = System.Windows.Forms.DockStyle.Top;
-            this.btnNavBaoCao.Height = 52;
-            this.btnNavBaoCao.Location = new System.Drawing.Point(0, 283);
+            this.btnNavBaoCao.Location = new System.Drawing.Point(0, 372);
             this.btnNavBaoCao.Name = "btnNavBaoCao";
-            this.btnNavBaoCao.Size = new System.Drawing.Size(250, 52);
-            this.btnNavBaoCao.TabIndex = 5;
-            this.btnNavBaoCao.Text = "📊  Báo Cáo (YC 6-9)";
+            this.btnNavBaoCao.Size = new System.Drawing.Size(260, 48);
+            this.btnNavBaoCao.TabIndex = 9;
+            this.btnNavBaoCao.Text = "📊  Báo Cáo Thống Kê";
             this.btnNavBaoCao.UseVisualStyleBackColor = true;
             this.btnNavBaoCao.Click += new System.EventHandler(this.btnNavBaoCao_Click);
-            // 
-            // btnNavAutoTest
-            // 
+            this.lblCat4.Dock = System.Windows.Forms.DockStyle.Top;
+            this.lblCat4.Font = new System.Drawing.Font("Segoe UI", 8F, System.Drawing.FontStyle.Bold);
+            this.lblCat4.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(148)))), ((int)(((byte)(163)))), ((int)(((byte)(184)))));
+            this.lblCat4.Location = new System.Drawing.Point(0, 420);
+            this.lblCat4.Name = "lblCat4";
+            this.lblCat4.Padding = new System.Windows.Forms.Padding(18, 14, 0, 4);
+            this.lblCat4.Size = new System.Drawing.Size(260, 34);
+            this.lblCat4.TabIndex = 10;
+            this.lblCat4.Text = "HỆ THỐNG & KIỂM THỬ";
             this.btnNavAutoTest.Dock = System.Windows.Forms.DockStyle.Top;
-            this.btnNavAutoTest.Height = 52;
-            this.btnNavAutoTest.Location = new System.Drawing.Point(0, 335);
+            this.btnNavAutoTest.Location = new System.Drawing.Point(0, 454);
             this.btnNavAutoTest.Name = "btnNavAutoTest";
-            this.btnNavAutoTest.Size = new System.Drawing.Size(250, 52);
-            this.btnNavAutoTest.TabIndex = 6;
-            this.btnNavAutoTest.Text = "⚡  Tự Kiểm Thử (Auto-Test)";
+            this.btnNavAutoTest.Size = new System.Drawing.Size(260, 48);
+            this.btnNavAutoTest.TabIndex = 11;
+            this.btnNavAutoTest.Text = "🧪  Chạy Tự Kiểm Thử (Auto-Test)";
             this.btnNavAutoTest.UseVisualStyleBackColor = true;
             this.btnNavAutoTest.Click += new System.EventHandler(this.btnNavAutoTest_Click);
-            // 
-            // btnThoat
-            // 
-            this.btnThoat.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.btnThoat.Height = 52;
-            this.btnThoat.Location = new System.Drawing.Point(0, 698);
+            this.btnThoat.Dock = System.Windows.Forms.DockStyle.Top;
+            this.btnThoat.Location = new System.Drawing.Point(0, 502);
             this.btnThoat.Name = "btnThoat";
-            this.btnThoat.Size = new System.Drawing.Size(250, 52);
-            this.btnThoat.TabIndex = 7;
-            this.btnThoat.Text = "🚪  Thoát Ứng Dụng";
+            this.btnThoat.Size = new System.Drawing.Size(260, 48);
+            this.btnThoat.TabIndex = 12;
+            this.btnThoat.Text = "🚪  Đăng Xuất / Thoát";
             this.btnThoat.UseVisualStyleBackColor = true;
             this.btnThoat.Click += new System.EventHandler(this.btnThoat_Click);
-            // 
-            // pnlHeader
-            // 
+            this.pnlUserCard.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(10)))), ((int)(((byte)(15)))), ((int)(((byte)(30)))));
+            this.pnlUserCard.Controls.Add(this.lblUserStatus);
+            this.pnlUserCard.Controls.Add(this.lblUserRole);
+            this.pnlUserCard.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.pnlUserCard.Location = new System.Drawing.Point(0, 715);
+            this.pnlUserCard.Name = "pnlUserCard";
+            this.pnlUserCard.Size = new System.Drawing.Size(260, 65);
+            this.pnlUserCard.TabIndex = 13;
+            this.lblUserRole.Font = new System.Drawing.Font("Segoe UI", 9.5F, System.Drawing.FontStyle.Bold);
+            this.lblUserRole.ForeColor = System.Drawing.Color.White;
+            this.lblUserRole.Location = new System.Drawing.Point(14, 10);
+            this.lblUserRole.Name = "lblUserRole";
+            this.lblUserRole.Size = new System.Drawing.Size(232, 22);
+            this.lblUserRole.TabIndex = 0;
+            this.lblUserRole.Text = "👤 Quản Trị Viên (Admin)";
+            this.lblUserStatus.Font = new System.Drawing.Font("Segoe UI", 8F);
+            this.lblUserStatus.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(52)))), ((int)(((byte)(211)))), ((int)(((byte)(153)))));
+            this.lblUserStatus.Location = new System.Drawing.Point(14, 34);
+            this.lblUserStatus.Name = "lblUserStatus";
+            this.lblUserStatus.Size = new System.Drawing.Size(232, 20);
+            this.lblUserStatus.TabIndex = 1;
+            this.lblUserStatus.Text = "🟢 Trạng thái: Đang hoạt động";
             this.pnlHeader.BackColor = System.Drawing.Color.White;
-            this.pnlHeader.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.pnlHeader.Controls.Add(this.lblDbStatus);
+            this.pnlHeader.Controls.Add(this.lblClock);
+            this.pnlHeader.Controls.Add(this.lblSubTitle);
             this.pnlHeader.Controls.Add(this.lblTitle);
             this.pnlHeader.Dock = System.Windows.Forms.DockStyle.Top;
-            this.pnlHeader.Location = new System.Drawing.Point(250, 0);
+            this.pnlHeader.Location = new System.Drawing.Point(260, 0);
             this.pnlHeader.Name = "pnlHeader";
-            this.pnlHeader.Size = new System.Drawing.Size(1034, 55);
+            this.pnlHeader.Size = new System.Drawing.Size(1040, 70);
             this.pnlHeader.TabIndex = 1;
-            // 
-            // lblTitle
-            // 
-            this.lblTitle.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblTitle.Font = new System.Drawing.Font("Segoe UI", 13F, System.Drawing.FontStyle.Bold);
-            this.lblTitle.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(41)))), ((int)(((byte)(59)))));
-            this.lblTitle.Location = new System.Drawing.Point(0, 0);
+            this.lblTitle.Font = new System.Drawing.Font("Segoe UI", 13.5F, System.Drawing.FontStyle.Bold);
+            this.lblTitle.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(15)))), ((int)(((byte)(23)))), ((int)(((byte)(42)))));
+            this.lblTitle.Location = new System.Drawing.Point(20, 10);
             this.lblTitle.Name = "lblTitle";
-            this.lblTitle.Padding = new System.Windows.Forms.Padding(20, 0, 0, 0);
-            this.lblTitle.Size = new System.Drawing.Size(1032, 53);
+            this.lblTitle.Size = new System.Drawing.Size(550, 28);
             this.lblTitle.TabIndex = 0;
-            this.lblTitle.Text = "BẢNG ĐIỀU KHIỂN HỆ THỐNG";
-            this.lblTitle.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // pnlContent
-            // 
-            this.pnlContent.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(244)))), ((int)(((byte)(245)))));
+            this.lblTitle.Text = "QUẢN LÝ DANH MỤC MÁY VI TÍNH";
+            this.lblSubTitle.Font = new System.Drawing.Font("Segoe UI", 8.5F);
+            this.lblSubTitle.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(116)))), ((int)(((byte)(139)))));
+            this.lblSubTitle.Location = new System.Drawing.Point(22, 38);
+            this.lblSubTitle.Name = "lblSubTitle";
+            this.lblSubTitle.Size = new System.Drawing.Size(550, 20);
+            this.lblSubTitle.TabIndex = 1;
+            this.lblSubTitle.Text = "Quản lý danh sách thiết bị, 14 linh kiện phần cứng, giá nhập, giá bán và tồn kho";
+            this.lblClock.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.lblClock.Font = new System.Drawing.Font("Segoe UI", 9.5F, System.Drawing.FontStyle.Bold);
+            this.lblClock.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(41)))), ((int)(((byte)(59)))));
+            this.lblClock.Location = new System.Drawing.Point(740, 12);
+            this.lblClock.Name = "lblClock";
+            this.lblClock.Size = new System.Drawing.Size(280, 22);
+            this.lblClock.TabIndex = 2;
+            this.lblClock.Text = "🕒 10:00:00 • 27/10/2026";
+            this.lblClock.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.lblDbStatus.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.lblDbStatus.Font = new System.Drawing.Font("Segoe UI", 8.5F);
+            this.lblDbStatus.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(16)))), ((int)(((byte)(185)))), ((int)(((byte)(129)))));
+            this.lblDbStatus.Location = new System.Drawing.Point(740, 36);
+            this.lblDbStatus.Name = "lblDbStatus";
+            this.lblDbStatus.Size = new System.Drawing.Size(280, 20);
+            this.lblDbStatus.TabIndex = 3;
+            this.lblDbStatus.Text = "🟢 CSDL: Sẵn Sàng (SQL Server Connected)";
+            this.lblDbStatus.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.pnlContent.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(241)))), ((int)(((byte)(245)))), ((int)(((byte)(249)))));
             this.pnlContent.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pnlContent.Location = new System.Drawing.Point(250, 55);
+            this.pnlContent.Location = new System.Drawing.Point(260, 70);
             this.pnlContent.Name = "pnlContent";
-            this.pnlContent.Size = new System.Drawing.Size(1034, 695);
+            this.pnlContent.Padding = new System.Windows.Forms.Padding(12);
+            this.pnlContent.Size = new System.Drawing.Size(1040, 710);
             this.pnlContent.TabIndex = 2;
-            // 
-            // frmMain
-            // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
+            this.timerClock.Enabled = true;
+            this.timerClock.Interval = 1000;
+            this.timerClock.Tick += new System.EventHandler(this.timerClock_Tick);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 17F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1284, 750);
+            this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(241)))), ((int)(((byte)(245)))), ((int)(((byte)(249)))));
+            this.ClientSize = new System.Drawing.Size(1300, 780);
             this.Controls.Add(this.pnlContent);
             this.Controls.Add(this.pnlHeader);
             this.Controls.Add(this.pnlSidebar);
-            this.Font = new System.Drawing.Font("Segoe UI", 9F);
-            this.MinimumSize = new System.Drawing.Size(1200, 720);
+            this.Font = new System.Drawing.Font("Segoe UI", 9.5F);
+            this.MinimumSize = new System.Drawing.Size(1150, 720);
             this.Name = "frmMain";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Hệ Thống Quản Lý Cửa Hàng Bán Máy Vi Tính - BTL Lập Trình Trực Quan C#";
+            this.Text = "HỆ THỐNG QUẢN LÝ CỬA HÀNG BÁN MÁY VI TÍNH - ADO.NET SQLCLIENT";
+            this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.frmMain_FormClosing);
             this.Load += new System.EventHandler(this.frmMain_Load);
             this.pnlSidebar.ResumeLayout(false);
+            this.pnlUserCard.ResumeLayout(false);
             this.pnlLogo.ResumeLayout(false);
             this.pnlHeader.ResumeLayout(false);
             this.ResumeLayout(false);
-
         }
+
+        #endregion
+
+        private System.Windows.Forms.Panel pnlSidebar;
+        private System.Windows.Forms.Panel pnlLogo;
+        private System.Windows.Forms.Label lblLogoText;
+        private System.Windows.Forms.Label lblLogoSub;
+        private System.Windows.Forms.Label lblCat1;
+        private System.Windows.Forms.Button btnNavMayTinh;
+        private System.Windows.Forms.Label lblCat2;
+        private System.Windows.Forms.Button btnNavHDNhap;
+        private System.Windows.Forms.Button btnNavHDBan;
+        private System.Windows.Forms.Label lblCat3;
+        private System.Windows.Forms.Button btnNavTimKiem;
+        private System.Windows.Forms.Button btnNavBaoCao;
+        private System.Windows.Forms.Label lblCat4;
+        private System.Windows.Forms.Button btnNavAutoTest;
+        private System.Windows.Forms.Button btnThoat;
+        private System.Windows.Forms.Panel pnlUserCard;
+        private System.Windows.Forms.Label lblUserRole;
+        private System.Windows.Forms.Label lblUserStatus;
+        private System.Windows.Forms.Panel pnlHeader;
+        private System.Windows.Forms.Label lblTitle;
+        private System.Windows.Forms.Label lblSubTitle;
+        private System.Windows.Forms.Label lblClock;
+        private System.Windows.Forms.Label lblDbStatus;
+        private System.Windows.Forms.Panel pnlContent;
+        private System.Windows.Forms.Timer timerClock;
     }
 }

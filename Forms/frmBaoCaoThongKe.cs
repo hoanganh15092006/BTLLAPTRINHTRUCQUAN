@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Data;
 using System.Drawing;
 using System.IO;
@@ -19,12 +19,19 @@ namespace QLBanMayViTinh.Forms
 
         private void frmBaoCaoThongKe_Load(object sender, EventArgs e)
         {
+            UIThemeHelper.StyleCard(card1, Color.FromArgb(79, 70, 229));
+            UIThemeHelper.StyleCard(card2, Color.FromArgb(2, 132, 199));
+            UIThemeHelper.StyleCard(card3, Color.FromArgb(16, 185, 129));
+            UIThemeHelper.StyleCard(card4, Color.FromArgb(245, 158, 11));
+            UIThemeHelper.StyleCard(pnlFilterCard);
+            UIThemeHelper.StyleCard(pnlGridCard);
+            UIThemeHelper.StyleCard(pnlBottom);
+
             UIThemeHelper.StyleDataGridView(dgvBaoCao);
             UIThemeHelper.StyleButton(btnXemBaoCao, UIThemeHelper.BtnTimColor, Color.White);
             UIThemeHelper.StyleButton(btnXuatExcel, UIThemeHelper.BtnInExcelColor, Color.White);
             UIThemeHelper.StyleButton(btnDong, Color.FromArgb(100, 116, 139), Color.White);
 
-            // Nạp dữ liệu các bộ lọc thời gian
             for (int i = 1; i <= 12; i++) cboThang.Items.Add(i.ToString());
             cboThang.SelectedIndex = DateTime.Now.Month - 1;
 
@@ -43,22 +50,19 @@ namespace QLBanMayViTinh.Forms
 
         private void CapNhatSummaryCards()
         {
-            // 1. Tổng giá trị hàng tồn kho = SUM(SoLuong * GiaNhap)
+
             string valTon = Functions.GetFieldValues("SELECT ISNULL(SUM(SoLuong * GiaNhap), 0) FROM MayViTinh");
             decimal.TryParse(valTon, out decimal giaTriTon);
             lblCardGiaTriTon.Text = string.Format("{0:N0} VNĐ", giaTriTon);
 
-            // 2. Tổng tiền nhập hàng toàn thời gian
             string valNhap = Functions.GetFieldValues("SELECT ISNULL(SUM(TongTien), 0) FROM HoaDonNhap");
             decimal.TryParse(valNhap, out decimal tongNhap);
             lblCardTongNhap.Text = string.Format("{0:N0} VNĐ", tongNhap);
 
-            // 3. Tổng tiền bán hàng toàn thời gian
             string valBan = Functions.GetFieldValues("SELECT ISNULL(SUM(TongTien), 0) FROM HoaDonBan");
             decimal.TryParse(valBan, out decimal tongBan);
             lblCardTongBan.Text = string.Format("{0:N0} VNĐ", tongBan);
 
-            // 4. Lợi nhuận gộp ước tính
             decimal loiNhuan = tongBan - tongNhap;
             lblCardLoiNhuan.Text = string.Format("{0:N0} VNĐ", loiNhuan);
             lblCardLoiNhuan.ForeColor = loiNhuan >= 0 ? Color.FromArgb(16, 185, 129) : Color.FromArgb(239, 68, 68);
@@ -103,6 +107,13 @@ namespace QLBanMayViTinh.Forms
             HienThiDieuKienLoc();
         }
 
+        private void rdoLocThoiGian_CheckedChanged(object sender, EventArgs e)
+        {
+            cboThang.Enabled = rdoLocThang.Checked;
+            cboQuy.Enabled = rdoLocQuy.Checked;
+            cboNam.Enabled = true;
+        }
+
         private void btnXemBaoCao_Click(object sender, EventArgs e)
         {
             int nam = int.Parse(cboNam.SelectedItem.ToString());
@@ -111,8 +122,8 @@ namespace QLBanMayViTinh.Forms
 
             if (rdoTonKho.Checked)
             {
-                // Yêu cầu 6: Báo cáo danh sách sản phẩm tồn kho
-                string sql = @"SELECT m.MaMayVT, m.TenMayVT, l.TenLoai, h.TenHangSX, m.SoLuong, 
+
+                string sql = @"SELECT m.MaMayVT, m.TenMayVT, l.TenLoai, h.TenHangSX, m.SoLuong,
                                       m.GiaNhap, m.GiaBan, (m.SoLuong * m.GiaNhap) AS TongGiaTriTon
                                FROM MayViTinh m
                                LEFT JOIN LoaiMay l ON m.MaLoai = l.MaLoai
@@ -139,7 +150,7 @@ namespace QLBanMayViTinh.Forms
             }
             else if (rdoNhapHang.Checked)
             {
-                // Yêu cầu 7: Báo cáo nhập hàng theo Tháng/Quý/Năm
+
                 string whereTime = "";
                 if (rdoLocThang.Checked)
                     whereTime = string.Format("MONTH(h.NgayNhap) = {0} AND YEAR(h.NgayNhap) = {1}", thang, nam);
@@ -171,7 +182,7 @@ namespace QLBanMayViTinh.Forms
             }
             else if (rdoBanHang.Checked)
             {
-                // Yêu cầu 8: Báo cáo bán hàng theo Tháng/Quý/Năm
+
                 string whereTime = "";
                 if (rdoLocThang.Checked)
                     whereTime = string.Format("MONTH(h.NgayBan) = {0} AND YEAR(h.NgayBan) = {1}", thang, nam);
@@ -201,9 +212,9 @@ namespace QLBanMayViTinh.Forms
                 foreach (DataRow row in tblBaoCao.Rows) tongTien += Convert.ToDecimal(row["TongTien"]);
                 lblTongKet.Text = string.Format("Tổng số hóa đơn bán: {0} | Tổng tiền bán: {1:N0} VNĐ", tblBaoCao.Rows.Count, tongTien);
             }
-            else // rdoTop5NV.Checked
+            else
             {
-                // Yêu cầu 9: Báo cáo danh sách họ tên, tổng tiền của 5 NV bán được nhiều tiền nhất theo Tháng, Quý, Năm
+
                 string whereTime = "";
                 if (rdoLocThang.Checked)
                     whereTime = string.Format("MONTH(h.NgayBan) = {0} AND YEAR(h.NgayBan) = {1}", thang, nam);
@@ -212,8 +223,8 @@ namespace QLBanMayViTinh.Forms
                 else
                     whereTime = string.Format("YEAR(h.NgayBan) = {0}", nam);
 
-                string sql = string.Format(@"SELECT TOP 5 WITH TIES nv.MaNV, nv.TenNV, nv.DienThoai, 
-                                                    COUNT(h.MaHDB) AS SoHoaDonDaBan, 
+                string sql = string.Format(@"SELECT TOP 5 WITH TIES nv.MaNV, nv.TenNV, nv.DienThoai,
+                                                    COUNT(h.MaHDB) AS SoHoaDonDaBan,
                                                     ISNULL(SUM(h.TongTien), 0) AS TongTienBan
                                             FROM NhanVien nv
                                             INNER JOIN HoaDonBan h ON nv.MaNV = h.MaNV
@@ -259,13 +270,11 @@ namespace QLBanMayViTinh.Forms
                         sb.AppendLine("<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />");
                         sb.AppendLine("<table border='1' style='font-family:Arial; font-size:11pt; border-collapse:collapse;'>");
 
-                        // Tiêu đề báo cáo
                         sb.AppendLine(string.Format("<tr><th colspan='{0}' style='font-size:16pt; color:#1E293B; background-color:#E2E8F0; padding:10px;'>{1}</th></tr>",
                             dgvBaoCao.Columns.Count, lblTieuDeBaoCao.Text));
                         sb.AppendLine(string.Format("<tr><td colspan='{0}' style='font-style:italic; padding:5px;'>Thời gian xuất báo cáo: {1}</td></tr>",
                             dgvBaoCao.Columns.Count, DateTime.Now.ToString("dd/MM/yyyy HH:mm:ss")));
 
-                        // Tiêu đề các cột
                         sb.AppendLine("<tr style='background-color:#1E293B; color:#FFFFFF; font-weight:bold; height:30px;'>");
                         foreach (DataGridViewColumn col in dgvBaoCao.Columns)
                         {
@@ -274,7 +283,6 @@ namespace QLBanMayViTinh.Forms
                         }
                         sb.AppendLine("</tr>");
 
-                        // Dữ liệu từng dòng
                         foreach (DataGridViewRow row in dgvBaoCao.Rows)
                         {
                             sb.AppendLine("<tr>");
@@ -298,7 +306,6 @@ namespace QLBanMayViTinh.Forms
                             sb.AppendLine("</tr>");
                         }
 
-                        // Dòng tổng kết
                         sb.AppendLine(string.Format("<tr style='font-weight:bold; background-color:#F1F5F9;'><td colspan='{0}' style='padding:8px;'>{1}</td></tr>",
                             dgvBaoCao.Columns.Count, lblTongKet.Text));
 
@@ -307,7 +314,6 @@ namespace QLBanMayViTinh.Forms
                         File.WriteAllText(sfd.FileName, sb.ToString(), Encoding.UTF8);
                         MessageBox.Show("Xuất báo cáo ra Excel thành công tại:\n" + sfd.FileName, "Xuất Excel Thành Công", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-                        // Mở file ngay
                         System.Diagnostics.Process.Start(sfd.FileName);
                     }
                     catch (Exception ex)

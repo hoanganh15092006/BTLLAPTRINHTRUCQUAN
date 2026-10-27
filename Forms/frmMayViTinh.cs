@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Data;
 using System.Drawing;
 using System.IO;
@@ -18,6 +18,11 @@ namespace QLBanMayViTinh.Forms
 
         private void frmMayViTinh_Load(object sender, EventArgs e)
         {
+            UIThemeHelper.StyleCard(pnlHardwareCard);
+            UIThemeHelper.StyleCard(pnlMediaCard);
+            UIThemeHelper.StyleCard(pnlToolbar);
+            UIThemeHelper.StyleCard(pnlGridCard);
+
             UIThemeHelper.StyleDataGridView(dgvMayViTinh);
             UIThemeHelper.StyleButton(btnThem, UIThemeHelper.BtnThemColor, Color.White);
             UIThemeHelper.StyleButton(btnSua, UIThemeHelper.BtnSuaColor, Color.White);
@@ -30,6 +35,56 @@ namespace QLBanMayViTinh.Forms
             LoadComboBoxes();
             ResetValues();
             LoadDataGridView();
+        }
+
+        private void UpdateKpiCards()
+        {
+            pnlKpiBar.Controls.Clear();
+            int totalModels = tblMayViTinh != null ? tblMayViTinh.Rows.Count : 0;
+            int totalStock = 0;
+            decimal totalValuation = 0;
+
+            if (tblMayViTinh != null)
+            {
+                foreach (DataRow r in tblMayViTinh.Rows)
+                {
+                    int sl = 0;
+                    decimal gia = 0;
+                    if (r["SoLuong"] != DBNull.Value) int.TryParse(r["SoLuong"].ToString(), out sl);
+                    if (r["GiaNhap"] != DBNull.Value) decimal.TryParse(r["GiaNhap"].ToString(), out gia);
+                    totalStock += sl;
+                    totalValuation += sl * gia;
+                }
+            }
+
+            Panel kpi1 = UIThemeHelper.CreateKpiCard("Mẫu Sản Phẩm", totalModels + " Mẫu", "Đang quản lý trên hệ thống", Color.FromArgb(79, 70, 229), "🖥️", 240, 76);
+            Panel kpi2 = UIThemeHelper.CreateKpiCard("Tổng Tồn Kho", totalStock + " Chiếc", "Sẵn sàng xuất bán lẻ", Color.FromArgb(16, 185, 129), "📦", 240, 76);
+            Panel kpi3 = UIThemeHelper.CreateKpiCard("Tổng Giá Trị Kho", string.Format("{0:N0} đ", totalValuation), "Định giá theo giá nhập", Color.FromArgb(245, 158, 11), "💰", 250, 76);
+            Panel kpi4 = UIThemeHelper.CreateKpiCard("Cấu Hình Chuẩn 3NF", "14 Linh Kiện", "Toàn vẹn khóa ngoại CSDL", Color.FromArgb(14, 165, 233), "⚙️", 240, 76);
+
+            kpi1.Location = new Point(0, 0);
+            kpi2.Location = new Point(250, 0);
+            kpi3.Location = new Point(500, 0);
+            kpi4.Location = new Point(760, 0);
+
+            pnlKpiBar.Controls.Add(kpi1);
+            pnlKpiBar.Controls.Add(kpi2);
+            pnlKpiBar.Controls.Add(kpi3);
+            pnlKpiBar.Controls.Add(kpi4);
+        }
+
+        private void txtTimKiemNhanh_TextChanged(object sender, EventArgs e)
+        {
+            if (tblMayViTinh == null) return;
+            string keyword = txtTimKiemNhanh.Text.Trim().Replace("'", "''");
+            if (string.IsNullOrEmpty(keyword))
+            {
+                tblMayViTinh.DefaultView.RowFilter = "";
+            }
+            else
+            {
+                tblMayViTinh.DefaultView.RowFilter = string.Format("MaMayVT LIKE '%{0}%' OR TenMayVT LIKE '%{0}%' OR TenLoai LIKE '%{0}%' OR TenHangSX LIKE '%{0}%'", keyword);
+            }
         }
 
         private void LoadComboBoxes()
@@ -52,7 +107,7 @@ namespace QLBanMayViTinh.Forms
 
         private void LoadDataGridView()
         {
-            string sql = @"SELECT m.MaMayVT, m.TenMayVT, l.TenLoai, h.TenHangSX, c.TenChip, r.TenRAM, 
+            string sql = @"SELECT m.MaMayVT, m.TenMayVT, l.TenLoai, h.TenHangSX, c.TenChip, r.TenRAM,
                                   m.SoLuong, m.GiaNhap, m.GiaBan, m.ThoiGianBH, m.Anh, m.GhiChu,
                                   m.MaLoai, m.MaChip, m.MaOCung, m.MaDungLuong, m.MaTocDo, m.MaOCD,
                                   m.MaManHinh, m.MaCoMH, m.MaChuot, m.MaBanPhim, m.MaUSB, m.MaRAM, m.MaLoa, m.MaHangSX
@@ -64,7 +119,6 @@ namespace QLBanMayViTinh.Forms
             tblMayViTinh = Functions.GetDataToTable(sql);
             dgvMayViTinh.DataSource = tblMayViTinh;
 
-            // Đặt tên cột hiển thị
             dgvMayViTinh.Columns["MaMayVT"].HeaderText = "Mã Máy";
             dgvMayViTinh.Columns["TenMayVT"].HeaderText = "Tên Máy Vi Tính";
             dgvMayViTinh.Columns["TenLoai"].HeaderText = "Loại Máy";
@@ -76,8 +130,7 @@ namespace QLBanMayViTinh.Forms
             dgvMayViTinh.Columns["GiaBan"].HeaderText = "Giá Bán (110%)";
             dgvMayViTinh.Columns["ThoiGianBH"].HeaderText = "BH (Tháng)";
 
-            // Ẩn bớt các cột mã chi tiết để lưới thoáng đẹp
-            string[] hiddenCols = { "Anh", "GhiChu", "MaLoai", "MaChip", "MaOCung", "MaDungLuong", "MaTocDo", 
+            string[] hiddenCols = { "Anh", "GhiChu", "MaLoai", "MaChip", "MaOCung", "MaDungLuong", "MaTocDo",
                                     "MaOCD", "MaManHinh", "MaCoMH", "MaChuot", "MaBanPhim", "MaUSB", "MaRAM", "MaLoa", "MaHangSX" };
             foreach (var col in hiddenCols)
             {
@@ -86,6 +139,7 @@ namespace QLBanMayViTinh.Forms
             }
 
             UIThemeHelper.FormatCurrencyColumns(dgvMayViTinh, "GiaNhap", "GiaBan");
+            UpdateKpiCards();
         }
 
         private void ResetValues()
@@ -137,7 +191,6 @@ namespace QLBanMayViTinh.Forms
             txtGhiChu.Text = r.Cells["GhiChu"].Value?.ToString() ?? "";
             txtAnh.Text = r.Cells["Anh"].Value?.ToString() ?? "";
 
-            // Chọn giá trị 14 ComboBox linh kiện
             cboMaLoai.SelectedValue = r.Cells["MaLoai"].Value?.ToString() ?? "";
             cboMaChip.SelectedValue = r.Cells["MaChip"].Value?.ToString() ?? "";
             cboMaOCung.SelectedValue = r.Cells["MaOCung"].Value?.ToString() ?? "";
@@ -153,7 +206,6 @@ namespace QLBanMayViTinh.Forms
             cboMaLoa.SelectedValue = r.Cells["MaLoa"].Value?.ToString() ?? "";
             cboMaHangSX.SelectedValue = r.Cells["MaHangSX"].Value?.ToString() ?? "";
 
-            // Hiển thị ảnh không gây lock file
             string imgFile = txtAnh.Text.Trim();
             if (!string.IsNullOrEmpty(imgFile))
             {
@@ -213,9 +265,8 @@ namespace QLBanMayViTinh.Forms
                 return;
             }
 
-            // Lưu sản phẩm mới: Số lượng ban đầu = 0, Giá nhập = 0 (Trigger sẽ tự tính khi nhập hàng)
-            string sqlInsert = string.Format(@"INSERT INTO MayViTinh 
-                (MaMayVT, TenMayVT, MaLoai, MaChip, MaOCung, MaDungLuong, MaTocDo, MaOCD, MaManHinh, MaCoMH, 
+            string sqlInsert = string.Format(@"INSERT INTO MayViTinh
+                (MaMayVT, TenMayVT, MaLoai, MaChip, MaOCung, MaDungLuong, MaTocDo, MaOCD, MaManHinh, MaCoMH,
                  MaChuot, MaBanPhim, MaUSB, MaRAM, MaLoa, MaHangSX, GiaNhap, GiaBan, ThoiGianBH, SoLuong, Anh, GhiChu)
                 VALUES (N'{0}', N'{1}', N'{2}', N'{3}', N'{4}', N'{5}', N'{6}', N'{7}', N'{8}', N'{9}',
                         N'{10}', N'{11}', N'{12}', N'{13}', N'{14}', N'{15}', 0, 0, {16}, 0, N'{17}', N'{18}')",
@@ -254,7 +305,7 @@ namespace QLBanMayViTinh.Forms
                 return;
             }
 
-            string sqlUpdate = string.Format(@"UPDATE MayViTinh SET 
+            string sqlUpdate = string.Format(@"UPDATE MayViTinh SET
                 TenMayVT = N'{1}', MaLoai = N'{2}', MaChip = N'{3}', MaOCung = N'{4}', MaDungLuong = N'{5}',
                 MaTocDo = N'{6}', MaOCD = N'{7}', MaManHinh = N'{8}', MaCoMH = N'{9}', MaChuot = N'{10}',
                 MaBanPhim = N'{11}', MaUSB = N'{12}', MaRAM = N'{13}', MaLoa = N'{14}', MaHangSX = N'{15}',

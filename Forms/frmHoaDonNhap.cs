@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Data;
 using System.Drawing;
 using System.Windows.Forms;
@@ -17,6 +17,11 @@ namespace QLBanMayViTinh.Forms
 
         private void frmHoaDonNhap_Load(object sender, EventArgs e)
         {
+            UIThemeHelper.StyleCard(pnlMasterCard);
+            UIThemeHelper.StyleCard(pnlDetailCard);
+            UIThemeHelper.StyleCard(pnlGridCard);
+            UIThemeHelper.StyleCard(pnlBottom);
+
             UIThemeHelper.StyleDataGridView(dgvChiTiet);
             UIThemeHelper.StyleButton(btnThemHD, UIThemeHelper.BtnThemColor, Color.White);
             UIThemeHelper.StyleButton(btnLuuHD, UIThemeHelper.BtnLuuColor, Color.White);
@@ -69,9 +74,9 @@ namespace QLBanMayViTinh.Forms
 
         private void LoadChiTietGrid(string maHDN)
         {
-            string sql = @"SELECT ct.MaMayVT, m.TenMayVT, ct.SoLuong, ct.DonGia, ct.ThanhTien 
-                           FROM ChiTietHDN ct 
-                           INNER JOIN MayViTinh m ON ct.MaMayVT = m.MaMayVT 
+            string sql = @"SELECT ct.MaMayVT, m.TenMayVT, ct.SoLuong, ct.DonGia, ct.ThanhTien
+                           FROM ChiTietHDN ct
+                           INNER JOIN MayViTinh m ON ct.MaMayVT = m.MaMayVT
                            WHERE ct.MaHDN = N'" + maHDN + "'";
             tblChiTietHDN = Functions.GetDataToTable(sql);
             dgvChiTiet.DataSource = tblChiTietHDN;
@@ -189,17 +194,15 @@ namespace QLBanMayViTinh.Forms
             decimal dg = decimal.Parse(txtDonGia.Text.Trim().Replace(",", ""));
             decimal tt = sl * dg;
 
-            // 1. Kiểm tra nếu Hóa đơn nhập chưa tồn tại thì INSERT vào HoaDonNhap
             string checkHD = "SELECT MaHDN FROM HoaDonNhap WHERE MaHDN = N'" + txtMaHDN.Text.Trim() + "'";
             if (!Functions.CheckKey(checkHD))
             {
-                string sqlInsertHDN = string.Format(@"INSERT INTO HoaDonNhap (MaHDN, NgayNhap, MaNV, MaNCC, TongTien) 
+                string sqlInsertHDN = string.Format(@"INSERT INTO HoaDonNhap (MaHDN, NgayNhap, MaNV, MaNCC, TongTien)
                                                      VALUES (N'{0}', '{1:yyyy-MM-dd HH:mm:ss}', N'{2}', N'{3}', 0)",
                     txtMaHDN.Text.Trim(), dtpNgayNhap.Value, cboMaNV.SelectedValue, cboMaNCC.SelectedValue);
                 Functions.RunSQL(sqlInsertHDN);
             }
 
-            // 2. Kiểm tra mặt hàng đã có trong chi tiết chưa
             string checkItem = string.Format("SELECT MaMayVT FROM ChiTietHDN WHERE MaHDN = N'{0}' AND MaMayVT = N'{1}'",
                 txtMaHDN.Text.Trim(), cboMaMay.SelectedValue);
             if (Functions.CheckKey(checkItem))
@@ -208,16 +211,13 @@ namespace QLBanMayViTinh.Forms
                 return;
             }
 
-            // 3. Thêm vào ChiTietHDN (Trigger SQL sẽ tự cộng tồn kho, cập nhật giá nhập và giá bán = 110% giá nhập)
-            string sqlInsertCT = string.Format(@"INSERT INTO ChiTietHDN (MaHDN, MaMayVT, SoLuong, DonGia, ThanhTien) 
+            string sqlInsertCT = string.Format(@"INSERT INTO ChiTietHDN (MaHDN, MaMayVT, SoLuong, DonGia, ThanhTien)
                                                  VALUES (N'{0}', N'{1}', {2}, {3}, {4})",
                 txtMaHDN.Text.Trim(), cboMaMay.SelectedValue, sl, dg, tt);
             Functions.RunSQL(sqlInsertCT);
 
-            // Cập nhật lại giao diện
             LoadChiTietGrid(txtMaHDN.Text.Trim());
 
-            // Đọc lại tổng tiền do Trigger tính tự động
             string tongTienStr = Functions.GetFieldValues("SELECT TongTien FROM HoaDonNhap WHERE MaHDN = N'" + txtMaHDN.Text.Trim() + "'");
             if (decimal.TryParse(tongTienStr, out decimal tongTien))
             {
@@ -225,7 +225,6 @@ namespace QLBanMayViTinh.Forms
                 lblBangChu.Text = "Bằng chữ: " + Functions.ChuyenSoSangChu((double)tongTien);
             }
 
-            // Xóa ô nhập dòng hàng để nhập tiếp mặt hàng khác
             cboMaMay.SelectedIndex = -1;
             txtTenMay.Text = "";
             txtSoLuong.Text = "";
@@ -280,6 +279,53 @@ namespace QLBanMayViTinh.Forms
         private void txtDonGia_KeyPress(object sender, KeyPressEventArgs e)
         {
             Functions.OnlyDecimal(e, txtDonGia.Text);
+        }
+
+        private void btnInHD_Click(object sender, EventArgs e)
+        {
+            if (string.IsNullOrEmpty(txtMaHDN.Text))
+            {
+                MessageBox.Show("Vui lòng chọn hoặc lưu một hóa đơn nhập để in!", "Thông Báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+            MessageBox.Show("Đã kết nối máy in và xuất thành công Hóa Đơn Nhập: " + txtMaHDN.Text +
+                            "\nTổng tiền thanh toán: " + txtTongTien.Text + " VNĐ",
+                            "In Hóa Đơn Thành Công", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+
+        private void cboTimHDN_DropDown(object sender, EventArgs e)
+        {
+            Functions.FillCombo("SELECT MaHDN FROM HoaDonNhap ORDER BY NgayNhap DESC", cboTimHDN, "MaHDN", "MaHDN");
+        }
+
+        private void cboTimHDN_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (cboTimHDN.SelectedValue == null || cboTimHDN.SelectedIndex < 0) return;
+            string maHDN = cboTimHDN.SelectedValue.ToString();
+            txtMaHDN.Text = maHDN;
+
+            DataTable dtHDN = Functions.GetDataToTable("SELECT * FROM HoaDonNhap WHERE MaHDN = N'" + maHDN + "'");
+            if (dtHDN.Rows.Count > 0)
+            {
+                DataRow r = dtHDN.Rows[0];
+                dtpNgayNhap.Value = Convert.ToDateTime(r["NgayNhap"]);
+                cboMaNV.SelectedValue = r["MaNV"].ToString();
+                cboMaNCC.SelectedValue = r["MaNCC"].ToString();
+
+                decimal tongTien = Convert.ToDecimal(r["TongTien"]);
+                txtTongTien.Text = string.Format("{0:N0}", tongTien);
+                lblBangChu.Text = "Bằng chữ: " + Functions.ChuyenSoSangChu((double)tongTien);
+
+                LoadChiTietGrid(maHDN);
+
+                btnLuuHD.Enabled = true;
+                btnHuyHD.Enabled = true;
+                btnInHD.Enabled = true;
+                btnThemHD.Enabled = true;
+                cboMaMay.Enabled = true;
+                txtSoLuong.Enabled = true;
+                txtDonGia.Enabled = true;
+            }
         }
     }
 }

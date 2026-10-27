@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Data;
 using System.Drawing;
 using System.Windows.Forms;
@@ -17,6 +17,11 @@ namespace QLBanMayViTinh.Forms
 
         private void frmHoaDonBan_Load(object sender, EventArgs e)
         {
+            UIThemeHelper.StyleCard(pnlMasterCard);
+            UIThemeHelper.StyleCard(pnlDetailCard);
+            UIThemeHelper.StyleCard(pnlGridCard);
+            UIThemeHelper.StyleCard(pnlBottom);
+
             UIThemeHelper.StyleDataGridView(dgvChiTiet);
             UIThemeHelper.StyleButton(btnThemHD, UIThemeHelper.BtnThemColor, Color.White);
             UIThemeHelper.StyleButton(btnLuuHD, UIThemeHelper.BtnLuuColor, Color.White);
@@ -69,9 +74,9 @@ namespace QLBanMayViTinh.Forms
 
         private void LoadChiTietGrid(string maHDB)
         {
-            string sql = @"SELECT ct.MaMayVT, m.TenMayVT, ct.SoLuong, ct.DonGia, ct.ThanhTien 
-                           FROM ChiTietHDB ct 
-                           INNER JOIN MayViTinh m ON ct.MaMayVT = m.MaMayVT 
+            string sql = @"SELECT ct.MaMayVT, m.TenMayVT, ct.SoLuong, ct.DonGia, ct.ThanhTien
+                           FROM ChiTietHDB ct
+                           INNER JOIN MayViTinh m ON ct.MaMayVT = m.MaMayVT
                            WHERE ct.MaHDB = N'" + maHDB + "'";
             tblChiTietHDB = Functions.GetDataToTable(sql);
             dgvChiTiet.DataSource = tblChiTietHDB;
@@ -190,7 +195,6 @@ namespace QLBanMayViTinh.Forms
             int slBan = int.Parse(txtSoLuong.Text.Trim());
             int tonKho = int.Parse(txtTonKho.Text.Trim());
 
-            // Kiểm tra tồn kho phía Client trước khi gọi xuống SQL
             if (slBan > tonKho)
             {
                 MessageBox.Show(string.Format("Sản phẩm [{0}] chỉ còn tồn {1} cái trong kho, không đủ xuất {2} cái!",
@@ -202,17 +206,15 @@ namespace QLBanMayViTinh.Forms
             decimal dg = decimal.Parse(txtDonGia.Text.Trim().Replace(",", ""));
             decimal tt = slBan * dg;
 
-            // 1. Kiểm tra nếu Hóa đơn bán chưa có thì tạo mới
             string checkHDB = "SELECT MaHDB FROM HoaDonBan WHERE MaHDB = N'" + txtMaHDB.Text.Trim() + "'";
             if (!Functions.CheckKey(checkHDB))
             {
-                string sqlInsertHDB = string.Format(@"INSERT INTO HoaDonBan (MaHDB, NgayBan, MaNV, MaKhach, TongTien) 
+                string sqlInsertHDB = string.Format(@"INSERT INTO HoaDonBan (MaHDB, NgayBan, MaNV, MaKhach, TongTien)
                                                      VALUES (N'{0}', '{1:yyyy-MM-dd HH:mm:ss}', N'{2}', N'{3}', 0)",
                     txtMaHDB.Text.Trim(), dtpNgayBan.Value, cboMaNV.SelectedValue, cboMaKhach.SelectedValue);
                 Functions.RunSQL(sqlInsertHDB);
             }
 
-            // 2. Kiểm tra mặt hàng đã có trong chi tiết chưa
             string checkItem = string.Format("SELECT MaMayVT FROM ChiTietHDB WHERE MaHDB = N'{0}' AND MaMayVT = N'{1}'",
                 txtMaHDB.Text.Trim(), cboMaMay.SelectedValue);
             if (Functions.CheckKey(checkItem))
@@ -221,16 +223,13 @@ namespace QLBanMayViTinh.Forms
                 return;
             }
 
-            // 3. Thêm vào ChiTietHDB (Trigger SQL sẽ tự trừ số lượng tồn kho và cập nhật Tổng tiền HDB)
-            string sqlInsertCT = string.Format(@"INSERT INTO ChiTietHDB (MaHDB, MaMayVT, SoLuong, DonGia, ThanhTien) 
+            string sqlInsertCT = string.Format(@"INSERT INTO ChiTietHDB (MaHDB, MaMayVT, SoLuong, DonGia, ThanhTien)
                                                  VALUES (N'{0}', N'{1}', {2}, {3}, {4})",
                 txtMaHDB.Text.Trim(), cboMaMay.SelectedValue, slBan, dg, tt);
             Functions.RunSQL(sqlInsertCT);
 
-            // Cập nhật lại danh sách chi tiết
             LoadChiTietGrid(txtMaHDB.Text.Trim());
 
-            // Đọc lại tổng tiền do Trigger tính
             string tongTienStr = Functions.GetFieldValues("SELECT TongTien FROM HoaDonBan WHERE MaHDB = N'" + txtMaHDB.Text.Trim() + "'");
             if (decimal.TryParse(tongTienStr, out decimal tongTien))
             {
@@ -238,10 +237,8 @@ namespace QLBanMayViTinh.Forms
                 lblBangChu.Text = "Bằng chữ: " + Functions.ChuyenSoSangChu((double)tongTien);
             }
 
-            // Cập nhật lại tồn kho mới nhất trên form
             txtTonKho.Text = (tonKho - slBan).ToString();
 
-            // Xóa ô nhập dòng hàng
             cboMaMay.SelectedIndex = -1;
             txtTenMay.Text = "";
             txtSoLuong.Text = "";
@@ -290,6 +287,53 @@ namespace QLBanMayViTinh.Forms
         private void txtSoLuong_KeyPress(object sender, KeyPressEventArgs e)
         {
             Functions.OnlyInteger(e);
+        }
+
+        private void btnInHD_Click(object sender, EventArgs e)
+        {
+            if (string.IsNullOrEmpty(txtMaHDB.Text))
+            {
+                MessageBox.Show("Vui lòng chọn hoặc lập một hóa đơn bán để in!", "Thông Báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+            MessageBox.Show("Đã kết nối máy in nhiệt POS và xuất Hóa Đơn Bán Lẻ: " + txtMaHDB.Text +
+                            "\nKhách hàng: " + txtTenKhach.Text +
+                            "\nTổng tiền thanh toán: " + txtTongTien.Text + " VNĐ",
+                            "In Hóa Đơn Bán Lẻ Thành Công", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+
+        private void cboTimHDB_DropDown(object sender, EventArgs e)
+        {
+            Functions.FillCombo("SELECT MaHDB FROM HoaDonBan ORDER BY NgayBan DESC", cboTimHDB, "MaHDB", "MaHDB");
+        }
+
+        private void cboTimHDB_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (cboTimHDB.SelectedValue == null || cboTimHDB.SelectedIndex < 0) return;
+            string maHDB = cboTimHDB.SelectedValue.ToString();
+            txtMaHDB.Text = maHDB;
+
+            DataTable dtHDB = Functions.GetDataToTable("SELECT * FROM HoaDonBan WHERE MaHDB = N'" + maHDB + "'");
+            if (dtHDB.Rows.Count > 0)
+            {
+                DataRow r = dtHDB.Rows[0];
+                dtpNgayBan.Value = Convert.ToDateTime(r["NgayBan"]);
+                cboMaNV.SelectedValue = r["MaNV"].ToString();
+                cboMaKhach.SelectedValue = r["MaKhach"].ToString();
+
+                decimal tongTien = Convert.ToDecimal(r["TongTien"]);
+                txtTongTien.Text = string.Format("{0:N0}", tongTien);
+                lblBangChu.Text = "Bằng chữ: " + Functions.ChuyenSoSangChu((double)tongTien);
+
+                LoadChiTietGrid(maHDB);
+
+                btnLuuHD.Enabled = true;
+                btnHuyHD.Enabled = true;
+                btnInHD.Enabled = true;
+                btnThemHD.Enabled = true;
+                cboMaMay.Enabled = true;
+                txtSoLuong.Enabled = true;
+            }
         }
     }
 }

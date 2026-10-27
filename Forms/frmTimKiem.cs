@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Data;
 using System.Drawing;
 using System.Windows.Forms;
@@ -17,6 +17,11 @@ namespace QLBanMayViTinh.Forms
 
         private void frmTimKiem_Load(object sender, EventArgs e)
         {
+            UIThemeHelper.StyleCard(pnlTopCard);
+            UIThemeHelper.StyleCard(pnlFilterCard);
+            UIThemeHelper.StyleCard(pnlActions);
+            UIThemeHelper.StyleCard(pnlGridCard);
+
             UIThemeHelper.StyleDataGridView(dgvKetQua);
             UIThemeHelper.StyleButton(btnTimKiem, UIThemeHelper.BtnTimColor, Color.White);
             UIThemeHelper.StyleButton(btnLamMoi, UIThemeHelper.BtnHuyColor, Color.White);
@@ -41,18 +46,18 @@ namespace QLBanMayViTinh.Forms
         {
             if (rdoMayViTinh.Checked)
             {
-                // Yêu cầu 4: Tìm kiếm máy vi tính
+
                 pnlMayTinh.Visible = true;
                 pnlHoaDon.Visible = false;
                 lblTieuDe.Text = "TÌM KIẾM SẢN PHẨM MÁY VI TÍNH (YÊU CẦU 4)";
             }
             else
             {
-                // Yêu cầu 5: Tìm kiếm hóa đơn nhập / hóa đơn bán
+
                 pnlMayTinh.Visible = false;
                 pnlHoaDon.Visible = true;
-                lblTieuDe.Text = rdoHoaDonNhap.Checked 
-                    ? "TÌM KIẾM HÓA ĐƠN NHẬP HÀNG (YÊU CẦU 5)" 
+                lblTieuDe.Text = rdoHoaDonNhap.Checked
+                    ? "TÌM KIẾM HÓA ĐƠN NHẬP HÀNG (YÊU CẦU 5)"
                     : "TÌM KIẾM HÓA ĐƠN BÁN HÀNG (YÊU CẦU 5)";
 
                 lblDoiTac.Text = rdoHoaDonNhap.Checked ? "Nhà Cung Cấp:" : "Khách Hàng:";
@@ -80,9 +85,9 @@ namespace QLBanMayViTinh.Forms
         {
             if (rdoMayViTinh.Checked)
             {
-                // Kỹ thuật ghép chuỗi SQL động chống SQL Injection & lỗi nháy đơn
-                string sql = @"SELECT m.MaMayVT, m.TenMayVT, l.TenLoai, h.TenHangSX, c.TenChip, r.TenRAM, 
-                                      m.SoLuong, m.GiaNhap, m.GiaBan, m.ThoiGianBH 
+
+                string sql = @"SELECT m.MaMayVT, m.TenMayVT, l.TenLoai, h.TenHangSX, c.TenChip, r.TenRAM,
+                                      m.SoLuong, m.GiaNhap, m.GiaBan, m.ThoiGianBH
                                FROM MayViTinh m
                                LEFT JOIN LoaiMay l ON m.MaLoai = l.MaLoai
                                LEFT JOIN HangSanXuat h ON m.MaHangSX = h.MaHangSX
@@ -157,7 +162,7 @@ namespace QLBanMayViTinh.Forms
 
                 UIThemeHelper.FormatCurrencyColumns(dgvKetQua, "TongTien");
             }
-            else // rdoHoaDonBan.Checked
+            else
             {
                 string sql = @"SELECT DISTINCT h.MaHDB, h.NgayBan, nv.TenNV, kh.TenKhach, h.TongTien
                                FROM HoaDonBan h

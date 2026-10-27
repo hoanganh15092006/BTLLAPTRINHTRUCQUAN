@@ -22,6 +22,7 @@ namespace QLBanMayViTinh.Classes
             if (Conn != null && Conn.State == ConnectionState.Open)
                 return;
 
+            // Kết nối với máy chủ SQL
             string[] candidateSources = new string[]
             {
                 @".\SQLEXPRESS01",
@@ -32,7 +33,9 @@ namespace QLBanMayViTinh.Classes
                 @"DESKTOP-HQLKIT4\EXALAPTOP"
             };
 
+            // Kết nối với CSDL SQL
             string dbName = "QLBanMayViTinh";
+
             Exception lastException = null;
 
             foreach (string src in candidateSources)
@@ -71,37 +74,38 @@ namespace QLBanMayViTinh.Classes
             try
             {
                 string sqlCheckTables = @"
-                IF NOT EXISTS (SELECT 1 FROM sys.tables WHERE name = 'tblTaiKhoan')
-                BEGIN
-                    CREATE TABLE tblTaiKhoan (
-                        TenDangNhap NVARCHAR(50) NOT NULL PRIMARY KEY,
-                        MatKhauHash NVARCHAR(255) NOT NULL,
-                        Salt NVARCHAR(100) NOT NULL,
-                        MaNV NVARCHAR(20) NULL,
-                        VaiTro NVARCHAR(50) NOT NULL DEFAULT 'BanHang',
-                        TrangThai NVARCHAR(50) NOT NULL DEFAULT N'Hoạt động',
-                        NgayTao DATETIME NOT NULL DEFAULT GETDATE()
-                    );
-                END;
+                        IF NOT EXISTS (SELECT 1 FROM sys.tables WHERE name = 'tblTaiKhoan')
+                        BEGIN
+                            CREATE TABLE tblTaiKhoan (
+                                TenDangNhap NVARCHAR(50) NOT NULL PRIMARY KEY,
+                                MatKhauHash NVARCHAR(255) NOT NULL,
+                                Salt NVARCHAR(100) NOT NULL,
+                                MaNV NVARCHAR(20) NULL,
+                                VaiTro NVARCHAR(50) NOT NULL DEFAULT 'BanHang',
+                                TrangThai NVARCHAR(50) NOT NULL DEFAULT N'Hoạt động',
+                                NgayTao DATETIME NOT NULL DEFAULT GETDATE()
+                            );
+                        END;
 
-                IF NOT EXISTS (SELECT 1 FROM sys.tables WHERE name = 'tblNhatKyHoatDong')
-                BEGIN
-                    CREATE TABLE tblNhatKyHoatDong (
-                        Id INT IDENTITY(1,1) PRIMARY KEY,
-                        TenDangNhap NVARCHAR(50) NULL,
-                        HanhDong NVARCHAR(100) NOT NULL,
-                        ThoiGian DATETIME NOT NULL DEFAULT GETDATE(),
-                        ChiTiet NVARCHAR(500) NULL
-                    );
-                END;
+                        IF NOT EXISTS (SELECT 1 FROM sys.tables WHERE name = 'tblNhatKyHoatDong')
+                        BEGIN
+                            CREATE TABLE tblNhatKyHoatDong (
+                                Id INT IDENTITY(1,1) PRIMARY KEY,
+                                TenDangNhap NVARCHAR(50) NULL,
+                                HanhDong NVARCHAR(100) NOT NULL,
+                                ThoiGian DATETIME NOT NULL DEFAULT GETDATE(),
+                                ChiTiet NVARCHAR(500) NULL
+                            );
+                        END;
 
-                IF NOT EXISTS (SELECT 1 FROM sys.tables WHERE name = 'tblCauHinhHeThong')
-                BEGIN
-                    CREATE TABLE tblCauHinhHeThong (
-                        KeyName NVARCHAR(100) NOT NULL PRIMARY KEY,
-                        KeyValue NVARCHAR(1000) NULL
-                    );
-                END;";
+                        IF NOT EXISTS (SELECT 1 FROM sys.tables WHERE name = 'tblCauHinhHeThong')
+                        BEGIN
+                            CREATE TABLE tblCauHinhHeThong (
+                                KeyName NVARCHAR(100) NOT NULL PRIMARY KEY,
+                                KeyValue NVARCHAR(1000) NULL
+                            );
+                        END;
+                    ";
 
                 using (SqlCommand cmd = new SqlCommand(sqlCheckTables, Conn))
                 {

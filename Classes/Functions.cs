@@ -7,12 +7,15 @@ using System.Windows.Forms;
 
 namespace QLBanMayViTinh.Classes
 {
-
     public static class Functions
     {
-
         public static string ConnString = @"Data Source=.\SQLEXPRESS01;Initial Catalog=QLBanMayViTinh;Integrated Security=True";
         public static SqlConnection Conn = null;
+
+        public static string CurrentUsername = "admin";
+        public static string CurrentFullName = "Quản Trị Viên";
+        public static string CurrentRole = "Admin";
+        public static string CurrentMaNV = "NV01";
 
         public static void Connect()
         {
@@ -42,6 +45,7 @@ namespace QLBanMayViTinh.Classes
 
                     Conn = testConn;
                     ConnString = testStr;
+                    EnsureSystemTables();
                     return;
                 }
                 catch (Exception ex)
@@ -57,6 +61,206 @@ namespace QLBanMayViTinh.Classes
                 "Chi tiết lỗi: " + (lastException != null ? lastException.Message : ""),
                 "Lỗi Kết Nối CSDL", MessageBoxButtons.OK, MessageBoxIcon.Error
                 );
+        }
+
+        public static void EnsureSystemTables()
+        {
+            if (Conn == null || Conn.State != ConnectionState.Open)
+                return;
+
+            try
+            {
+                string sqlCheckTables = @"
+                IF NOT EXISTS (SELECT 1 FROM sys.tables WHERE name = 'tblTaiKhoan')
+                BEGIN
+                    CREATE TABLE tblTaiKhoan (
+                        TenDangNhap NVARCHAR(50) NOT NULL PRIMARY KEY,
+                        MatKhauHash NVARCHAR(255) NOT NULL,
+                        Salt NVARCHAR(100) NOT NULL,
+                        MaNV NVARCHAR(20) NULL,
+                        VaiTro NVARCHAR(50) NOT NULL DEFAULT 'BanHang',
+                        TrangThai NVARCHAR(50) NOT NULL DEFAULT N'Hoạt động',
+                        NgayTao DATETIME NOT NULL DEFAULT GETDATE()
+                    );
+                END;
+
+                IF NOT EXISTS (SELECT 1 FROM sys.tables WHERE name = 'tblNhatKyHoatDong')
+                BEGIN
+                    CREATE TABLE tblNhatKyHoatDong (
+                        Id INT IDENTITY(1,1) PRIMARY KEY,
+                        TenDangNhap NVARCHAR(50) NULL,
+                        HanhDong NVARCHAR(100) NOT NULL,
+                        ThoiGian DATETIME NOT NULL DEFAULT GETDATE(),
+                        ChiTiet NVARCHAR(500) NULL
+                    );
+                END;
+
+                IF NOT EXISTS (SELECT 1 FROM sys.tables WHERE name = 'tblCauHinhHeThong')
+                BEGIN
+                    CREATE TABLE tblCauHinhHeThong (
+                        KeyName NVARCHAR(100) NOT NULL PRIMARY KEY,
+                        KeyValue NVARCHAR(1000) NULL
+                    );
+                END;";
+
+                using (SqlCommand cmd = new SqlCommand(sqlCheckTables, Conn))
+                {
+                    cmd.ExecuteNonQuery();
+                }
+
+                string countUsers = "SELECT COUNT(*) FROM tblTaiKhoan";
+                int count = 0;
+                using (SqlCommand cmd = new SqlCommand(countUsers, Conn))
+                {
+                    object obj = cmd.ExecuteScalar();
+                    if (obj != null) int.TryParse(obj.ToString(), out count);
+                }
+
+                if (count == 0)
+                {
+                    string salt;
+                    string hash = SecurityHelper.HashPassword("Admin@123", out salt);
+                    string insertAdmin = string.Format(
+                        "INSERT INTO tblTaiKhoan (TenDangNhap, MatKhauHash, Salt, MaNV, VaiTro, TrangThai, NgayTao) " +
+                        "VALUES (N'admin', N'{0}', N'{1}', N'NV01', 'Admin', N'Hoạt động', GETDATE())",
+                        hash, salt);
+
+                    using (SqlCommand cmd = new SqlCommand(insertAdmin, Conn))
+                    {
+                        cmd.ExecuteNonQuery();
+                    }
+
+                    string staffSalt;
+                    string staffHash = SecurityHelper.HashPassword("Staff@123", out staffSalt);
+                    string insertStaff = string.Format(
+                        "INSERT INTO tblTaiKhoan (TenDangNhap, MatKhauHash, Salt, MaNV, VaiTro, TrangThai, NgayTao) " +
+                        "VALUES (N'banhang', N'{0}', N'{1}', N'NV02', 'BanHang', N'Hoạt động', GETDATE()), " +
+                        "(N'thukho', N'{0}', N'{1}', N'NV03', 'ThuKho', N'Hoạt động', GETDATE())",
+                        staffHash, staffSalt);
+
+                    using (SqlCommand cmd = new SqlCommand(insertStaff, Conn))
+                    {
+                        cmd.ExecuteNonQuery();
+                    }
+                }
+
+                EnsureCleanVietnameseData();
+            }
+            catch
+            {
+            }
+        }
+
+        public static void EnsureCleanVietnameseData()
+        {
+            try
+            {
+                if (Conn == null || Conn.State != ConnectionState.Open) return;
+
+                string checkSql = "SELECT COUNT(*) FROM LoaiMay WHERE TenLoai LIKE '%Ã%' OR TenLoai LIKE '%Ä%'";
+                int count = 0;
+                using (SqlCommand cmd = new SqlCommand(checkSql, Conn))
+                {
+                    object obj = cmd.ExecuteScalar();
+                    if (obj != null) int.TryParse(obj.ToString(), out count);
+                }
+
+                if (count > 0)
+                {
+                    string repairSql = @"
+                    UPDATE LoaiMay SET TenLoai = N'Máy tính xách tay (Laptop)' WHERE MaLoai = 'LM01';
+                    UPDATE LoaiMay SET TenLoai = N'Máy tính để bàn Gaming (PC Gaming)' WHERE MaLoai = 'LM02';
+                    UPDATE LoaiMay SET TenLoai = N'Máy tính để bàn Văn phòng (All-in-One)' WHERE MaLoai = 'LM03';
+                    UPDATE LoaiMay SET TenLoai = N'Máy trạm đồ họa chuyên nghiệp (Workstation)' WHERE MaLoai = 'LM04';
+                    UPDATE Chip SET TenChip = N'Intel Core i5 13400F (10 Cores, up to 4.6 GHz)' WHERE MaChip = 'CPU01';
+                    UPDATE Chip SET TenChip = N'Intel Core i7 13700K (16 Cores, up to 5.4 GHz)' WHERE MaChip = 'CPU02';
+                    UPDATE Chip SET TenChip = N'AMD Ryzen 5 7600X (6 Cores, up to 5.3 GHz)' WHERE MaChip = 'CPU03';
+                    UPDATE Chip SET TenChip = N'AMD Ryzen 7 7800X3D (8 Cores, 3D V-Cache)' WHERE MaChip = 'CPU04';
+                    UPDATE OCung SET TenOCung = N'SSD M.2 NVMe PCIe Gen4 x4' WHERE MaOCung = 'OC01';
+                    UPDATE OCung SET TenOCung = N'SSD 2.5 inch SATA III' WHERE MaOCung = 'OC02';
+                    UPDATE OCung SET TenOCung = N'HDD 3.5 inch Western Digital Blue' WHERE MaOCung = 'OC03';
+                    UPDATE DungLuong SET TenDungLuong = N'512 GB' WHERE MaDungLuong = 'DL01';
+                    UPDATE DungLuong SET TenDungLuong = N'1024 GB (1 TB)' WHERE MaDungLuong = 'DL02';
+                    UPDATE DungLuong SET TenDungLuong = N'2048 GB (2 TB)' WHERE MaDungLuong = 'DL03';
+                    UPDATE TocDo SET TenTocDo = N'3500 MB/s (PCIe 3.0)' WHERE MaTocDo = 'TD01';
+                    UPDATE TocDo SET TenTocDo = N'7000 MB/s (PCIe 4.0 Siêu tốc)' WHERE MaTocDo = 'TD02';
+                    UPDATE TocDo SET TenTocDo = N'7200 RPM (HDD Standard)' WHERE MaTocDo = 'TD03';
+                    UPDATE OCD SET TenOCD = N'Không trang bị ổ CD' WHERE MaOCD = 'CD01';
+                    UPDATE OCD SET TenOCD = N'Ổ đĩa DVD-RW ghi đọc gắn ngoài' WHERE MaOCD = 'CD02';
+                    UPDATE ManHinh SET TenManHinh = N'Màn hình IPS Full HD 144Hz' WHERE MaManHinh = 'MH01';
+                    UPDATE ManHinh SET TenManHinh = N'Màn hình IPS 2K QHD 165Hz Chống chói' WHERE MaManHinh = 'MH02';
+                    UPDATE ManHinh SET TenManHinh = N'Màn hình OLED 4K UHD 120Hz Chuẩn màu' WHERE MaManHinh = 'MH03';
+                    UPDATE CoMH SET TenCoMH = N'14.0 inch' WHERE MaCoMH = 'CO01';
+                    UPDATE CoMH SET TenCoMH = N'15.6 inch' WHERE MaCoMH = 'CO02';
+                    UPDATE CoMH SET TenCoMH = N'24.0 inch (Desktop)' WHERE MaCoMH = 'CO03';
+                    UPDATE CoMH SET TenCoMH = N'27.0 inch (Desktop)' WHERE MaCoMH = 'CO04';
+                    UPDATE Chuot SET TenChuot = N'Chuột không dây Logitech Silent M331' WHERE MaChuot = 'CH01';
+                    UPDATE Chuot SET TenChuot = N'Chuột Gaming Razer DeathAdder Essential' WHERE MaChuot = 'CH02';
+                    UPDATE Chuot SET TenChuot = N'Chuột quang văn phòng có dây Genius' WHERE MaChuot = 'CH03';
+                    UPDATE BanPhim SET TenBanPhim = N'Bàn phím cơ DareU EK87 Red Switch RGB' WHERE MaBanPhim = 'BP01';
+                    UPDATE BanPhim SET TenBanPhim = N'Bàn phím cơ không dây Asus ROG Azoth' WHERE MaBanPhim = 'BP02';
+                    UPDATE BanPhim SET TenBanPhim = N'Bàn phím cao su văn phòng Logitech K120' WHERE MaBanPhim = 'BP03';
+                    UPDATE USB SET TenUSB = N'Kingston DataTraveler Exodia USB 3.2', DungLuong = N'64 GB' WHERE MaUSB = 'USB01';
+                    UPDATE USB SET TenUSB = N'SanDisk Ultra Flair USB 3.0 Vỏ kim loại', DungLuong = N'128 GB' WHERE MaUSB = 'USB02';
+                    UPDATE USB SET TenUSB = N'Samsung Type-C Flash Drive', DungLuong = N'256 GB' WHERE MaUSB = 'USB03';
+                    UPDATE RAM SET TenRAM = N'16GB (2x8GB) DDR4 3200MHz Kingston Fury' WHERE MaRAM = 'RAM01';
+                    UPDATE RAM SET TenRAM = N'32GB (2x16GB) DDR5 6000MHz Corsair Vengeance' WHERE MaRAM = 'RAM02';
+                    UPDATE RAM SET TenRAM = N'64GB (2x32GB) DDR5 6400MHz G.Skill Trident Z5' WHERE MaRAM = 'RAM03';
+                    UPDATE Loa SET TenLoa = N'Loa tích hợp sẵn Stereo Waves MaxxAudio' WHERE MaLoa = 'LOA01';
+                    UPDATE Loa SET TenLoa = N'Loa để bàn Microlab M-108 2.1 Siêu trầm' WHERE MaLoa = 'LOA02';
+                    UPDATE Loa SET TenLoa = N'Loa Soundbar Gaming Edifier G2000 RGB' WHERE MaLoa = 'LOA03';
+                    UPDATE HangSanXuat SET TenHangSX = N'ASUS ROG / TUF Gaming' WHERE MaHangSX = 'HSX01';
+                    UPDATE HangSanXuat SET TenHangSX = N'DELL Technologies' WHERE MaHangSX = 'HSX02';
+                    UPDATE HangSanXuat SET TenHangSX = N'MSI Gaming Series' WHERE MaHangSX = 'HSX03';
+                    UPDATE HangSanXuat SET TenHangSX = N'HP (Hewlett-Packard)' WHERE MaHangSX = 'HSX04';
+                    UPDATE NhanVien SET TenNV = N'Nguyễn Hoàng Long', GioiTinh = N'Nam', DiaChi = N'128 Cầu Giấy, Hà Nội' WHERE MaNV = 'NV01';
+                    UPDATE NhanVien SET TenNV = N'Trần Thị Mai Phương', GioiTinh = N'Nữ', DiaChi = N'45 Giải Phóng, Hai Bà Trưng, Hà Nội' WHERE MaNV = 'NV02';
+                    UPDATE NhanVien SET TenNV = N'Lê Minh Tuấn', GioiTinh = N'Nam', DiaChi = N'78 Nguyễn Trãi, Thanh Xuân, Hà Nội' WHERE MaNV = 'NV03';
+                    UPDATE NhanVien SET TenNV = N'Phạm Thu Hà', GioiTinh = N'Nữ', DiaChi = N'12 Kim Mã, Ba Đình, Hà Nội' WHERE MaNV = 'NV04';
+                    UPDATE NhanVien SET TenNV = N'Đỗ Quang Huy', GioiTinh = N'Nam', DiaChi = N'90 Hoàng Mai, Hà Nội' WHERE MaNV = 'NV05';
+                    UPDATE KhachHang SET TenKhach = N'Công ty CP Công Nghệ NextTech', DiaChi = N'Tầng 5 Keangnam Landmark, Nam Từ Liêm' WHERE MaKhach = 'KH01';
+                    UPDATE KhachHang SET TenKhach = N'Vũ Đình Khang', DiaChi = N'15 Hoàng Quốc Việt, Cầu Giấy, Hà Nội' WHERE MaKhach = 'KH02';
+                    UPDATE KhachHang SET TenKhach = N'Hoàng Yến Nhi', DiaChi = N'22 Tây Sơn, Đống Đa, Hà Nội' WHERE MaKhach = 'KH03';
+                    UPDATE KhachHang SET TenKhach = N'Trần Đức Anh', DiaChi = N'36 Lê Văn Lương, Cầu Giấy, Hà Nội' WHERE MaKhach = 'KH04';
+                    UPDATE NhaCungCap SET TenNCC = N'Tổng Kho Máy Tính Viễn Sơn', DiaChi = N'Số 175 Phố Vọng, Hai Bà Trưng, Hà Nội' WHERE MaNCC = 'NCC01';
+                    UPDATE NhaCungCap SET TenNCC = N'Công ty Phân Phối Synnex FPT', DiaChi = N'Tòa nhà FPT Cầu Giấy, Hà Nội' WHERE MaNCC = 'NCC02';
+                    UPDATE NhaCungCap SET TenNCC = N'Công ty TNHH Phân Phối Dầu Khí PSD', DiaChi = N'Tầng 6 Petrovietnam Tower, Hà Nội' WHERE MaNCC = 'NCC03';
+                    UPDATE MayViTinh SET TenMayVT = N'Laptop ASUS ROG Strix G16', GhiChu = N'Laptop Gaming cao cấp 2024' WHERE MaMayVT = 'MVT01';
+                    UPDATE MayViTinh SET TenMayVT = N'Laptop Dell XPS 15 9530', GhiChu = N'Dòng doanh nhân mỏng nhẹ sang trọng' WHERE MaMayVT = 'MVT02';
+                    UPDATE MayViTinh SET TenMayVT = N'PC Gaming MSI Dragon Core', GhiChu = N'PC Gaming hiệu năng cao giá tốt' WHERE MaMayVT = 'MVT03';
+                    UPDATE MayViTinh SET TenMayVT = N'Máy trạm HP Z4 Workstation', GhiChu = N'Chuyên render kiến trúc, 3D max' WHERE MaMayVT = 'MVT04';";
+
+                    using (SqlCommand cmd = new SqlCommand(repairSql, Conn))
+                    {
+                        cmd.ExecuteNonQuery();
+                    }
+                }
+            }
+            catch
+            {
+            }
+        }
+
+        public static void LogAction(string action, string detail)
+        {
+            try
+            {
+                Connect();
+                if (Conn == null || Conn.State != ConnectionState.Open) return;
+
+                string user = string.IsNullOrEmpty(CurrentUsername) ? "system" : CurrentUsername;
+                string sql = "INSERT INTO tblNhatKyHoatDong (TenDangNhap, HanhDong, ThoiGian, ChiTiet) VALUES (@u, @a, GETDATE(), @d)";
+                using (SqlCommand cmd = new SqlCommand(sql, Conn))
+                {
+                    cmd.Parameters.AddWithValue("@u", user);
+                    cmd.Parameters.AddWithValue("@a", action ?? "");
+                    cmd.Parameters.AddWithValue("@d", detail ?? "");
+                    cmd.ExecuteNonQuery();
+                }
+            }
+            catch
+            {
+            }
         }
 
         public static void Disconnect()

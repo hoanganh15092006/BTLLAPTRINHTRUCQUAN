@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Windows.Forms;
@@ -17,6 +18,9 @@ namespace QLBanMayViTinh.Forms
 
         private void frmHoaDonNhap_Load(object sender, EventArgs e)
         {
+            if (this.DesignMode || LicenseManager.UsageMode == LicenseUsageMode.Designtime)
+                return;
+
             UIThemeHelper.StyleCard(pnlMasterCard);
             UIThemeHelper.StyleCard(pnlDetailCard);
             UIThemeHelper.StyleCard(pnlGridCard);

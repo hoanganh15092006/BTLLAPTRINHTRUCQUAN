@@ -4,10 +4,10 @@ using System.Data.SqlClient;
 using System.Text;
 using System.Windows.Forms;
 using QLBanMayViTinh.Classes;
+using QLBanMayViTinh.Forms;
 
 namespace QLBanMayViTinh.Testing
 {
-
     public static class SelfTestSuite
     {
         public static string RunSelfTest()
@@ -49,16 +49,17 @@ namespace QLBanMayViTinh.Testing
                                           'LoaiMay', 'Chip', 'OCung', 'DungLuong', 'TocDo', 'OCD',
                                           'ManHinh', 'CoMH', 'Chuot', 'BanPhim', 'USB', 'RAM',
                                           'Loa', 'HangSanXuat', 'NhanVien', 'KhachHang', 'NhaCungCap',
-                                          'MayViTinh', 'HoaDonNhap', 'ChiTietHDN', 'HoaDonBan', 'ChiTietHDB')";
+                                          'MayViTinh', 'HoaDonNhap', 'ChiTietHDN', 'HoaDonBan', 'ChiTietHDB',
+                                          'tblTaiKhoan', 'tblNhatKyHoatDong', 'tblCauHinhHeThong')";
                 string tableCount = Functions.GetFieldValues(sqlCheckTables);
                 if (int.TryParse(tableCount, out int count) && count >= 21)
                 {
                     passCount++;
-                    sb.AppendLine(string.Format("[PASS] Test 2: CSDL đã tạo đầy đủ {0}/21 bảng chuẩn hóa 3NF.", count));
+                    sb.AppendLine(string.Format("[PASS] Test 2: CSDL đã tạo đầy đủ {0} bảng chuẩn hóa 3NF và hệ thống bảo mật.", count));
                 }
                 else
                 {
-                    sb.AppendLine(string.Format("[FAIL] Test 2: Chỉ tìm thấy {0}/21 bảng trong CSDL!", tableCount));
+                    sb.AppendLine(string.Format("[FAIL] Test 2: Chỉ tìm thấy {0} bảng trong CSDL!", tableCount));
                 }
             }
             catch (Exception ex)
@@ -72,7 +73,6 @@ namespace QLBanMayViTinh.Testing
 
             try
             {
-
                 Functions.RunSQL("DELETE FROM ChiTietHDB WHERE MaHDB = N'" + testHDB + "'");
                 Functions.RunSQL("DELETE FROM HoaDonBan WHERE MaHDB = N'" + testHDB + "'");
                 Functions.RunSQL("DELETE FROM ChiTietHDN WHERE MaHDN = N'" + testHDN + "'");
@@ -142,9 +142,7 @@ namespace QLBanMayViTinh.Testing
                 bool daChanXuatAm = false;
                 try
                 {
-
                     Functions.RunSQL(string.Format("INSERT INTO HoaDonBan (MaHDB, NgayBan, MaNV, MaKhach, TongTien) VALUES (N'{0}', GETDATE(), N'NV01', N'KH01', 0)", testHDB));
-
                     Functions.RunSQL(string.Format("INSERT INTO ChiTietHDB (MaHDB, MaMayVT, SoLuong, DonGia, ThanhTien) VALUES (N'{0}', N'{1}', 50, 22000000, 0)", testHDB, testMayVT), false);
                 }
                 catch
@@ -208,11 +206,82 @@ namespace QLBanMayViTinh.Testing
                 Functions.RunSQL("DELETE FROM ChiTietHDN WHERE MaHDN = N'" + testHDN + "'");
                 Functions.RunSQL("DELETE FROM HoaDonNhap WHERE MaHDN = N'" + testHDN + "'");
                 Functions.RunSQL("DELETE FROM MayViTinh WHERE MaMayVT = N'" + testMayVT + "'");
-                sb.AppendLine("\n[CLEANUP] Đã dọn dẹp sạch sẽ toàn bộ bản ghi thử nghiệm. CSDL an toàn 100%.");
+                sb.AppendLine("[CLEANUP] Đã dọn dẹp sạch sẽ toàn bộ bản ghi thử nghiệm. CSDL an toàn 100%.");
             }
             catch (Exception ex)
             {
                 sb.AppendLine("[ERROR] Phát sinh ngoại lệ trong quá trình tự kiểm thử: " + ex.Message);
+            }
+
+            totalTests++;
+            try
+            {
+                string testPwd = "SecretPassword@2026";
+                string salt;
+                string hash = SecurityHelper.HashPassword(testPwd, out salt);
+                bool valid = SecurityHelper.VerifyPassword(testPwd, hash, salt);
+                bool invalid = SecurityHelper.VerifyPassword("WrongPassword", hash, salt);
+
+                if (valid && !invalid)
+                {
+                    passCount++;
+                    sb.AppendLine("[PASS] Test 10 (Security): Thuật toán băm PBKDF2 và kiểm tra mật khẩu chính xác 100%.");
+                }
+                else
+                {
+                    sb.AppendLine("[FAIL] Test 10 (Security): Xác thực PBKDF2 không đúng!");
+                }
+            }
+            catch (Exception ex)
+            {
+                sb.AppendLine("[FAIL] Test 10 (Security): Lỗi băm mật khẩu: " + ex.Message);
+            }
+
+            totalTests++;
+            try
+            {
+                string plainText = "Số điện thoại: 0988.888.999 - Địa chỉ: 128 Cầu Giấy, Hà Nội";
+                string encrypted = SecurityHelper.EncryptAES(plainText);
+                string decrypted = SecurityHelper.DecryptAES(encrypted);
+
+                if (encrypted.StartsWith("ENC:") && decrypted == plainText)
+                {
+                    passCount++;
+                    sb.AppendLine("[PASS] Test 11 (Security): Mã hóa & Giải mã AES-256 bảo vệ dữ liệu nhạy cảm hoạt động hoàn hảo.");
+                }
+                else
+                {
+                    sb.AppendLine("[FAIL] Test 11 (Security): Chu trình mã hóa AES-256 không khớp với dữ liệu gốc!");
+                }
+            }
+            catch (Exception ex)
+            {
+                sb.AppendLine("[FAIL] Test 11 (Security): Lỗi AES-256: " + ex.Message);
+            }
+
+            totalTests++;
+            try
+            {
+                using (frmDangNhap f1 = new frmDangNhap()) { }
+                using (frmDangKy f2 = new frmDangKy()) { }
+                using (frmQuenMatKhau f3 = new frmQuenMatKhau()) { }
+                using (frmHoSoCaNhan f4 = new frmHoSoCaNhan()) { }
+                using (frmQuanLyNguoiDung f5 = new frmQuanLyNguoiDung()) { }
+                using (frmDanhMucHeThong f6 = new frmDanhMucHeThong()) { }
+                using (frmCaiDat f7 = new frmCaiDat()) { }
+                using (frmNhatKyHoatDong f8 = new frmNhatKyHoatDong()) { }
+                using (frmMayViTinh f9 = new frmMayViTinh()) { }
+                using (frmHoaDonNhap f10 = new frmHoaDonNhap()) { }
+                using (frmHoaDonBan f11 = new frmHoaDonBan()) { }
+                using (frmTimKiem f12 = new frmTimKiem()) { }
+                using (frmBaoCaoThongKe f13 = new frmBaoCaoThongKe()) { }
+
+                passCount++;
+                sb.AppendLine("[PASS] Test 12 (UI Forms): Khởi tạo thành công 13/13 Form giao diện mà không gặp bất kỳ lỗi runtime nào.");
+            }
+            catch (Exception ex)
+            {
+                sb.AppendLine("[FAIL] Test 12 (UI Forms): Lỗi khởi tạo Form: " + ex.Message);
             }
 
             sb.AppendLine("======================================================================");

@@ -241,3 +241,4 @@
   *"Thưa thầy/cô, dự án của chúng em được kiểm soát chất lượng qua 2 tiêu chuẩn nghiêm ngặt:*  
   *1. **Quy tắc Zero-Comment:** Toàn bộ 40 file C# và script SQL của dự án không chứa bất kỳ dòng chú thích thừa nào (`//`, `/* */`). Mã nguồn được viết theo nguyên lý Clean Code: tên hàm, tên biến, cấu trúc lớp tự giải thích rõ ràng chức năng.*  
   *2. **Bộ Test Suite E2E tự động:** Dự án tích hợp bộ kiểm thử hộp đục 25 kịch bản tự động kiểm tra toàn bộ tính năng từ kết nối CSDL, tính toàn vẹn ảnh nhị phân, stress test giao diện cho đến chu trình bán hàng thực tế. Báo cáo kiểm thử đạt 25/25 bài thành công (100%), đảm bảo phần mềm hoạt động bền bỉ, không có lỗi tiềm ẩn."*
+

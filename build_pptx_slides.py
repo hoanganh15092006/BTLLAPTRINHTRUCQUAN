@@ -393,3 +393,4 @@ for s in slides_data:
 out_pptx = os.path.abspath("Presentation/QLBanMayViTinh_Full_Presentation.pptx")
 prs.save(out_pptx)
 print(f"Generated PowerPoint Presentation: {out_pptx}")
+

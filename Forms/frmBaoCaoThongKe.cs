@@ -141,7 +141,7 @@ namespace QLBanMayViTinh.Forms
             {
                 pnlThoiGian.Visible = false;
                 pnlFilterCard.Height = 54;
-                lblTieuDeBaoCao.Text = "BÁO CÁO DANH SÁCH MÁY VI TÍNH TỒN KHO (YÊU CẦU 6)";
+                lblTieuDeBaoCao.Text = "BÁO CÁO DANH SÁCH MÁY VI TÍNH TỒN KHO";
                 LayoutActionButtons();
             }
             else
@@ -149,11 +149,11 @@ namespace QLBanMayViTinh.Forms
                 pnlThoiGian.Visible = true;
                 pnlFilterCard.Height = 98;
                 if (rdoNhapHang.Checked)
-                    lblTieuDeBaoCao.Text = "BÁO CÁO DOANH THU NHẬP HÀNG THEO THỜI GIAN (YÊU CẦU 7)";
+                    lblTieuDeBaoCao.Text = "BÁO CÁO DOANH THU NHẬP HÀNG THEO THỜI GIAN";
                 else if (rdoBanHang.Checked)
-                    lblTieuDeBaoCao.Text = "BÁO CÁO DOANH THU BÁN HÀNG THEO THỜI GIAN (YÊU CẦU 8)";
+                    lblTieuDeBaoCao.Text = "BÁO CÁO DOANH THU BÁN HÀNG THEO THỜI GIAN";
                 else
-                    lblTieuDeBaoCao.Text = "TOP 5 NHÂN VIÊN DOANH THU CAO NHẤT (YÊU CẦU 9)";
+                    lblTieuDeBaoCao.Text = "TOP 5 NHÂN VIÊN DOANH THU CAO NHẤT";
                 LayoutActionButtons();
             }
             pnlFilterCard.Invalidate();

@@ -183,7 +183,7 @@ namespace QLBanMayViTinh.Forms
 
             Panel kpi3 = UIThemeHelper.CreateKpiCard("Tổng Giá Trị Kho", string.Format("{0:N0} đ", totalValuation), "Định giá theo giá nhập", Color.FromArgb(245, 158, 11), "", kpiW, 76);
 
-            Panel kpi4 = UIThemeHelper.CreateKpiCard("Cấu Hình Chuẩn 3NF", "14 Linh Kiện", "Toàn vẹn khóa ngoại CSDL", Color.FromArgb(14, 165, 233), "", kpiW, 76);
+            Panel kpi4 = UIThemeHelper.CreateKpiCard("Cấu Hình Phần Cứng", "14 Thông Số", "Chi tiết linh kiện máy tính", Color.FromArgb(14, 165, 233), "", kpiW, 76);
 
 
 

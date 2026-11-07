@@ -184,7 +184,7 @@ namespace QLBanMayViTinh.Forms
             this.lblHeaderDetail.Name = "lblHeaderDetail";
             this.lblHeaderDetail.Size = new System.Drawing.Size(1006, 22);
             this.lblHeaderDetail.TabIndex = 0;
-            this.lblHeaderDetail.Text = "CHỌN SẢN PHẨM BÁN HÀNG (DETAIL - CHỐNG XUẤT ÂM)";
+            this.lblHeaderDetail.Text = "CHỌN SẢN PHẨM BÁN HÀNG";
             this.lblMaMay.AutoSize = true;
             this.lblMaMay.Location = new System.Drawing.Point(12, 38);
             this.lblMaMay.Name = "lblMaMay";

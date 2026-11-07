@@ -158,7 +158,7 @@ namespace QLBanMayViTinh.Forms
             this.lblHeaderHardware.Name = "lblHeaderHardware";
             this.lblHeaderHardware.Size = new System.Drawing.Size(1578, 32);
             this.lblHeaderHardware.TabIndex = 0;
-            this.lblHeaderHardware.Text = "THÔNG TIN CƠ BẢN & 14 CẤU HÌNH PHẦN CỨNG (CHUẨN 3NF)";
+            this.lblHeaderHardware.Text = "THÔNG TIN CƠ BẢN & CẤU HÌNH PHẦN CỨNG";
             this.lblHeaderHardware.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.lblHeaderHardware.Click += new System.EventHandler(this.lblHeaderHardware_Click);
             this.txtMaMay.Location = new System.Drawing.Point(85, 34);

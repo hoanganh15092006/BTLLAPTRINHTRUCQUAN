@@ -178,7 +178,7 @@ namespace QLBanMayViTinh.Forms
             this.lblHeaderDetail.Name = "lblHeaderDetail";
             this.lblHeaderDetail.Size = new System.Drawing.Size(1599, 22);
             this.lblHeaderDetail.TabIndex = 0;
-            this.lblHeaderDetail.Text = "CHI TIẾT MẶT HÀNG NHẬP KHO (DETAIL)";
+            this.lblHeaderDetail.Text = "CHI TIẾT MẶT HÀNG NHẬP KHO";
             this.lblMaMay.AutoSize = true;
             this.lblMaMay.Location = new System.Drawing.Point(12, 38);
             this.lblMaMay.Name = "lblMaMay";

@@ -287,7 +287,7 @@ namespace QLBanMayViTinh.Forms
             pnlBentoDashboard.Visible = true;
             pnlBentoDashboard.BringToFront();
 
-            lblTitle.Text = "BENTO GRID DASHBOARD - HỆ THỐNG PC STORE PRO";
+            lblTitle.Text = "BẢNG ĐIỀU KHIỂN TRUNG TÂM - HỆ THỐNG PC STORE PRO";
             lblSubTitle.Text = "Tổng quan kinh doanh, kho hàng trực quan, cảnh báo tự động và điều hành nhanh";
 
             RefreshBentoData();
@@ -406,7 +406,7 @@ namespace QLBanMayViTinh.Forms
         private void btnNavHDNhap_Click(object sender, EventArgs e)
         {
             ActivateSidebarButton(btnNavHDNhap);
-            OpenChildForm(new frmHoaDonNhap(), " QUẢN LÝ HÓA ĐƠN NHẬP HÀNG (MASTER-DETAIL)", "Nhập hàng từ nhà cung cấp, tự động cộng tồn kho, cập nhật giá nhập và tính giá bán 110%");
+            OpenChildForm(new frmHoaDonNhap(), " QUẢN LÝ HÓA ĐƠN NHẬP HÀNG", "Nhập hàng từ nhà cung cấp, tự động cộng tồn kho, cập nhật giá nhập và tính giá bán 110%");
         }
 
         private void btnNavHDBan_Click(object sender, EventArgs e)
@@ -418,13 +418,13 @@ namespace QLBanMayViTinh.Forms
         private void btnNavTimKiem_Click(object sender, EventArgs e)
         {
             ActivateSidebarButton(btnNavTimKiem);
-            OpenChildForm(new frmTimKiem(), " TRA CỨU & TÌM KIẾM ĐA TIÊU CHÍ (YÊU CẦU 4 & 5)", "Tìm kiếm máy vi tính theo cấu hình phần cứng hoặc tra cứu hóa đơn bán hàng linh hoạt");
+            OpenChildForm(new frmTimKiem(), " TRA CỨU & TÌM KIẾM ĐA TIÊU CHÍ", "Tìm kiếm máy vi tính theo cấu hình phần cứng hoặc tra cứu hóa đơn bán hàng linh hoạt");
         }
 
         private void btnNavBaoCao_Click(object sender, EventArgs e)
         {
             ActivateSidebarButton(btnNavBaoCao);
-            OpenChildForm(new frmBaoCaoThongKe(), "📈  BÁO CÁO & THỐNG KÊ DOANH THU (YÊU CẦU 6, 7, 8, 9)", "Báo cáo nhập/bán theo quý/năm, danh sách máy tồn kho và Top 5 nhân viên xuất sắc");
+            OpenChildForm(new frmBaoCaoThongKe(), "📈  BÁO CÁO & THỐNG KÊ DOANH THU", "Báo cáo nhập/bán theo quý/năm, danh sách máy tồn kho và Top 5 nhân viên xuất sắc");
         }
 
         private void btnNavHoSo_Click(object sender, EventArgs e)
@@ -436,7 +436,7 @@ namespace QLBanMayViTinh.Forms
         private void btnNavNguoiDung_Click(object sender, EventArgs e)
         {
             ActivateSidebarButton(btnNavNguoiDung);
-            OpenChildForm(new frmQuanLyNguoiDung(), "👥  QUẢN TRỊ NGƯỜI DÙNG & PHÂN QUYỀN (RBAC)", "Quản lý tài khoản, phân quyền Admin/Bán Hàng/Thủ Kho và trạng thái truy cập");
+            OpenChildForm(new frmQuanLyNguoiDung(), "👥  QUẢN TRỊ NGƯỜI DÙNG & PHÂN QUYỀN", "Quản lý tài khoản, phân quyền Admin/Bán Hàng/Thủ Kho và trạng thái truy cập");
         }
 
         private void btnNavNhatKy_Click(object sender, EventArgs e)

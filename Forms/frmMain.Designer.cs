@@ -1,4 +1,4 @@
-﻿namespace QLBanMayViTinh.Forms
+namespace QLBanMayViTinh.Forms
 {
     partial class frmMain
     {
@@ -366,7 +366,7 @@
             this.lblTitle.Name = "lblTitle";
             this.lblTitle.Size = new System.Drawing.Size(580, 26);
             this.lblTitle.TabIndex = 0;
-            this.lblTitle.Text = "BENTO GRID DASHBOARD - HỆ THỐNG PC STORE PRO";
+            this.lblTitle.Text = "BẢNG ĐIỀU KHIỂN TRUNG TÂM - HỆ THỐNG PC STORE PRO";
             this.pnlContent.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(241)))), ((int)(((byte)(245)))), ((int)(((byte)(249)))));
             this.pnlContent.Controls.Add(this.pnlBentoDashboard);
             this.pnlContent.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -543,7 +543,7 @@
             this.lblQuickHeader.Name = "lblQuickHeader";
             this.lblQuickHeader.Size = new System.Drawing.Size(400, 20);
             this.lblQuickHeader.TabIndex = 0;
-            this.lblQuickHeader.Text = "TÁC VỤ NHANH BENTO (QUICK ACTIONS)";
+            this.lblQuickHeader.Text = "TÁC VỤ NHANH (QUICK ACTIONS)";
             this.pnlBentoSec.BackColor = System.Drawing.Color.White;
             this.pnlBentoSec.Controls.Add(this.lblSecHash);
             this.pnlBentoSec.Controls.Add(this.lblSecDbName);
@@ -678,7 +678,7 @@
             this.lblHeroTag.Name = "lblHeroTag";
             this.lblHeroTag.Size = new System.Drawing.Size(320, 18);
             this.lblHeroTag.TabIndex = 0;
-            this.lblHeroTag.Text = "✨ DOANH THU TOÀN CỬA HÀNG (BENTO HERO)";
+            this.lblHeroTag.Text = "✨ DOANH THU TOÀN CỬA HÀNG";
             this.timerClock.Enabled = true;
             this.timerClock.Interval = 1000;
             this.timerClock.Tick += new System.EventHandler(this.timerClock_Tick);

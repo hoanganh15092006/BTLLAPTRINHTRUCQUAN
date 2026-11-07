@@ -84,7 +84,7 @@ namespace QLBanMayViTinh.Forms
             this.lblTieuDe.ForeColor = System.Drawing.Color.FromArgb(15, 23, 42);
             this.lblTieuDe.Location = new System.Drawing.Point(14, 8);
             this.lblTieuDe.Size = new System.Drawing.Size(460, 24);
-            this.lblTieuDe.Text = "TÌM KIẾM SẢN PHẨM MÁY VI TÍNH (YÊU CẦU 4)";
+            this.lblTieuDe.Text = "TÌM KIẾM SẢN PHẨM MÁY VI TÍNH";
 
             this.lblSubTieuDe.Font = new System.Drawing.Font("Segoe UI", 8.5F);
             this.lblSubTieuDe.ForeColor = System.Drawing.Color.FromArgb(100, 116, 139);
@@ -107,7 +107,7 @@ namespace QLBanMayViTinh.Forms
             this.rdoMayViTinh.ForeColor = System.Drawing.Color.FromArgb(15, 23, 42);
             this.rdoMayViTinh.Location = new System.Drawing.Point(10, 10);
             this.rdoMayViTinh.Size = new System.Drawing.Size(160, 24);
-            this.rdoMayViTinh.Text = " Máy Vi Tính (YC4)";
+            this.rdoMayViTinh.Text = " Máy Vi Tính";
             this.rdoMayViTinh.UseVisualStyleBackColor = true;
             this.rdoMayViTinh.CheckedChanged += new System.EventHandler(this.rdoMayViTinh_CheckedChanged);
 
@@ -127,7 +127,7 @@ namespace QLBanMayViTinh.Forms
             this.rdoHoaDonBan.ForeColor = System.Drawing.Color.FromArgb(15, 23, 42);
             this.rdoHoaDonBan.Location = new System.Drawing.Point(340, 10);
             this.rdoHoaDonBan.Size = new System.Drawing.Size(185, 24);
-            this.rdoHoaDonBan.Text = " Hóa Đơn Bán (YC5)";
+            this.rdoHoaDonBan.Text = " Hóa Đơn Bán";
             this.rdoHoaDonBan.UseVisualStyleBackColor = true;
             this.rdoHoaDonBan.CheckedChanged += new System.EventHandler(this.rdoHoaDonBan_CheckedChanged);
 

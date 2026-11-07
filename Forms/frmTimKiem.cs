@@ -175,7 +175,7 @@ namespace QLBanMayViTinh.Forms
                 pnlMayTinh.Visible = true;
                 pnlHoaDon.Visible = false;
                 pnlFilterCard.Height = 80;
-                lblTieuDe.Text = "TÌM KIẾM SẢN PHẨM MÁY VI TÍNH (YÊU CẦU 4)";
+                lblTieuDe.Text = "TÌM KIẾM SẢN PHẨM MÁY VI TÍNH";
             }
             else
             {
@@ -184,13 +184,13 @@ namespace QLBanMayViTinh.Forms
                 pnlFilterCard.Height = 98;
                 if (rdoHoaDonNhap.Checked)
                 {
-                    lblTieuDe.Text = "TÌM KIẾM HÓA ĐƠN NHẬP HÀNG (YÊU CẦU 5)";
+                    lblTieuDe.Text = "TÌM KIẾM HÓA ĐƠN NHẬP HÀNG";
                     lblDoiTac.Text = "Nhà Cung Cấp:";
                     Functions.FillCombo("SELECT MaNCC, TenNCC FROM NhaCungCap", cboDoiTac, "MaNCC", "TenNCC");
                 }
                 else
                 {
-                    lblTieuDe.Text = "TÌM KIẾM HÓA ĐƠN BÁN HÀNG (YÊU CẦU 5)";
+                    lblTieuDe.Text = "TÌM KIẾM HÓA ĐƠN BÁN HÀNG";
                     lblDoiTac.Text = "Khách Hàng:";
                     Functions.FillCombo("SELECT MaKhach, TenKhach FROM KhachHang", cboDoiTac, "MaKhach", "TenKhach");
                 }

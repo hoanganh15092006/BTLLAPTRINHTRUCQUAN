@@ -87,9 +87,12 @@ Hệ thống **Quản Lý Cửa Hàng Bán Máy Vi Tính (QLBanMayViTinh)** là 
 
 ## 🖥️ 3. Chi Tiết 14 Form Nghiệp Vụ Trong Hệ Thống
 
+> 📖 **HỆ THỐNG BÁO CÁO KỸ THUẬT ĐỘC LẬP**: Mỗi Form trong hệ thống đều có một bản tài liệu kỹ thuật chuyên sâu trình bày chi tiết về **Cách hoạt động**, **Công nghệ sử dụng**, **Cấu trúc mã nguồn chi tiết** và **Sơ đồ giải thuật**. Xem danh mục đầy đủ tại: **[Tài Liệu Chi Tiết 14 Forms (docs/README.md)](docs/README.md)**.
+
 Dự án sở hữu **14 Form** được thiết kế nhất quán theo chuẩn giao diện phẳng hiện đại, phân quyền truy cập thông minh và kiểm soát lỗi toàn diện:
 
-### Form 1: `frmDangNhap` - Đăng Nhập Hệ Thống Bảo Mật
+### Form 1: [`frmDangNhap`](docs/forms/README_frmDangNhap.md) - Đăng Nhập Hệ Thống Bảo Mật
+- 📑 **Báo cáo kỹ thuật chi tiết:** [docs/forms/README_frmDangNhap.md](docs/forms/README_frmDangNhap.md)
 - **Mục đích:** Xác thực danh tính người dùng trước khi cấp quyền truy cập vào phần mềm.
 - **Tính năng nổi bật:**
   - Kiểm tra tài khoản bằng thuật toán băm PBKDF2 và khóa muối Salt từ bảng `tblTaiKhoan`.
@@ -99,7 +102,8 @@ Dự án sở hữu **14 Form** được thiết kế nhất quán theo chuẩn 
   - Điều hướng nhanh sang Form Đăng ký tài khoản và Form Khôi phục mật khẩu.
   - Ghi nhật ký tự động vào bảng `tblNhatKyHoatDong` khi đăng nhập thành công hoặc thất bại.
 
-### Form 2: `frmDangKy` - Đăng Ký Tài Khoản Mới
+### Form 2: [`frmDangKy`](docs/forms/README_frmDangKy.md) - Đăng Ký Tài Khoản Mới
+- 📑 **Báo cáo kỹ thuật chi tiết:** [docs/forms/README_frmDangKy.md](docs/forms/README_frmDangKy.md)
 - **Mục đích:** Cho phép nhân viên tạo tài khoản mới để tham gia vận hành hệ thống.
 - **Tính năng nổi bật:**
   - Kiểm tra độ dài mật khẩu (tối thiểu 6 ký tự) và so khớp mật khẩu xác nhận.
@@ -108,7 +112,8 @@ Dự án sở hữu **14 Form** được thiết kế nhất quán theo chuẩn 
   - Gắn liên kết tài khoản với danh sách Mã nhân viên chưa có tài khoản trong bảng `NhanVien`.
   - Phân quyền mặc định an toàn theo vai trò quy định.
 
-### Form 3: `frmQuenMatKhau` - Khôi Phục Mật Khẩu
+### Form 3: [`frmQuenMatKhau`](docs/forms/README_frmQuenMatKhau.md) - Khôi Phục Mật Khẩu
+- 📑 **Báo cáo kỹ thuật chi tiết:** [docs/forms/README_frmQuenMatKhau.md](docs/forms/README_frmQuenMatKhau.md)
 - **Mục đích:** Giúp người dùng lấy lại quyền truy cập khi quên mật khẩu đăng nhập.
 - **Tính năng nổi bật:**
   - Quy trình xác minh bảo mật nhiều lớp: Xác thực Tên đăng nhập và Mã nhân viên tương ứng.
@@ -116,7 +121,8 @@ Dự án sở hữu **14 Form** được thiết kế nhất quán theo chuẩn 
   - Tự động tạo lại khóa muối Salt mới và băm mật khẩu mới ghi đè vào bảng `tblTaiKhoan`.
   - Ghi vết hành động khôi phục vào nhật ký kiểm toán hệ thống.
 
-### Form 4: `frmMain` - Dashboard Trung Tâm & Điều Hướng Đa Phân Hệ
+### Form 4: [`frmMain`](docs/forms/README_frmMain.md) - Dashboard Trung Tâm & Điều Hướng Đa Phân Hệ
+- 📑 **Báo cáo kỹ thuật chi tiết:** [docs/forms/README_frmMain.md](docs/forms/README_frmMain.md)
 - **Mục đích:** Khung làm việc chính của ứng dụng chứa Sidebar điều hướng, thanh Header trạng thái và khu vực hiển thị các Form con.
 - **Tính năng nổi bật:**
   - Sidebar điều hướng dạng cây menu thông minh: Trang Chủ, Sản Phẩm, Danh Mục, Hóa Đơn Nhập, Hóa Đơn Bán, Tra Cứu, Báo Cáo Thống Kê, Phân Quyền, Hồ Sơ, Nhật Ký, Cài Đặt.
@@ -125,7 +131,8 @@ Dự án sở hữu **14 Form** được thiết kế nhất quán theo chuẩn 
   - Thanh trạng thái hiển thị thời gian thực và trạng thái kết nối SQL Server.
   - Phân quyền động: Tự động ẩn các nút chức năng quản trị (Phân quyền, Nhật ký, Cài đặt) đối với nhân viên bán hàng thường.
 
-### Form 5: `frmMayViTinh` - Quản Lý Sản Phẩm Máy Vi Tính & 14 Cấu Hình 3NF
+### Form 5: [`frmMayViTinh`](docs/forms/README_frmMayViTinh.md) - Quản Lý Sản Phẩm Máy Vi Tính & 14 Cấu Hình 3NF
+- 📑 **Báo cáo kỹ thuật chi tiết:** [docs/forms/README_frmMayViTinh.md](docs/forms/README_frmMayViTinh.md)
 - **Mục đích:** Quản lý toàn bộ danh mục sản phẩm máy vi tính kèm 14 thông số cấu hình kỹ thuật chuẩn 3NF.
 - **Tính năng nổi bật:**
   - Nạp động 14 ComboBox linh kiện từ các bảng danh mục: Loại máy, Chip, RAM, Ổ cứng, Dung lượng, Tốc độ Bus, Ổ đĩa quang, Màn hình, Cỡ màn hình, Chuột, Bàn phím, Cổng USB, Loa, Hãng sản xuất.
@@ -135,7 +142,8 @@ Dự án sở hữu **14 Form** được thiết kế nhất quán theo chuẩn 
   - Cảnh báo an toàn nếu người dùng thiết lập giá bán thấp hơn giá nhập hoặc nhập giá trị âm.
   - Gắn bộ lọc phím `Functions.OnlyInteger` chặn nhập ký tự chữ vào các ô giá và số lượng.
 
-### Form 6: `frmDanhMucHeThong` - Quản Lý Danh Mục KH, NCC, NV & 14 Linh Kiện
+### Form 6: [`frmDanhMucHeThong`](docs/forms/README_frmDanhMucHeThong.md) - Quản Lý Danh Mục KH, NCC, NV & 14 Linh Kiện
+- 📑 **Báo cáo kỹ thuật chi tiết:** [docs/forms/README_frmDanhMucHeThong.md](docs/forms/README_frmDanhMucHeThong.md)
 - **Mục đích:** Quản lý tập trung toàn bộ các đối tượng danh mục nền tảng của doanh nghiệp.
 - **Gồm 4 Tab chức năng chuyên biệt:**
   1. **Tab Khách Hàng:** Quản lý Mã, Tên, Địa chỉ, Số điện thoại.
@@ -148,7 +156,8 @@ Dự án sở hữu **14 Form** được thiết kế nhất quán theo chuẩn 
   - Kiểm tra ràng buộc độ tuổi nhân viên (từ 15 tuổi trở lên, ngày sinh không vượt quá ngày hiện tại).
   - Toàn bộ thao tác thêm, sửa, xóa đều được bọc trong khối `try-catch` ngăn chặn triệt để lỗi ngoại lệ CSDL.
 
-### Form 7: `frmHoaDonNhap` - Quản Lý Nhập Hàng (Master-Detail)
+### Form 7: [`frmHoaDonNhap`](docs/forms/README_frmHoaDonNhap.md) - Quản Lý Nhập Hàng (Master-Detail)
+- 📑 **Báo cáo kỹ thuật chi tiết:** [docs/forms/README_frmHoaDonNhap.md](docs/forms/README_frmHoaDonNhap.md)
 - **Mục đích:** Lập phiếu và quản lý hóa đơn nhập máy vi tính từ nhà cung cấp vào kho.
 - **Tính năng nổi bật:**
   - Mô hình **Master-Detail**: Khối thông tin phiếu (Mã HDN, Ngày nhập, Nhân viên, Nhà cung cấp) và khối chi tiết mặt hàng nhập (Chọn máy, Tên máy, Số lượng, Đơn giá nhập, Thành tiền).
@@ -157,7 +166,8 @@ Dự án sở hữu **14 Form** được thiết kế nhất quán theo chuẩn 
   - Hỗ trợ xóa dòng mặt hàng với tính năng hoàn trả tồn kho tự động.
   - Bố cục responsive co dãn động (`LayoutDetailCard`), nhãn chữ hiển thị 100% đầy đủ không bị che khuất.
 
-### Form 8: `frmHoaDonBan` - Quản Lý Bán Hàng & Thu Ngân (POS Chống Xuất Âm)
+### Form 8: [`frmHoaDonBan`](docs/forms/README_frmHoaDonBan.md) - Quản Lý Bán Hàng & Thu Ngân (POS Chống Xuất Âm)
+- 📑 **Báo cáo kỹ thuật chi tiết:** [docs/forms/README_frmHoaDonBan.md](docs/forms/README_frmHoaDonBan.md)
 - **Mục đích:** Giao diện bán hàng lẻ trực tiếp cho khách hàng, lập hóa đơn và quản lý thu ngân.
 - **Tính năng nổi bật:**
   - Khi chọn sản phẩm, tự động nạp Đơn giá bán chuẩn (đã được tính 110%) và hiển thị Số lượng tồn kho hiện tại theo thời gian thực.
@@ -169,7 +179,8 @@ Dự án sở hữu **14 Form** được thiết kế nhất quán theo chuẩn 
   - Hỗ trợ xuất và in hóa đơn bán hàng cho khách.
   - Bố cục co dãn động `LayoutDetailCard` với `AutoSize = true` cho tất cả nhãn chữ.
 
-### Form 9: `frmTimKiem` - Tra Cứu & Tìm Kiếm Đa Tiêu Chí Thông Minh
+### Form 9: [`frmTimKiem`](docs/forms/README_frmTimKiem.md) - Tra Cứu & Tìm Kiếm Đa Tiêu Chí Thông Minh
+- 📑 **Báo cáo kỹ thuật chi tiết:** [docs/forms/README_frmTimKiem.md](docs/forms/README_frmTimKiem.md)
 - **Mục đích:** Cho phép nhân viên và ban quản lý tra cứu tức thì thông tin máy tính hoặc hóa đơn giao dịch.
 - **Tính năng nổi bật:**
   - **Tab 1 - Tìm Kiếm Máy Vi Tính (Yêu cầu 4):** Lọc linh hoạt theo Mã máy, Tên máy, Loại máy, Hãng sản xuất.
@@ -178,7 +189,8 @@ Dự án sở hữu **14 Form** được thiết kế nhất quán theo chuẩn 
   - Bố cục thích ứng `LayoutDynamicControls`: Tự động căn chỉnh nhãn *"Nhà Cung Cấp:"* và *"Khách Hàng:"* không bao giờ bị cắt chữ hay đè lên ô ComboBox.
   - Các nút Radio Switch góc trên hiển thị trọn vẹn 100% nội dung.
 
-### Form 10: `frmBaoCaoThongKe` - Báo Cáo Thống Kê Doanh Thu Tài Chính Chuyên Sâu
+### Form 10: [`frmBaoCaoThongKe`](docs/forms/README_frmBaoCaoThongKe.md) - Báo Cáo Thống Kê Doanh Thu Tài Chính Chuyên Sâu
+- 📑 **Báo cáo kỹ thuật chi tiết:** [docs/forms/README_frmBaoCaoThongKe.md](docs/forms/README_frmBaoCaoThongKe.md)
 - **Mục đích:** Cung cấp bức tranh toàn cảnh về tình hình tài chính, hiệu quả kinh doanh và tồn kho của cửa hàng.
 - **Đáp ứng trọn vẹn 4 yêu cầu báo cáo cốt lõi:**
   - **Yêu Cầu 8:** Thống kê sản phẩm tồn kho phân nhóm theo từng loại máy vi tính, tính tổng giá trị hàng tồn định giá theo giá nhập kho.
@@ -190,7 +202,8 @@ Dự án sở hữu **14 Form** được thiết kế nhất quán theo chuẩn 
   - **Cơ chế Auto-Refresh:** Tự động tải lại báo cáo ngay khi người dùng bấm chuyển đổi RadioButton hoặc chọn lại Tháng, Quý, Năm mà không cần bấm nút tìm kiếm thủ công.
   - Tính năng **Xuất Dữ Liệu Ra File Excel (`ExportToExcel`)** chuyên nghiệp, tự động căn lề và định dạng tiền tệ.
 
-### Form 11: `frmQuanLyNguoiDung` - Quản Lý Tài Khoản & Phân Quyền (RBAC)
+### Form 11: [`frmQuanLyNguoiDung`](docs/forms/README_frmQuanLyNguoiDung.md) - Quản Lý Tài Khoản & Phân Quyền (RBAC)
+- 📑 **Báo cáo kỹ thuật chi tiết:** [docs/forms/README_frmQuanLyNguoiDung.md](docs/forms/README_frmQuanLyNguoiDung.md)
 - **Mục đích:** Cung cấp công cụ cho Quản trị viên (Admin) quản lý người dùng và phân quyền truy cập hệ thống.
 - **Tính năng nổi bật:**
   - Quản lý danh sách tài khoản hệ thống từ bảng `tblTaiKhoan`.
@@ -203,14 +216,16 @@ Dự án sở hữu **14 Form** được thiết kế nhất quán theo chuẩn 
   - Tự động ngăn chặn Admin tự khóa tài khoản của chính mình.
   - Tạo mới tài khoản với mật khẩu khởi tạo mã hóa PBKDF2 an toàn.
 
-### Form 12: `frmHoSoCaNhan` - Hồ Sơ Người Dùng & Nhật Ký Cá Nhân
+### Form 12: [`frmHoSoCaNhan`](docs/forms/README_frmHoSoCaNhan.md) - Hồ Sơ Người Dùng & Nhật Ký Cá Nhân
+- 📑 **Báo cáo kỹ thuật chi tiết:** [docs/forms/README_frmHoSoCaNhan.md](docs/forms/README_frmHoSoCaNhan.md)
 - **Mục đích:** Nơi nhân viên quản lý thông tin tài khoản của mình và theo dõi các hoạt động đã thực hiện.
 - **Tính năng nổi bật:**
   - Xem và chỉnh sửa thông tin cá nhân: Họ tên, Giới tính, Địa chỉ, Số điện thoại (dữ liệu được tự động giải mã AES-256 hiển thị và mã hóa lại khi lưu).
   - Đổi mật khẩu cá nhân: Kiểm tra mật khẩu cũ bằng hàm xác thực `VerifyPassword`, băm mật khẩu mới bằng `HashPassword`.
   - Hiển thị lưới lịch sử hoạt động gần nhất của chính người dùng đăng nhập từ bảng `tblNhatKyHoatDong`.
 
-### Form 13: `frmNhatKyHoatDong` - Nhật Ký Hoạt Động (Audit Trail)
+### Form 13: [`frmNhatKyHoatDong`](docs/forms/README_frmNhatKyHoatDong.md) - Nhật Ký Hoạt Động (Audit Trail)
+- 📑 **Báo cáo kỹ thuật chi tiết:** [docs/forms/README_frmNhatKyHoatDong.md](docs/forms/README_frmNhatKyHoatDong.md)
 - **Mục đích:** Ghi nhận và giám sát toàn bộ các hành vi của người dùng trong hệ thống phục vụ công tác kiểm toán, bảo mật.
 - **Tính năng nổi bật:**
   - Lưu vết tự động: Tên đăng nhập, Loại hành động (Đăng nhập, Thêm máy, Sửa giá, Lập hóa đơn, Đổi mật khẩu...), Chi tiết thao tác và Thời gian thực thi chính xác đến từng giây.
@@ -218,7 +233,8 @@ Dự án sở hữu **14 Form** được thiết kế nhất quán theo chuẩn 
   - Tính năng phân trang hoặc làm mới danh mục theo thời gian thực.
   - Dữ liệu được bảo vệ chỉ đọc (Read-Only), không cho phép nhân viên sửa đổi nhật ký.
 
-### Form 14: `frmCaiDat` - Cài Đặt Hệ Thống & Chuỗi Kết Nối Mã Hóa
+### Form 14: [`frmCaiDat`](docs/forms/README_frmCaiDat.md) - Cài Đặt Hệ Thống & Chuỗi Kết Nối Mã Hóa
+- 📑 **Báo cáo kỹ thuật chi tiết:** [docs/forms/README_frmCaiDat.md](docs/forms/README_frmCaiDat.md)
 - **Mục đích:** Cấu hình các tham số môi trường và giao diện ứng dụng.
 - **Tính năng nổi bật:**
   - **Cấu hình chuỗi kết nối SQL Server:** Cho phép đổi máy chủ CSDL, kiểm tra kết nối thử (`Test Connection`) và lưu chuỗi kết nối mã hóa AES-256 an toàn vào bảng `tblCauHinhHeThong`.

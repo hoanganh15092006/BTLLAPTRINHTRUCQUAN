@@ -61,7 +61,7 @@
             this.lblTitle.ForeColor = System.Drawing.Color.FromArgb(15, 23, 42);
             this.lblTitle.Location = new System.Drawing.Point(22, 10);
             this.lblTitle.Name = "lblTitle";
-            this.lblTitle.Size = new System.Drawing.Size(500, 30);
+            this.lblTitle.Size = new System.Drawing.Size(560, 30);
             this.lblTitle.TabIndex = 0;
             this.lblTitle.Text = "QUẢN TRỊ NGƯỜI DÙNG & PHÂN QUYỀN (RBAC)";
             this.pnlDetailCard.BackColor = System.Drawing.Color.White;
@@ -92,7 +92,7 @@
             this.btnDatLaiMK.Name = "btnDatLaiMK";
             this.btnDatLaiMK.Size = new System.Drawing.Size(155, 36);
             this.btnDatLaiMK.TabIndex = 14;
-            this.btnDatLaiMK.Text = "🔑 CẤP LẠI MK";
+            this.btnDatLaiMK.Text = "CẤP LẠI MK";
             this.btnDatLaiMK.UseVisualStyleBackColor = true;
             this.btnDatLaiMK.Click += new System.EventHandler(this.btnDatLaiMK_Click);
             this.btnKhoaMoKhoa.Cursor = System.Windows.Forms.Cursors.Hand;
@@ -103,7 +103,7 @@
             this.btnKhoaMoKhoa.Name = "btnKhoaMoKhoa";
             this.btnKhoaMoKhoa.Size = new System.Drawing.Size(155, 36);
             this.btnKhoaMoKhoa.TabIndex = 13;
-            this.btnKhoaMoKhoa.Text = "🔒 KHÓA / MỞ";
+            this.btnKhoaMoKhoa.Text = "KHÓA / MỞ";
             this.btnKhoaMoKhoa.UseVisualStyleBackColor = true;
             this.btnKhoaMoKhoa.Click += new System.EventHandler(this.btnKhoaMoKhoa_Click);
             this.btnLamMoi.Cursor = System.Windows.Forms.Cursors.Hand;
@@ -243,7 +243,7 @@
             this.lblGridTitle.Padding = new System.Windows.Forms.Padding(15, 8, 0, 0);
             this.lblGridTitle.Size = new System.Drawing.Size(971, 35);
             this.lblGridTitle.TabIndex = 0;
-            this.lblGridTitle.Text = "📋 DANH SÁCH TÀI KHOẢN VÀ PHÂN QUYỀN TRÊN HỆ THỐNG";
+            this.lblGridTitle.Text = "DANH SÁCH TÀI KHOẢN VÀ PHÂN QUYỀN TRÊN HỆ THỐNG";
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(241, 245, 249);

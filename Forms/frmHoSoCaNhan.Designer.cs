@@ -172,7 +172,7 @@
             this.lblAvatar.Name = "lblAvatar";
             this.lblAvatar.Size = new System.Drawing.Size(70, 70);
             this.lblAvatar.TabIndex = 0;
-            this.lblAvatar.Text = "👤";
+            this.lblAvatar.Text = "";
             this.lblAvatar.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.pnlPassCard.BackColor = System.Drawing.Color.White;
             this.pnlPassCard.Controls.Add(this.btnDoiMatKhau);
@@ -246,7 +246,7 @@
             this.lblPassTitle.Name = "lblPassTitle";
             this.lblPassTitle.Size = new System.Drawing.Size(350, 25);
             this.lblPassTitle.TabIndex = 0;
-            this.lblPassTitle.Text = "🔒 Đổi Mật Khẩu Đăng Nhập";
+            this.lblPassTitle.Text = "Đổi Mật Khẩu Đăng Nhập";
             this.pnlGridCard.BackColor = System.Drawing.Color.White;
             this.pnlGridCard.Controls.Add(this.dgvLichSu);
             this.pnlGridCard.Controls.Add(this.lblGridTitle);
@@ -271,7 +271,7 @@
             this.lblGridTitle.Padding = new System.Windows.Forms.Padding(15, 8, 0, 0);
             this.lblGridTitle.Size = new System.Drawing.Size(971, 35);
             this.lblGridTitle.TabIndex = 0;
-            this.lblGridTitle.Text = "🕒 LỊCH SỬ THAO TÁC CỦA BẠN TRÊN HỆ THỐNG";
+            this.lblGridTitle.Text = "LỊCH SỬ THAO TÁC CỦA BẠN TRÊN HỆ THỐNG";
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(241, 245, 249);

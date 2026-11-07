@@ -58,7 +58,7 @@
             this.lblTitle.ForeColor = System.Drawing.Color.FromArgb(15, 23, 42);
             this.lblTitle.Location = new System.Drawing.Point(22, 10);
             this.lblTitle.Name = "lblTitle";
-            this.lblTitle.Size = new System.Drawing.Size(500, 30);
+            this.lblTitle.Size = new System.Drawing.Size(560, 30);
             this.lblTitle.TabIndex = 0;
             this.lblTitle.Text = "NHẬT KÝ HOẠT ĐỘNG & THÔNG BÁO HỆ THỐNG";
             this.pnlFilterCard.BackColor = System.Drawing.Color.White;
@@ -81,7 +81,7 @@
             this.btnXoaNhatKy.Name = "btnXoaNhatKy";
             this.btnXoaNhatKy.Size = new System.Drawing.Size(150, 34);
             this.btnXoaNhatKy.TabIndex = 6;
-            this.btnXoaNhatKy.Text = "🗑️ DỌN DẸP LOG";
+            this.btnXoaNhatKy.Text = "DỌN DẸP LOG";
             this.btnXoaNhatKy.UseVisualStyleBackColor = true;
             this.btnXoaNhatKy.Click += new System.EventHandler(this.btnXoaNhatKy_Click);
             this.btnLamMoi.Cursor = System.Windows.Forms.Cursors.Hand;
@@ -103,7 +103,7 @@
             this.btnLoc.Name = "btnLoc";
             this.btnLoc.Size = new System.Drawing.Size(120, 34);
             this.btnLoc.TabIndex = 4;
-            this.btnLoc.Text = "🔍 TRA CỨU";
+            this.btnLoc.Text = "TRA CỨU";
             this.btnLoc.UseVisualStyleBackColor = true;
             this.btnLoc.Click += new System.EventHandler(this.btnLoc_Click);
             this.cboHanhDong.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
@@ -170,7 +170,7 @@
             this.lblLogsTitle.Padding = new System.Windows.Forms.Padding(15, 8, 0, 0);
             this.lblLogsTitle.Size = new System.Drawing.Size(610, 35);
             this.lblLogsTitle.TabIndex = 0;
-            this.lblLogsTitle.Text = "📋 NHẬT KÝ THAO TÁC HỆ THỐNG (AUDIT LOGS)";
+            this.lblLogsTitle.Text = "NHẬT KÝ THAO TÁC HỆ THỐNG (AUDIT LOGS)";
             this.pnlAlertCard.BackColor = System.Drawing.Color.White;
             this.pnlAlertCard.Controls.Add(this.dgvAlerts);
             this.pnlAlertCard.Controls.Add(this.lblAlertTitle);

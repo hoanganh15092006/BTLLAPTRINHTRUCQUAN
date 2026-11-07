@@ -1,4 +1,4 @@
-﻿namespace QLBanMayViTinh.Forms
+namespace QLBanMayViTinh.Forms
 {
     partial class frmCaiDat
     {
@@ -15,10 +15,7 @@
 
         private void InitializeComponent()
         {
-            this.pnlTop = new System.Windows.Forms.Panel();
-            this.lblSub = new System.Windows.Forms.Label();
-            this.lblTitle = new System.Windows.Forms.Label();
-            this.pnlDbCard = new System.Windows.Forms.Panel();
+                                                this.pnlDbCard = new System.Windows.Forms.Panel();
             this.lblDbStatus = new System.Windows.Forms.Label();
             this.btnLuuConnect = new System.Windows.Forms.Button();
             this.btnTestConnect = new System.Windows.Forms.Button();
@@ -44,34 +41,11 @@
             this.txtTenCuaHang = new System.Windows.Forms.TextBox();
             this.lblTenCuaHang = new System.Windows.Forms.Label();
             this.lblStoreTitle = new System.Windows.Forms.Label();
-            this.pnlTop.SuspendLayout();
-            this.pnlDbCard.SuspendLayout();
+                        this.pnlDbCard.SuspendLayout();
             this.pnlThemeCard.SuspendLayout();
             this.pnlStoreCard.SuspendLayout();
             this.SuspendLayout();
-            this.pnlTop.BackColor = System.Drawing.Color.White;
-            this.pnlTop.Controls.Add(this.lblSub);
-            this.pnlTop.Controls.Add(this.lblTitle);
-            this.pnlTop.Dock = System.Windows.Forms.DockStyle.Top;
-            this.pnlTop.Location = new System.Drawing.Point(0, 0);
-            this.pnlTop.Name = "pnlTop";
-            this.pnlTop.Size = new System.Drawing.Size(1020, 70);
-            this.pnlTop.TabIndex = 0;
-            this.lblSub.Font = new System.Drawing.Font("Segoe UI", 9F);
-            this.lblSub.ForeColor = System.Drawing.Color.FromArgb(100, 116, 139);
-            this.lblSub.Location = new System.Drawing.Point(24, 40);
-            this.lblSub.Name = "lblSub";
-            this.lblSub.Size = new System.Drawing.Size(700, 20);
-            this.lblSub.TabIndex = 1;
-            this.lblSub.Text = "Cấu hình kết nối SQL Server mã hóa AES-256, tùy chỉnh chủ đề giao diện và thông tin hóa đơn bán lẻ";
-            this.lblTitle.Font = new System.Drawing.Font("Segoe UI", 16F, System.Drawing.FontStyle.Bold);
-            this.lblTitle.ForeColor = System.Drawing.Color.FromArgb(15, 23, 42);
-            this.lblTitle.Location = new System.Drawing.Point(22, 10);
-            this.lblTitle.Name = "lblTitle";
-            this.lblTitle.Size = new System.Drawing.Size(400, 30);
-            this.lblTitle.TabIndex = 0;
-            this.lblTitle.Text = "CÀI ĐẶT HỆ THỐNG";
-            this.pnlDbCard.BackColor = System.Drawing.Color.White;
+                                                                                                                                                                                                                                                                                    this.pnlDbCard.BackColor = System.Drawing.Color.White;
             this.pnlDbCard.Controls.Add(this.lblDbStatus);
             this.pnlDbCard.Controls.Add(this.btnLuuConnect);
             this.pnlDbCard.Controls.Add(this.btnTestConnect);
@@ -81,7 +55,7 @@
             this.pnlDbCard.Controls.Add(this.txtServer);
             this.pnlDbCard.Controls.Add(this.lblServer);
             this.pnlDbCard.Controls.Add(this.lblDbTitle);
-            this.pnlDbCard.Location = new System.Drawing.Point(24, 85);
+            this.pnlDbCard.Location = new System.Drawing.Point(24, 20);
             this.pnlDbCard.Name = "pnlDbCard";
             this.pnlDbCard.Size = new System.Drawing.Size(470, 300);
             this.pnlDbCard.TabIndex = 1;
@@ -156,13 +130,13 @@
             this.lblDbTitle.Name = "lblDbTitle";
             this.lblDbTitle.Size = new System.Drawing.Size(425, 25);
             this.lblDbTitle.TabIndex = 0;
-            this.lblDbTitle.Text = "💾 Cấu Hình Kết Nối Cơ Sở Dữ Liệu";
+            this.lblDbTitle.Text = "Cấu Hình Kết Nối Cơ Sở Dữ Liệu";
             this.pnlThemeCard.BackColor = System.Drawing.Color.White;
             this.pnlThemeCard.Controls.Add(this.btnLuuGiaoDien);
             this.pnlThemeCard.Controls.Add(this.rdoDark);
             this.pnlThemeCard.Controls.Add(this.rdoLight);
             this.pnlThemeCard.Controls.Add(this.lblThemeTitle);
-            this.pnlThemeCard.Location = new System.Drawing.Point(24, 400);
+            this.pnlThemeCard.Location = new System.Drawing.Point(24, 335);
             this.pnlThemeCard.Name = "pnlThemeCard";
             this.pnlThemeCard.Size = new System.Drawing.Size(470, 230);
             this.pnlThemeCard.TabIndex = 2;
@@ -177,20 +151,20 @@
             this.btnLuuGiaoDien.Text = "ÁP DỤNG CHỦ ĐỀ";
             this.btnLuuGiaoDien.UseVisualStyleBackColor = true;
             this.btnLuuGiaoDien.Click += new System.EventHandler(this.btnLuuGiaoDien_Click);
-            this.rdoDark.AutoSize = true;
+            this.rdoDark.AutoSize = false;
             this.rdoDark.Font = new System.Drawing.Font("Segoe UI", 10F);
             this.rdoDark.Location = new System.Drawing.Point(30, 110);
             this.rdoDark.Name = "rdoDark";
-            this.rdoDark.Size = new System.Drawing.Size(262, 23);
+            this.rdoDark.Size = new System.Drawing.Size(380, 36);
             this.rdoDark.TabIndex = 2;
-            this.rdoDark.Text = "🌙 Dark Mode (Hiện đại, dịu mắt ban đêm)";
+            this.rdoDark.Text = "Dark Mode (Hiện đại, dịu mắt ban đêm)";
             this.rdoDark.UseVisualStyleBackColor = true;
-            this.rdoLight.AutoSize = true;
+            this.rdoLight.AutoSize = false;
             this.rdoLight.Checked = true;
             this.rdoLight.Font = new System.Drawing.Font("Segoe UI", 10F);
             this.rdoLight.Location = new System.Drawing.Point(30, 68);
             this.rdoLight.Name = "rdoLight";
-            this.rdoLight.Size = new System.Drawing.Size(243, 23);
+            this.rdoLight.Size = new System.Drawing.Size(380, 36);
             this.rdoLight.TabIndex = 1;
             this.rdoLight.TabStop = true;
             this.rdoLight.Text = "☀️ Light Mode (Giao diện sáng chuẩn)";
@@ -201,7 +175,7 @@
             this.lblThemeTitle.Name = "lblThemeTitle";
             this.lblThemeTitle.Size = new System.Drawing.Size(425, 25);
             this.lblThemeTitle.TabIndex = 0;
-            this.lblThemeTitle.Text = "🎨 Tùy Chỉnh Chủ Đề Giao Diện (Theme)";
+            this.lblThemeTitle.Text = "Tùy Chỉnh Chủ Đề Giao Diện (Theme)";
             this.pnlStoreCard.BackColor = System.Drawing.Color.White;
             this.pnlStoreCard.Controls.Add(this.btnLuuCuaHang);
             this.pnlStoreCard.Controls.Add(this.txtLoiChao);
@@ -213,7 +187,7 @@
             this.pnlStoreCard.Controls.Add(this.txtTenCuaHang);
             this.pnlStoreCard.Controls.Add(this.lblTenCuaHang);
             this.pnlStoreCard.Controls.Add(this.lblStoreTitle);
-            this.pnlStoreCard.Location = new System.Drawing.Point(510, 85);
+            this.pnlStoreCard.Location = new System.Drawing.Point(510, 20);
             this.pnlStoreCard.Name = "pnlStoreCard";
             this.pnlStoreCard.Size = new System.Drawing.Size(485, 545);
             this.pnlStoreCard.TabIndex = 3;
@@ -287,7 +261,7 @@
             this.lblStoreTitle.Name = "lblStoreTitle";
             this.lblStoreTitle.Size = new System.Drawing.Size(430, 25);
             this.lblStoreTitle.TabIndex = 0;
-            this.lblStoreTitle.Text = "🏪 Thông Tin Cửa Hàng In Trên Hóa Đơn";
+            this.lblStoreTitle.Text = "Thông Tin Cửa Hàng In Trên Hóa Đơn";
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(241, 245, 249);
@@ -295,14 +269,12 @@
             this.Controls.Add(this.pnlStoreCard);
             this.Controls.Add(this.pnlThemeCard);
             this.Controls.Add(this.pnlDbCard);
-            this.Controls.Add(this.pnlTop);
-            this.Font = new System.Drawing.Font("Segoe UI", 9F);
+                        this.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Name = "frmCaiDat";
             this.Text = "Cài Đặt Hệ Thống";
             this.Load += new System.EventHandler(this.frmCaiDat_Load);
-            this.pnlTop.ResumeLayout(false);
-            this.pnlDbCard.ResumeLayout(false);
+                        this.pnlDbCard.ResumeLayout(false);
             this.pnlDbCard.PerformLayout();
             this.pnlThemeCard.ResumeLayout(false);
             this.pnlThemeCard.PerformLayout();
@@ -311,10 +283,7 @@
             this.ResumeLayout(false);
         }
 
-        private System.Windows.Forms.Panel pnlTop;
-        private System.Windows.Forms.Label lblTitle;
-        private System.Windows.Forms.Label lblSub;
-        private System.Windows.Forms.Panel pnlDbCard;
+                                private System.Windows.Forms.Panel pnlDbCard;
         private System.Windows.Forms.Label lblDbTitle;
         private System.Windows.Forms.Label lblServer;
         private System.Windows.Forms.TextBox txtServer;

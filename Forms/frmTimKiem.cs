@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
@@ -18,18 +18,31 @@ namespace QLBanMayViTinh.Forms
 
         private void frmTimKiem_Load(object sender, EventArgs e)
         {
-            if (this.DesignMode || LicenseManager.UsageMode == LicenseUsageMode.Designtime)
+            if (this.DesignMode ||
+                LicenseManager.UsageMode == LicenseUsageMode.Designtime ||
+                System.Diagnostics.Process.GetCurrentProcess().ProcessName.Equals("devenv", StringComparison.OrdinalIgnoreCase))
+            {
                 return;
+            }
 
-            UIThemeHelper.StyleCard(pnlTopCard);
-            UIThemeHelper.StyleCard(pnlFilterCard);
-            UIThemeHelper.StyleCard(pnlActions);
-            UIThemeHelper.StyleCard(pnlGridCard);
+            UIThemeHelper.StyleCard(pnlTopCard, null, 8);
+            UIThemeHelper.StyleCard(pnlFilterCard, null, 8);
+            UIThemeHelper.StyleCard(pnlActions, null, 8);
+            UIThemeHelper.StyleCard(pnlGridCard, null, 8);
 
             UIThemeHelper.StyleDataGridView(dgvKetQua);
-            UIThemeHelper.StyleButton(btnTimKiem, UIThemeHelper.BtnTimColor, Color.White);
-            UIThemeHelper.StyleButton(btnLamMoi, UIThemeHelper.BtnHuyColor, Color.White);
-            UIThemeHelper.StyleButton(btnDong, Color.FromArgb(100, 116, 139), Color.White);
+            UIThemeHelper.StyleButton(btnTimKiem, UIThemeHelper.BtnTimColor, Color.White, 8);
+            UIThemeHelper.StyleButton(btnLamMoi, UIThemeHelper.BtnHuyColor, Color.White, 8);
+            UIThemeHelper.StyleButton(btnDong, Color.FromArgb(100, 116, 139), Color.White, 8);
+
+            UIThemeHelper.ApplyTheme(this);
+
+            if (!this.TopLevel)
+            {
+                lblTieuDe.Visible = false;
+                lblSubTieuDe.Visible = false;
+                pnlTopCard.Height = 55;
+            }
 
             LoadCombos();
             rdoMayViTinh.Checked = true;
@@ -41,8 +54,6 @@ namespace QLBanMayViTinh.Forms
             Functions.FillCombo("SELECT MaLoai, TenLoai FROM LoaiMay", cboLoai, "MaLoai", "TenLoai");
             Functions.FillCombo("SELECT MaHangSX, TenHangSX FROM HangSanXuat", cboHangSX, "MaHangSX", "TenHangSX");
             Functions.FillCombo("SELECT MaNV, TenNV FROM NhanVien", cboNhanVien, "MaNV", "TenNV");
-            Functions.FillCombo("SELECT MaKhach, TenKhach FROM KhachHang", cboKhachHang, "MaKhach", "TenKhach");
-            Functions.FillCombo("SELECT MaNCC, TenNCC FROM NhaCungCap", cboNCC, "MaNCC", "TenNCC");
             Functions.FillCombo("SELECT MaMayVT, TenMayVT FROM MayViTinh", cboMatHang, "MaMayVT", "TenMayVT");
         }
 
@@ -50,23 +61,29 @@ namespace QLBanMayViTinh.Forms
         {
             if (rdoMayViTinh.Checked)
             {
-
                 pnlMayTinh.Visible = true;
                 pnlHoaDon.Visible = false;
+                pnlFilterCard.Height = 65;
                 lblTieuDe.Text = "TÌM KIẾM SẢN PHẨM MÁY VI TÍNH (YÊU CẦU 4)";
             }
             else
             {
-
                 pnlMayTinh.Visible = false;
                 pnlHoaDon.Visible = true;
-                lblTieuDe.Text = rdoHoaDonNhap.Checked
-                    ? "TÌM KIẾM HÓA ĐƠN NHẬP HÀNG (YÊU CẦU 5)"
-                    : "TÌM KIẾM HÓA ĐƠN BÁN HÀNG (YÊU CẦU 5)";
-
-                lblDoiTac.Text = rdoHoaDonNhap.Checked ? "Nhà Cung Cấp:" : "Khách Hàng:";
-                cboNCC.Visible = rdoHoaDonNhap.Checked;
-                cboKhachHang.Visible = !rdoHoaDonNhap.Checked;
+                pnlFilterCard.Height = 85;
+                if (rdoHoaDonNhap.Checked)
+                {
+                    lblTieuDe.Text = "TÌM KIẾM HÓA ĐƠN NHẬP HÀNG (YÊU CẦU 5)";
+                    lblDoiTac.Text = "Nhà Cung Cấp:";
+                    Functions.FillCombo("SELECT MaNCC, TenNCC FROM NhaCungCap", cboDoiTac, "MaNCC", "TenNCC");
+                }
+                else
+                {
+                    lblTieuDe.Text = "TÌM KIẾM HÓA ĐƠN BÁN HÀNG (YÊU CẦU 5)";
+                    lblDoiTac.Text = "Khách Hàng:";
+                    Functions.FillCombo("SELECT MaKhach, TenKhach FROM KhachHang", cboDoiTac, "MaKhach", "TenKhach");
+                }
+                cboDoiTac.SelectedIndex = -1;
             }
         }
 
@@ -145,8 +162,8 @@ namespace QLBanMayViTinh.Forms
                 if (cboNhanVien.SelectedIndex >= 0 && cboNhanVien.SelectedValue != null)
                     sql += " AND h.MaNV = N'" + cboNhanVien.SelectedValue.ToString() + "'";
 
-                if (cboNCC.SelectedIndex >= 0 && cboNCC.SelectedValue != null)
-                    sql += " AND h.MaNCC = N'" + cboNCC.SelectedValue.ToString() + "'";
+                if (cboDoiTac.SelectedIndex >= 0 && cboDoiTac.SelectedValue != null)
+                    sql += " AND h.MaNCC = N'" + cboDoiTac.SelectedValue.ToString() + "'";
 
                 if (chkNgay.Checked)
                 {
@@ -184,8 +201,8 @@ namespace QLBanMayViTinh.Forms
                 if (cboNhanVien.SelectedIndex >= 0 && cboNhanVien.SelectedValue != null)
                     sql += " AND h.MaNV = N'" + cboNhanVien.SelectedValue.ToString() + "'";
 
-                if (cboKhachHang.SelectedIndex >= 0 && cboKhachHang.SelectedValue != null)
-                    sql += " AND h.MaKhach = N'" + cboKhachHang.SelectedValue.ToString() + "'";
+                if (cboDoiTac.SelectedIndex >= 0 && cboDoiTac.SelectedValue != null)
+                    sql += " AND h.MaKhach = N'" + cboDoiTac.SelectedValue.ToString() + "'";
 
                 if (chkNgay.Checked)
                 {
@@ -219,8 +236,7 @@ namespace QLBanMayViTinh.Forms
             txtMaHD.Text = "";
             cboMatHang.SelectedIndex = -1;
             cboNhanVien.SelectedIndex = -1;
-            cboNCC.SelectedIndex = -1;
-            cboKhachHang.SelectedIndex = -1;
+            cboDoiTac.SelectedIndex = -1;
             chkNgay.Checked = false;
             dtpTuNgay.Value = DateTime.Now.AddMonths(-1);
             dtpDenNgay.Value = DateTime.Now;

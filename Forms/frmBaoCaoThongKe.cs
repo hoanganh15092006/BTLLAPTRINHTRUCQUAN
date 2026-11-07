@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
@@ -20,21 +20,42 @@ namespace QLBanMayViTinh.Forms
 
         private void frmBaoCaoThongKe_Load(object sender, EventArgs e)
         {
-            if (this.DesignMode || LicenseManager.UsageMode == LicenseUsageMode.Designtime)
+            if (this.DesignMode ||
+                LicenseManager.UsageMode == LicenseUsageMode.Designtime ||
+                System.Diagnostics.Process.GetCurrentProcess().ProcessName.Equals("devenv", StringComparison.OrdinalIgnoreCase))
+            {
                 return;
+            }
 
-            UIThemeHelper.StyleCard(card1, Color.FromArgb(79, 70, 229));
-            UIThemeHelper.StyleCard(card2, Color.FromArgb(2, 132, 199));
-            UIThemeHelper.StyleCard(card3, Color.FromArgb(16, 185, 129));
-            UIThemeHelper.StyleCard(card4, Color.FromArgb(245, 158, 11));
-            UIThemeHelper.StyleCard(pnlFilterCard);
-            UIThemeHelper.StyleCard(pnlGridCard);
-            UIThemeHelper.StyleCard(pnlBottom);
+            UIThemeHelper.StyleCard(card1, Color.FromArgb(79, 70, 229), 8);
+            UIThemeHelper.StyleCard(card2, Color.FromArgb(2, 132, 199), 8);
+            UIThemeHelper.StyleCard(card3, Color.FromArgb(16, 185, 129), 8);
+            UIThemeHelper.StyleCard(card4, Color.FromArgb(245, 158, 11), 8);
+            UIThemeHelper.StyleCard(pnlFilterCard, null, 8);
+            UIThemeHelper.StyleCard(pnlGridCard, null, 8);
+            UIThemeHelper.StyleCard(pnlBottom, null, 8);
 
             UIThemeHelper.StyleDataGridView(dgvBaoCao);
-            UIThemeHelper.StyleButton(btnXemBaoCao, UIThemeHelper.BtnTimColor, Color.White);
-            UIThemeHelper.StyleButton(btnXuatExcel, UIThemeHelper.BtnInExcelColor, Color.White);
-            UIThemeHelper.StyleButton(btnDong, Color.FromArgb(100, 116, 139), Color.White);
+            UIThemeHelper.StyleButton(btnXemBaoCao, UIThemeHelper.BtnTimColor, Color.White, 8);
+            UIThemeHelper.StyleButton(btnXuatExcel, UIThemeHelper.BtnInExcelColor, Color.White, 8);
+            UIThemeHelper.StyleButton(btnDong, Color.FromArgb(100, 116, 139), Color.White, 8);
+
+            UIThemeHelper.ApplyTheme(this);
+
+            pnlCards.Resize += (s, ev) => LayoutSummaryCards();
+            pnlFilterCard.Resize += (s, ev) => LayoutActionButtons();
+            this.Resize += (s, ev) =>
+            {
+                LayoutSummaryCards();
+                LayoutActionButtons();
+            };
+            this.Shown += (s, ev) => this.BeginInvoke((Action)(() =>
+            {
+                LayoutSummaryCards();
+                LayoutActionButtons();
+            }));
+            LayoutSummaryCards();
+            LayoutActionButtons();
 
             for (int i = 1; i <= 12; i++) cboThang.Items.Add(i.ToString());
             cboThang.SelectedIndex = DateTime.Now.Month - 1;
@@ -50,6 +71,38 @@ namespace QLBanMayViTinh.Forms
             HienThiDieuKienLoc();
             CapNhatSummaryCards();
             btnXemBaoCao.PerformClick();
+        }
+
+        private void LayoutSummaryCards()
+        {
+            if (pnlCards == null || pnlCards.ClientSize.Width <= 0) return;
+            int gap = 12;
+            int barW = pnlCards.ClientSize.Width;
+            int w = Math.Max(220, (barW - (gap * 3)) / 4);
+            card1.Size = new Size(w, 76);
+            card2.Size = new Size(w, 76);
+            card3.Size = new Size(w, 76);
+            card4.Size = new Size(w, 76);
+            card1.Location = new Point(0, 0);
+            card2.Location = new Point(w + gap, 0);
+            card3.Location = new Point((w + gap) * 2, 0);
+            card4.Location = new Point((w + gap) * 3, 0);
+
+            lblTitleCard1.Width = w - 60;
+            lblCardGiaTriTon.Width = w - 60;
+            lblSubCard1.Width = w - 60;
+
+            lblTitleCard2.Width = w - 60;
+            lblCardTongNhap.Width = w - 60;
+            lblSubCard2.Width = w - 60;
+
+            lblTitleCard3.Width = w - 60;
+            lblCardTongBan.Width = w - 60;
+            lblSubCard3.Width = w - 60;
+
+            lblTitleCard4.Width = w - 60;
+            lblCardLoiNhuan.Width = w - 60;
+            lblSubCard4.Width = w - 60;
         }
 
         private void CapNhatSummaryCards()
@@ -74,21 +127,46 @@ namespace QLBanMayViTinh.Forms
 
         private void HienThiDieuKienLoc()
         {
+            int spacing = 12;
             if (rdoTonKho.Checked)
             {
                 pnlThoiGian.Visible = false;
+                pnlFilterCard.Height = 60;
                 lblTieuDeBaoCao.Text = "BÁO CÁO DANH SÁCH MÁY VI TÍNH TỒN KHO (YÊU CẦU 6)";
+                LayoutActionButtons();
             }
             else
             {
                 pnlThoiGian.Visible = true;
+                pnlFilterCard.Height = 110;
                 if (rdoNhapHang.Checked)
                     lblTieuDeBaoCao.Text = "BÁO CÁO DOANH THU NHẬP HÀNG THEO THỜI GIAN (YÊU CẦU 7)";
                 else if (rdoBanHang.Checked)
                     lblTieuDeBaoCao.Text = "BÁO CÁO DOANH THU BÁN HÀNG THEO THỜI GIAN (YÊU CẦU 8)";
                 else
                     lblTieuDeBaoCao.Text = "TOP 5 NHÂN VIÊN DOANH THU CAO NHẤT (YÊU CẦU 9)";
+                LayoutActionButtons();
             }
+            pnlGridCard.Top = pnlFilterCard.Bottom + spacing;
+            pnlGridCard.Height = pnlBottom.Top - pnlGridCard.Top - spacing;
+
+            LayoutActionButtons();
+        }
+
+        private void LayoutActionButtons()
+        {
+            if (pnlFilterCard == null || pnlFilterCard.ClientSize.Width <= 0) return;
+            int rightEdge = pnlFilterCard.ClientSize.Width - 12;
+            int btnY = pnlThoiGian.Visible ? 50 : 8;
+            btnDong.Size = new Size(85, 36);
+            btnXuatExcel.Size = new Size(105, 36);
+            btnXemBaoCao.Size = new Size(115, 36);
+            btnDong.Location = new Point(rightEdge - btnDong.Width, btnY);
+            btnXuatExcel.Location = new Point(btnDong.Left - btnXuatExcel.Width - 8, btnY);
+            btnXemBaoCao.Location = new Point(btnXuatExcel.Left - btnXemBaoCao.Width - 8, btnY);
+            btnDong.BringToFront();
+            btnXuatExcel.BringToFront();
+            btnXemBaoCao.BringToFront();
         }
 
         private void rdoTonKho_CheckedChanged(object sender, EventArgs e)
@@ -331,6 +409,21 @@ namespace QLBanMayViTinh.Forms
         private void btnDong_Click(object sender, EventArgs e)
         {
             this.Close();
+        }
+
+        private void pnlFilterCard_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        private void pnlControls_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        private void dgvBaoCao_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.ComponentModel;
 using System.Data;
 using System.Data.SqlClient;
@@ -17,38 +17,49 @@ namespace QLBanMayViTinh.Forms
 
         private void frmDanhMucHeThong_Load(object sender, EventArgs e)
         {
-            if (this.DesignMode || LicenseManager.UsageMode == LicenseUsageMode.Designtime)
+            if (this.DesignMode ||
+                LicenseManager.UsageMode == LicenseUsageMode.Designtime ||
+                System.Diagnostics.Process.GetCurrentProcess().ProcessName.Equals("devenv", StringComparison.OrdinalIgnoreCase))
+            {
                 return;
+            }
 
-            UIThemeHelper.StyleCard(pnlKH);
-            UIThemeHelper.StyleCard(pnlNCC);
-            UIThemeHelper.StyleCard(pnlNV);
-            UIThemeHelper.StyleCard(pnlLK);
+            UIThemeHelper.StyleCard(pnlKH, null, 8);
+            UIThemeHelper.StyleCard(pnlNCC, null, 8);
+            UIThemeHelper.StyleCard(pnlNV, null, 8);
+            UIThemeHelper.StyleCard(pnlLK, null, 8);
 
             UIThemeHelper.StyleDataGridView(dgvKH);
             UIThemeHelper.StyleDataGridView(dgvNCC);
             UIThemeHelper.StyleDataGridView(dgvNV);
             UIThemeHelper.StyleDataGridView(dgvLK);
 
-            UIThemeHelper.StyleButton(btnThemKH, UIThemeHelper.BtnThemColor, Color.White);
-            UIThemeHelper.StyleButton(btnSuaKH, UIThemeHelper.BtnSuaColor, Color.White);
-            UIThemeHelper.StyleButton(btnXoaKH, UIThemeHelper.BtnXoaColor, Color.White);
-            UIThemeHelper.StyleButton(btnLamMoiKH, Color.FromArgb(100, 116, 139), Color.White);
+            UIThemeHelper.StyleButton(btnThemKH, UIThemeHelper.BtnThemColor, Color.White, 8);
+            UIThemeHelper.StyleButton(btnSuaKH, UIThemeHelper.BtnSuaColor, Color.White, 8);
+            UIThemeHelper.StyleButton(btnXoaKH, UIThemeHelper.BtnXoaColor, Color.White, 8);
+            UIThemeHelper.StyleButton(btnLamMoiKH, Color.FromArgb(100, 116, 139), Color.White, 8);
 
-            UIThemeHelper.StyleButton(btnThemNCC, UIThemeHelper.BtnThemColor, Color.White);
-            UIThemeHelper.StyleButton(btnSuaNCC, UIThemeHelper.BtnSuaColor, Color.White);
-            UIThemeHelper.StyleButton(btnXoaNCC, UIThemeHelper.BtnXoaColor, Color.White);
-            UIThemeHelper.StyleButton(btnLamMoiNCC, Color.FromArgb(100, 116, 139), Color.White);
+            UIThemeHelper.StyleButton(btnThemNCC, UIThemeHelper.BtnThemColor, Color.White, 8);
+            UIThemeHelper.StyleButton(btnSuaNCC, UIThemeHelper.BtnSuaColor, Color.White, 8);
+            UIThemeHelper.StyleButton(btnXoaNCC, UIThemeHelper.BtnXoaColor, Color.White, 8);
+            UIThemeHelper.StyleButton(btnLamMoiNCC, Color.FromArgb(100, 116, 139), Color.White, 8);
 
-            UIThemeHelper.StyleButton(btnThemNV, UIThemeHelper.BtnThemColor, Color.White);
-            UIThemeHelper.StyleButton(btnSuaNV, UIThemeHelper.BtnSuaColor, Color.White);
-            UIThemeHelper.StyleButton(btnXoaNV, UIThemeHelper.BtnXoaColor, Color.White);
-            UIThemeHelper.StyleButton(btnLamMoiNV, Color.FromArgb(100, 116, 139), Color.White);
+            UIThemeHelper.StyleButton(btnThemNV, UIThemeHelper.BtnThemColor, Color.White, 8);
+            UIThemeHelper.StyleButton(btnSuaNV, UIThemeHelper.BtnSuaColor, Color.White, 8);
+            UIThemeHelper.StyleButton(btnXoaNV, UIThemeHelper.BtnXoaColor, Color.White, 8);
+            UIThemeHelper.StyleButton(btnLamMoiNV, Color.FromArgb(100, 116, 139), Color.White, 8);
 
-            UIThemeHelper.StyleButton(btnThemLK, UIThemeHelper.BtnThemColor, Color.White);
-            UIThemeHelper.StyleButton(btnSuaLK, UIThemeHelper.BtnSuaColor, Color.White);
-            UIThemeHelper.StyleButton(btnXoaLK, UIThemeHelper.BtnXoaColor, Color.White);
-            UIThemeHelper.StyleButton(btnLamMoiLK, Color.FromArgb(100, 116, 139), Color.White);
+            UIThemeHelper.StyleButton(btnThemLK, UIThemeHelper.BtnThemColor, Color.White, 8);
+            UIThemeHelper.StyleButton(btnSuaLK, UIThemeHelper.BtnSuaColor, Color.White, 8);
+            UIThemeHelper.StyleButton(btnXoaLK, UIThemeHelper.BtnXoaColor, Color.White, 8);
+            UIThemeHelper.StyleButton(btnLamMoiLK, Color.FromArgb(100, 116, 139), Color.White, 8);
+
+            UIThemeHelper.ApplyTheme(this);
+
+
+            this.Resize += (s, ev) => LayoutPanels();
+            this.Shown += (s, ev) => this.BeginInvoke((Action)(() => LayoutPanels()));
+            LayoutPanels();
 
             cboGioiTinhNV.SelectedIndex = 0;
             cboLoaiDanhMuc.SelectedIndex = 0;
@@ -57,6 +68,102 @@ namespace QLBanMayViTinh.Forms
             LoadDataNCC();
             LoadDataNV();
             LoadDataLK();
+        }
+
+        private void LayoutPanels()
+        {
+            if (tabMain == null || tabMain.ClientSize.Width <= 0) return;
+            int w = tabMain.ClientSize.Width - 30;
+            if (w < 800) return;
+            int colW = (w - 100) / 2;
+
+            if (pnlKH != null && pnlKH.ClientSize.Width > 0)
+            {
+                int inputW = colW - 145;
+                lblMaKH.Location = new Point(35, 15);
+                lblMaKH.Size = new Size(120, 20);
+                txtMaKH.Location = new Point(160, 10);
+                txtMaKH.Width = inputW;
+
+                lblTenKH.Location = new Point(35, 50);
+                lblTenKH.Size = new Size(120, 20);
+                txtTenKH.Location = new Point(160, 45);
+                txtTenKH.Width = inputW;
+
+                int col2X = 160 + inputW + 40;
+                lblDiaChiKH.Location = new Point(col2X, 15);
+                lblDiaChiKH.Size = new Size(110, 20);
+                txtDiaChiKH.Location = new Point(col2X + 120, 10);
+                txtDiaChiKH.Width = inputW;
+
+                lblDienThoaiKH.Location = new Point(col2X, 50);
+                lblDienThoaiKH.Size = new Size(110, 20);
+                txtDienThoaiKH.Location = new Point(col2X + 120, 45);
+                txtDienThoaiKH.Width = inputW;
+            }
+
+            if (pnlNCC != null && pnlNCC.ClientSize.Width > 0)
+            {
+                int inputW = colW - 145;
+                lblMaNCC.Location = new Point(35, 15);
+                lblMaNCC.Size = new Size(120, 20);
+                txtMaNCC.Location = new Point(160, 10);
+                txtMaNCC.Width = inputW;
+
+                lblTenNCC.Location = new Point(35, 50);
+                lblTenNCC.Size = new Size(120, 20);
+                txtTenNCC.Location = new Point(160, 45);
+                txtTenNCC.Width = inputW;
+
+                int col2X = 160 + inputW + 40;
+                lblDiaChiNCC.Location = new Point(col2X, 15);
+                lblDiaChiNCC.Size = new Size(110, 20);
+                txtDiaChiNCC.Location = new Point(col2X + 120, 10);
+                txtDiaChiNCC.Width = inputW;
+
+                lblDienThoaiNCC.Location = new Point(col2X, 50);
+                lblDienThoaiNCC.Size = new Size(110, 20);
+                txtDienThoaiNCC.Location = new Point(col2X + 120, 45);
+                txtDienThoaiNCC.Width = inputW;
+            }
+
+            if (pnlNV != null && pnlNV.ClientSize.Width > 0)
+            {
+                int nvColW = (w - 120) / 3;
+                lblMaNV.Location = new Point(35, 15);
+                txtMaNV.Location = new Point(145, 10);
+                txtMaNV.Width = nvColW - 115;
+
+                lblTenNV.Location = new Point(35, 50);
+                txtTenNV.Location = new Point(145, 45);
+                txtTenNV.Width = nvColW - 115;
+
+                int nv2X = 145 + (nvColW - 115) + 30;
+                lblNgaySinhNV.Location = new Point(nv2X, 15);
+                dtpNgaySinhNV.Location = new Point(nv2X + 85, 10);
+                dtpNgaySinhNV.Width = nvColW - 85;
+
+                lblGioiTinhNV.Location = new Point(nv2X, 50);
+                cboGioiTinhNV.Location = new Point(nv2X + 85, 45);
+                cboGioiTinhNV.Width = nvColW - 85;
+
+                int nv3X = nv2X + nvColW + 30;
+                lblDiaChiNV.Location = new Point(nv3X, 15);
+                txtDiaChiNV.Location = new Point(nv3X + 85, 10);
+                txtDiaChiNV.Width = Math.Max(160, w - (nv3X + 85) - 35);
+
+                lblDienThoaiNV.Location = new Point(nv3X, 50);
+                txtDienThoaiNV.Location = new Point(nv3X + 85, 45);
+                txtDienThoaiNV.Width = Math.Max(160, w - (nv3X + 85) - 35);
+            }
+
+            if (pnlLK != null && pnlLK.ClientSize.Width > 0)
+            {
+                txtMaLK.Location = new Point(620, 15);
+                txtMaLK.Width = Math.Max(200, w - 620);
+                txtTenLK.Location = new Point(620, 50);
+                txtTenLK.Width = Math.Max(200, w - 620);
+            }
         }
 
         private void tabMain_SelectedIndexChanged(object sender, EventArgs e)
@@ -80,6 +187,11 @@ namespace QLBanMayViTinh.Forms
             if (dgvKH.Columns.Contains("TenKhach")) dgvKH.Columns["TenKhach"].HeaderText = "Tên Khách Hàng";
             if (dgvKH.Columns.Contains("DiaChi")) dgvKH.Columns["DiaChi"].HeaderText = "Địa Chỉ";
             if (dgvKH.Columns.Contains("DienThoai")) dgvKH.Columns["DienThoai"].HeaderText = "Điện Thoại";
+
+            if (dgvKH.Columns.Contains("MaKhach")) dgvKH.Columns["MaKhach"].FillWeight = 20;
+            if (dgvKH.Columns.Contains("TenKhach")) dgvKH.Columns["TenKhach"].FillWeight = 30;
+            if (dgvKH.Columns.Contains("DiaChi")) dgvKH.Columns["DiaChi"].FillWeight = 35;
+            if (dgvKH.Columns.Contains("DienThoai")) dgvKH.Columns["DienThoai"].FillWeight = 15;
         }
 
         private void dgvKH_CellClick(object sender, DataGridViewCellEventArgs e)
@@ -174,6 +286,11 @@ namespace QLBanMayViTinh.Forms
             if (dgvNCC.Columns.Contains("TenNCC")) dgvNCC.Columns["TenNCC"].HeaderText = "Tên Nhà Cung Cấp";
             if (dgvNCC.Columns.Contains("DiaChi")) dgvNCC.Columns["DiaChi"].HeaderText = "Địa Chỉ";
             if (dgvNCC.Columns.Contains("DienThoai")) dgvNCC.Columns["DienThoai"].HeaderText = "Điện Thoại";
+
+            if (dgvNCC.Columns.Contains("MaNCC")) dgvNCC.Columns["MaNCC"].FillWeight = 20;
+            if (dgvNCC.Columns.Contains("TenNCC")) dgvNCC.Columns["TenNCC"].FillWeight = 30;
+            if (dgvNCC.Columns.Contains("DiaChi")) dgvNCC.Columns["DiaChi"].FillWeight = 35;
+            if (dgvNCC.Columns.Contains("DienThoai")) dgvNCC.Columns["DienThoai"].FillWeight = 15;
         }
 
         private void dgvNCC_CellClick(object sender, DataGridViewCellEventArgs e)
@@ -269,6 +386,13 @@ namespace QLBanMayViTinh.Forms
             if (dgvNV.Columns.Contains("GioiTinh")) dgvNV.Columns["GioiTinh"].HeaderText = "Giới Tính";
             if (dgvNV.Columns.Contains("DiaChi")) dgvNV.Columns["DiaChi"].HeaderText = "Địa Chỉ";
             if (dgvNV.Columns.Contains("DienThoai")) dgvNV.Columns["DienThoai"].HeaderText = "Điện Thoại";
+
+            if (dgvNV.Columns.Contains("MaNV")) dgvNV.Columns["MaNV"].FillWeight = 15;
+            if (dgvNV.Columns.Contains("TenNV")) dgvNV.Columns["TenNV"].FillWeight = 25;
+            if (dgvNV.Columns.Contains("GioiTinh")) dgvNV.Columns["GioiTinh"].FillWeight = 12;
+            if (dgvNV.Columns.Contains("NgaySinh")) dgvNV.Columns["NgaySinh"].FillWeight = 15;
+            if (dgvNV.Columns.Contains("DiaChi")) dgvNV.Columns["DiaChi"].FillWeight = 20;
+            if (dgvNV.Columns.Contains("DienThoai")) dgvNV.Columns["DienThoai"].FillWeight = 13;
         }
 
         private void dgvNV_CellClick(object sender, DataGridViewCellEventArgs e)
@@ -397,6 +521,9 @@ namespace QLBanMayViTinh.Forms
             dgvLK.DataSource = dt;
             if (dgvLK.Columns.Contains("Ma")) dgvLK.Columns["Ma"].HeaderText = "Mã " + table;
             if (dgvLK.Columns.Contains("Ten")) dgvLK.Columns["Ten"].HeaderText = "Tên / Thông Số " + table;
+
+            if (dgvLK.Columns.Contains("Ma")) dgvLK.Columns["Ma"].FillWeight = 25;
+            if (dgvLK.Columns.Contains("Ten")) dgvLK.Columns["Ten"].FillWeight = 75;
             txtMaLK.Text = "";
             txtTenLK.Text = "";
             txtMaLK.Enabled = true;

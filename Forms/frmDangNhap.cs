@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.ComponentModel;
 using System.Data;
 using System.Data.SqlClient;
@@ -19,19 +19,31 @@ namespace QLBanMayViTinh.Forms
 
         private void frmDangNhap_Load(object sender, EventArgs e)
         {
-            if (this.DesignMode || LicenseManager.UsageMode == LicenseUsageMode.Designtime)
+            if (this.DesignMode ||
+                LicenseManager.UsageMode == LicenseUsageMode.Designtime ||
+                System.Diagnostics.Process.GetCurrentProcess().ProcessName.Equals("devenv", StringComparison.OrdinalIgnoreCase))
+            {
                 return;
+            }
 
-            UIThemeHelper.StyleButton(btnDangNhap, UIThemeHelper.ColorPrimary, Color.White);
-            UIThemeHelper.StyleButton(btnDangKy, Color.FromArgb(241, 245, 249), Color.FromArgb(79, 70, 229));
+            UIThemeHelper.StyleCard(pnlLoginCard, null, 10);
+            UIThemeHelper.StyleButton(btnDangNhap, UIThemeHelper.ColorPrimary, Color.White, 8);
+            UIThemeHelper.StyleButton(btnDangKy, UIThemeHelper.IsDarkMode ? Color.FromArgb(40, 53, 72) : Color.FromArgb(241, 245, 249), UIThemeHelper.IsDarkMode ? Color.FromArgb(165, 180, 252) : Color.FromArgb(79, 70, 229), 8);
             btnDangKy.FlatAppearance.BorderSize = 1;
-            btnDangKy.FlatAppearance.BorderColor = Color.FromArgb(226, 232, 240);
-            UIThemeHelper.StyleButton(btnCaiDatDB, Color.Transparent, Color.FromArgb(100, 116, 139));
+            btnDangKy.FlatAppearance.BorderColor = UIThemeHelper.ColorBorder;
+            UIThemeHelper.StyleButton(btnCaiDatDB, Color.Transparent, UIThemeHelper.ColorTextSecondary, 8);
             btnCaiDatDB.FlatAppearance.BorderSize = 0;
 
             btnTogglePass.FlatStyle = FlatStyle.Flat;
             btnTogglePass.FlatAppearance.BorderSize = 0;
-            btnTogglePass.BackColor = Color.FromArgb(241, 245, 249);
+            btnTogglePass.BackColor = UIThemeHelper.IsDarkMode ? Color.FromArgb(40, 53, 72) : Color.FromArgb(241, 245, 249);
+            btnTogglePass.ForeColor = UIThemeHelper.ColorTextPrimary;
+            UIThemeHelper.MakeRoundedControl(btnTogglePass, 6);
+
+            UIThemeHelper.StyleTextBox(txtTenDangNhap);
+            UIThemeHelper.StyleTextBox(txtMatKhau);
+
+            UIThemeHelper.ApplyTheme(this);
 
             try
             {
@@ -144,7 +156,7 @@ namespace QLBanMayViTinh.Forms
         {
             isPasswordHidden = !isPasswordHidden;
             txtMatKhau.UseSystemPasswordChar = isPasswordHidden;
-            btnTogglePass.Text = isPasswordHidden ? "👁️" : "🙈";
+            btnTogglePass.Text = isPasswordHidden ? "Hiện" : "🙈";
         }
 
         private void lnkQuenMatKhau_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)

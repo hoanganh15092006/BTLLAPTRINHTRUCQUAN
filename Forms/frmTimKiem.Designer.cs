@@ -1,4 +1,4 @@
-﻿namespace QLBanMayViTinh.Forms
+namespace QLBanMayViTinh.Forms
 {
     partial class frmTimKiem
     {
@@ -44,8 +44,7 @@
             this.lblNhanVien = new System.Windows.Forms.Label();
             this.cboNhanVien = new System.Windows.Forms.ComboBox();
             this.lblDoiTac = new System.Windows.Forms.Label();
-            this.cboNCC = new System.Windows.Forms.ComboBox();
-            this.cboKhachHang = new System.Windows.Forms.ComboBox();
+            this.cboDoiTac = new System.Windows.Forms.ComboBox();
             this.chkNgay = new System.Windows.Forms.CheckBox();
             this.dtpTuNgay = new System.Windows.Forms.DateTimePicker();
             this.lblDenNgay = new System.Windows.Forms.Label();
@@ -71,7 +70,7 @@
             this.SuspendLayout();
 
             this.pnlTopCard.Dock = System.Windows.Forms.DockStyle.Top;
-            this.pnlTopCard.Height = 85;
+            this.pnlTopCard.Size = new System.Drawing.Size(1030, 85);
             this.pnlTopCard.Location = new System.Drawing.Point(0, 0);
             this.pnlTopCard.Name = "pnlTopCard";
             this.pnlTopCard.BackColor = System.Drawing.Color.White;
@@ -106,7 +105,7 @@
             this.rdoMayViTinh.ForeColor = System.Drawing.Color.FromArgb(15, 23, 42);
             this.rdoMayViTinh.Location = new System.Drawing.Point(10, 10);
             this.rdoMayViTinh.Size = new System.Drawing.Size(160, 24);
-            this.rdoMayViTinh.Text = "🖥️  Máy Vi Tính (YC4)";
+            this.rdoMayViTinh.Text = " Máy Vi Tính (YC4)";
             this.rdoMayViTinh.UseVisualStyleBackColor = true;
             this.rdoMayViTinh.CheckedChanged += new System.EventHandler(this.rdoMayViTinh_CheckedChanged);
 
@@ -114,7 +113,7 @@
             this.rdoHoaDonNhap.ForeColor = System.Drawing.Color.FromArgb(15, 23, 42);
             this.rdoHoaDonNhap.Location = new System.Drawing.Point(180, 10);
             this.rdoHoaDonNhap.Size = new System.Drawing.Size(155, 24);
-            this.rdoHoaDonNhap.Text = "📥  Hóa Đơn Nhập";
+            this.rdoHoaDonNhap.Text = " Hóa Đơn Nhập";
             this.rdoHoaDonNhap.UseVisualStyleBackColor = true;
             this.rdoHoaDonNhap.CheckedChanged += new System.EventHandler(this.rdoHoaDonNhap_CheckedChanged);
 
@@ -122,22 +121,23 @@
             this.rdoHoaDonBan.ForeColor = System.Drawing.Color.FromArgb(15, 23, 42);
             this.rdoHoaDonBan.Location = new System.Drawing.Point(345, 10);
             this.rdoHoaDonBan.Size = new System.Drawing.Size(165, 24);
-            this.rdoHoaDonBan.Text = "📤  Hóa Đơn Bán (YC5)";
+            this.rdoHoaDonBan.Text = " Hóa Đơn Bán (YC5)";
             this.rdoHoaDonBan.UseVisualStyleBackColor = true;
             this.rdoHoaDonBan.CheckedChanged += new System.EventHandler(this.rdoHoaDonBan_CheckedChanged);
 
             this.pnlFilterCard.Dock = System.Windows.Forms.DockStyle.Top;
-            this.pnlFilterCard.Height = 90;
+            this.pnlFilterCard.Size = new System.Drawing.Size(1030, 155);
             this.pnlFilterCard.Location = new System.Drawing.Point(0, 85);
             this.pnlFilterCard.Name = "pnlFilterCard";
             this.pnlFilterCard.BackColor = System.Drawing.Color.White;
             this.pnlFilterCard.Padding = new System.Windows.Forms.Padding(12, 6, 12, 6);
-            this.pnlFilterCard.Controls.Add(this.pnlMayTinh);
             this.pnlFilterCard.Controls.Add(this.pnlHoaDon);
+            this.pnlFilterCard.Controls.Add(this.pnlMayTinh);
             this.pnlFilterCard.TabIndex = 1;
 
-            this.pnlMayTinh.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pnlMayTinh.Location = new System.Drawing.Point(0, 0);
+            this.pnlMayTinh.Dock = System.Windows.Forms.DockStyle.Top;
+            this.pnlMayTinh.Size = new System.Drawing.Size(1006, 65);
+            this.pnlMayTinh.Location = new System.Drawing.Point(12, 6);
             this.pnlMayTinh.Name = "pnlMayTinh";
             this.pnlMayTinh.Controls.Add(this.cboHangSX);
             this.pnlMayTinh.Controls.Add(this.lblHangSX);
@@ -148,39 +148,39 @@
             this.pnlMayTinh.Controls.Add(this.txtMaMay);
             this.pnlMayTinh.Controls.Add(this.lblMaMay);
 
-            this.lblMaMay.Location = new System.Drawing.Point(14, 25);
+            this.lblMaMay.Location = new System.Drawing.Point(14, 20);
             this.lblMaMay.Size = new System.Drawing.Size(65, 20);
             this.lblMaMay.Text = "Mã máy:";
-            this.txtMaMay.Location = new System.Drawing.Point(82, 23);
+            this.txtMaMay.Location = new System.Drawing.Point(82, 18);
             this.txtMaMay.Size = new System.Drawing.Size(140, 25);
 
-            this.lblTenMay.Location = new System.Drawing.Point(245, 25);
+            this.lblTenMay.Location = new System.Drawing.Point(245, 20);
             this.lblTenMay.Size = new System.Drawing.Size(65, 20);
             this.lblTenMay.Text = "Tên máy:";
-            this.txtTenMay.Location = new System.Drawing.Point(315, 23);
+            this.txtTenMay.Location = new System.Drawing.Point(315, 18);
             this.txtTenMay.Size = new System.Drawing.Size(180, 25);
 
-            this.lblLoai.Location = new System.Drawing.Point(520, 25);
-            this.lblLoai.Size = new System.Drawing.Size(65, 20);
+            this.lblLoai.Location = new System.Drawing.Point(520, 20);
+            this.lblLoai.Size = new System.Drawing.Size(70, 20);
             this.lblLoai.Text = "Loại máy:";
-            this.cboLoai.Location = new System.Drawing.Point(590, 23);
+            this.cboLoai.Location = new System.Drawing.Point(590, 18);
             this.cboLoai.Size = new System.Drawing.Size(170, 25);
 
-            this.lblHangSX.Location = new System.Drawing.Point(785, 25);
+            this.lblHangSX.Location = new System.Drawing.Point(785, 20);
             this.lblHangSX.Size = new System.Drawing.Size(65, 20);
             this.lblHangSX.Text = "Hãng SX:";
-            this.cboHangSX.Location = new System.Drawing.Point(855, 23);
+            this.cboHangSX.Location = new System.Drawing.Point(855, 18);
             this.cboHangSX.Size = new System.Drawing.Size(155, 25);
 
-            this.pnlHoaDon.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pnlHoaDon.Location = new System.Drawing.Point(0, 0);
+            this.pnlHoaDon.Dock = System.Windows.Forms.DockStyle.Top;
+            this.pnlHoaDon.Size = new System.Drawing.Size(1006, 82);
+            this.pnlHoaDon.Location = new System.Drawing.Point(12, 71);
             this.pnlHoaDon.Name = "pnlHoaDon";
             this.pnlHoaDon.Controls.Add(this.dtpDenNgay);
             this.pnlHoaDon.Controls.Add(this.lblDenNgay);
             this.pnlHoaDon.Controls.Add(this.dtpTuNgay);
             this.pnlHoaDon.Controls.Add(this.chkNgay);
-            this.pnlHoaDon.Controls.Add(this.cboKhachHang);
-            this.pnlHoaDon.Controls.Add(this.cboNCC);
+            this.pnlHoaDon.Controls.Add(this.cboDoiTac);
             this.pnlHoaDon.Controls.Add(this.lblDoiTac);
             this.pnlHoaDon.Controls.Add(this.cboNhanVien);
             this.pnlHoaDon.Controls.Add(this.lblNhanVien);
@@ -195,39 +195,36 @@
             this.txtMaHD.Location = new System.Drawing.Point(82, 10);
             this.txtMaHD.Size = new System.Drawing.Size(130, 25);
 
-            this.lblMatHang.Location = new System.Drawing.Point(235, 12);
-            this.lblMatHang.Size = new System.Drawing.Size(70, 20);
+            this.lblMatHang.Location = new System.Drawing.Point(230, 12);
+            this.lblMatHang.Size = new System.Drawing.Size(75, 20);
             this.lblMatHang.Text = "Mặt hàng:";
             this.cboMatHang.Location = new System.Drawing.Point(310, 10);
             this.cboMatHang.Size = new System.Drawing.Size(185, 25);
 
-            this.lblNhanVien.Location = new System.Drawing.Point(520, 12);
-            this.lblNhanVien.Size = new System.Drawing.Size(70, 20);
+            this.lblNhanVien.Location = new System.Drawing.Point(515, 12);
+            this.lblNhanVien.Size = new System.Drawing.Size(75, 20);
             this.lblNhanVien.Text = "Nhân viên:";
             this.cboNhanVien.Location = new System.Drawing.Point(595, 10);
             this.cboNhanVien.Size = new System.Drawing.Size(165, 25);
 
-            this.lblDoiTac.Location = new System.Drawing.Point(785, 12);
-            this.lblDoiTac.Size = new System.Drawing.Size(65, 20);
-            this.lblDoiTac.Text = "Khách hàng:";
+            this.lblDoiTac.Location = new System.Drawing.Point(780, 12);
+            this.lblDoiTac.Size = new System.Drawing.Size(90, 20);
+            this.lblDoiTac.Text = "Đối tác:";
 
-            this.cboNCC.Location = new System.Drawing.Point(855, 10);
-            this.cboNCC.Size = new System.Drawing.Size(155, 25);
-
-            this.cboKhachHang.Location = new System.Drawing.Point(855, 10);
-            this.cboKhachHang.Size = new System.Drawing.Size(155, 25);
+            this.cboDoiTac.Location = new System.Drawing.Point(875, 10);
+            this.cboDoiTac.Size = new System.Drawing.Size(140, 25);
 
             this.chkNgay.Location = new System.Drawing.Point(14, 48);
             this.chkNgay.Size = new System.Drawing.Size(110, 24);
-            this.chkNgay.Text = "📅 Lọc từ ngày:";
+            this.chkNgay.Text = "Lọc từ ngày:";
             this.chkNgay.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
 
             this.dtpTuNgay.Location = new System.Drawing.Point(130, 48);
             this.dtpTuNgay.Size = new System.Drawing.Size(135, 25);
             this.dtpTuNgay.Format = System.Windows.Forms.DateTimePickerFormat.Short;
 
-            this.lblDenNgay.Location = new System.Drawing.Point(280, 50);
-            this.lblDenNgay.Size = new System.Drawing.Size(65, 20);
+            this.lblDenNgay.Location = new System.Drawing.Point(275, 50);
+            this.lblDenNgay.Size = new System.Drawing.Size(70, 20);
             this.lblDenNgay.Text = "đến ngày:";
 
             this.dtpDenNgay.Location = new System.Drawing.Point(350, 48);
@@ -244,21 +241,22 @@
             this.pnlActions.Controls.Add(this.btnDong);
             this.pnlActions.Controls.Add(this.btnLamMoi);
             this.pnlActions.Controls.Add(this.btnTimKiem);
+            this.pnlActions.Size = new System.Drawing.Size(1030, 50);
             this.pnlActions.TabIndex = 2;
 
             this.btnTimKiem.Location = new System.Drawing.Point(12, 8);
             this.btnTimKiem.Size = new System.Drawing.Size(135, 36);
-            this.btnTimKiem.Text = "🔍 Bắt Đầu Tìm";
+            this.btnTimKiem.Text = "Bắt Đầu Tìm";
             this.btnTimKiem.Click += new System.EventHandler(this.btnTimKiem_Click);
 
             this.btnLamMoi.Location = new System.Drawing.Point(160, 8);
             this.btnLamMoi.Size = new System.Drawing.Size(120, 36);
-            this.btnLamMoi.Text = "🔄 Đặt Lại";
+            this.btnLamMoi.Text = "Đặt Lại";
             this.btnLamMoi.Click += new System.EventHandler(this.btnLamMoi_Click);
 
             this.btnDong.Location = new System.Drawing.Point(292, 8);
             this.btnDong.Size = new System.Drawing.Size(95, 36);
-            this.btnDong.Text = "🚪 Đóng";
+            this.btnDong.Text = "Đóng";
             this.btnDong.Click += new System.EventHandler(this.btnDong_Click);
 
             this.lblSoKetQua.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
@@ -266,7 +264,7 @@
             this.lblSoKetQua.ForeColor = System.Drawing.Color.FromArgb(79, 70, 229);
             this.lblSoKetQua.Location = new System.Drawing.Point(620, 14);
             this.lblSoKetQua.Size = new System.Drawing.Size(395, 24);
-            this.lblSoKetQua.Text = "🎯 Nhấn [Bắt Đầu Tìm] để xem kết quả";
+            this.lblSoKetQua.Text = "Nhấn [Bắt Đầu Tìm] để xem kết quả";
             this.lblSoKetQua.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 
             this.pnlGridCard.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -335,8 +333,7 @@
         private System.Windows.Forms.Label lblNhanVien;
         private System.Windows.Forms.ComboBox cboNhanVien;
         private System.Windows.Forms.Label lblDoiTac;
-        private System.Windows.Forms.ComboBox cboNCC;
-        private System.Windows.Forms.ComboBox cboKhachHang;
+        private System.Windows.Forms.ComboBox cboDoiTac;
         private System.Windows.Forms.CheckBox chkNgay;
         private System.Windows.Forms.DateTimePicker dtpTuNgay;
         private System.Windows.Forms.Label lblDenNgay;

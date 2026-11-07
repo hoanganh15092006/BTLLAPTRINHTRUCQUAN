@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Data;
 using System.Data.SqlClient;
 using System.Text;
@@ -85,7 +85,7 @@ namespace QLBanMayViTinh.Testing
                      GiaNhap, GiaBan, ThoiGianBH, SoLuong, Anh, GhiChu)
                     VALUES (N'{0}', N'Máy Vi Tính Tự Kiểm Thử Unit Test', N'LM01', N'CPU01', N'OC01',
                             N'DL01', N'TD01', N'CD01', N'MH01', N'CO01', N'CH01', N'BP01',
-                            N'USB01', N'RAM01', N'LOA01', N'HSX01', 0, 0, 12, 0, N'', N'Test Trigger')", testMayVT);
+                            N'USB01', N'RAM01', N'LOA01', N'HSX01', 0, 0, 12, 0, NULL, N'Test Trigger')", testMayVT);
                 Functions.RunSQL(sqlAddMay);
 
                 string sqlAddHDN = string.Format(@"INSERT INTO HoaDonNhap (MaHDN, NgayNhap, MaNV, MaNCC, TongTien)

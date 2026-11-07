@@ -1,0 +1,1691 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hệ Thống Quản Lý Bán Máy Vi Tính - Báo Cáo 32 Slides Chuẩn Mực</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg-primary: #0b0f19;
+  --bg-card: rgba(18, 26, 43, 0.88);
+  --border-color: rgba(99, 102, 241, 0.25);
+  --border-focus: #6366f1;
+  --accent-cyan: #38bdf8;
+  --accent-indigo: #818cf8;
+  --accent-emerald: #34d399;
+  --accent-amber: #fbbf24;
+  --accent-rose: #fb7185;
+  --text-main: #f8fafc;
+  --text-muted: #94a3b8;
+  --font-main: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  --font-code: 'JetBrains Mono', monospace;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  background-color: var(--bg-primary);
+  color: var(--text-main);
+  font-family: var(--font-main);
+  overflow: hidden;
+  height: 100vh;
+  width: 100vw;
+  user-select: none;
+}
+.bg-mesh {
+  position: fixed;
+  inset: 0;
+  background: 
+    radial-gradient(circle at 15% 15%, rgba(99, 102, 241, 0.16) 0%, transparent 40%),
+    radial-gradient(circle at 85% 85%, rgba(14, 165, 233, 0.14) 0%, transparent 40%),
+    radial-gradient(circle at 50% 50%, rgba(16, 185, 129, 0.08) 0%, transparent 50%);
+  pointer-events: none;
+  z-index: 0;
+}
+#presentation-deck {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1;
+}
+.slide {
+  position: absolute;
+  width: 95vw;
+  height: 90vh;
+  max-width: 1720px;
+  max-height: 980px;
+  background: var(--bg-card);
+  backdrop-filter: blur(20px);
+  border: 1px solid var(--border-color);
+  border-radius: 20px;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.6), 0 0 40px rgba(99, 102, 241, 0.15);
+  display: none;
+  flex-direction: column;
+  padding: 36px 48px;
+  opacity: 0;
+  transform: scale(0.97);
+  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.slide.active {
+  display: flex;
+  opacity: 1;
+  transform: scale(1);
+}
+.slide-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 24px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  padding-bottom: 18px;
+}
+.slide-title-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.slide-tag {
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: var(--accent-cyan);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.slide-tag::before {
+  content: '';
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--accent-cyan);
+  box-shadow: 0 0 10px var(--accent-cyan);
+}
+.slide-title {
+  font-size: 2.1rem;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+  background: linear-gradient(135deg, #ffffff 40%, #94a3b8 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.slide-subtitle {
+  font-size: 1rem;
+  color: var(--text-muted);
+  font-weight: 400;
+}
+.slide-badges {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+.badge {
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  background: rgba(99, 102, 241, 0.15);
+  border: 1px solid rgba(99, 102, 241, 0.4);
+  color: var(--accent-indigo);
+  letter-spacing: 0.5px;
+}
+.slide-body {
+  flex: 1;
+  display: grid;
+  grid-template-columns: 1fr 1.15fr;
+  gap: 36px;
+  overflow: hidden;
+}
+.slide-body.full-layout {
+  grid-template-columns: 1fr;
+}
+.slide-left {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+.summary-box {
+  background: rgba(30, 41, 59, 0.6);
+  border-left: 4px solid var(--accent-cyan);
+  padding: 16px 20px;
+  border-radius: 0 12px 12px 0;
+  font-size: 1.05rem;
+  line-height: 1.6;
+  color: #e2e8f0;
+}
+.bullet-list {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  list-style: none;
+}
+.bullet-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  font-size: 0.98rem;
+  color: #cbd5e1;
+  line-height: 1.5;
+}
+.bullet-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--accent-emerald);
+  margin-top: 7px;
+  flex-shrink: 0;
+  box-shadow: 0 0 8px var(--accent-emerald);
+}
+.slide-right {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
+  height: 100%;
+}
+.media-container {
+  width: 100%;
+  height: 100%;
+  max-height: 580px;
+  background: rgba(15, 23, 42, 0.9);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 14px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: zoom-in;
+  position: relative;
+  transition: transform 0.25s ease, border-color 0.25s ease;
+}
+.media-container:hover {
+  transform: translateY(-2px);
+  border-color: var(--accent-cyan);
+}
+.media-container img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+.dual-media {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  width: 100%;
+  height: 100%;
+}
+.slide-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 18px;
+  padding-top: 14px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+.nav-controls {
+  position: fixed;
+  bottom: 24px;
+  right: 36px;
+  display: flex;
+  gap: 10px;
+  z-index: 100;
+}
+.nav-btn {
+  background: rgba(30, 41, 59, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: var(--text-main);
+  padding: 10px 18px;
+  border-radius: 10px;
+  font-family: var(--font-main);
+  font-weight: 600;
+  cursor: pointer;
+  backdrop-filter: blur(10px);
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.nav-btn:hover {
+  background: var(--accent-indigo);
+  color: white;
+  border-color: transparent;
+  box-shadow: 0 0 15px rgba(99, 102, 241, 0.5);
+}
+.progress-bar-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.08);
+  z-index: 1000;
+}
+.progress-bar-fill {
+  height: 100%;
+  width: 3.125%;
+  background: linear-gradient(90deg, var(--accent-cyan), var(--accent-indigo));
+  box-shadow: 0 0 10px var(--accent-cyan);
+  transition: width 0.3s ease;
+}
+#speaker-drawer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100vw;
+  background: rgba(11, 15, 25, 0.95);
+  border-top: 2px solid var(--accent-indigo);
+  padding: 24px 40px;
+  z-index: 200;
+  transform: translateY(100%);
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  backdrop-filter: blur(20px);
+  max-height: 40vh;
+  overflow-y: auto;
+}
+#speaker-drawer.open {
+  transform: translateY(0);
+}
+.drawer-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+.drawer-title {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--accent-amber);
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+}
+.drawer-content {
+  font-size: 1.05rem;
+  line-height: 1.7;
+  color: #e2e8f0;
+}
+#modal-zoom {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(15px);
+  z-index: 1000;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  cursor: zoom-out;
+}
+#modal-zoom img {
+  max-width: 92vw;
+  max-height: 92vh;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 0 50px rgba(0, 0, 0, 0.8);
+}
+</style>
+</head>
+<body>
+<div class="bg-mesh"></div>
+<div class="progress-bar-container">
+  <div class="progress-bar-fill" id="progress-bar"></div>
+</div>
+
+<main id="presentation-deck">
+
+  <!-- SLIDE 01: Hệ Thống Quản Lý Bán Máy Vi Tính -->
+  <section class="slide active" id="slide-1" data-slide="1" data-notes="[00:00 - 01:15] Kính thưa quý Thầy Cô trong Hội đồng phản biện. Hôm nay, em xin trân trọng báo cáo đồ án 'Hệ Thống Quản Lý Bán Máy Vi Tính' xây dựng trên nền tảng C# WinForms .NET và SQL Server. Điểm nổi bật của đề tài là chúng em áp dụng kiến trúc 3 tầng phân lớp rõ ràng, không sử dụng các ORM cồng kềnh mà tối ưu hóa 100% bằng ADO.NET thuần, chuẩn hóa cơ sở dữ liệu quan hệ 25 bảng đạt chuẩn 3NF, đồng bộ kho hàng bằng Trigger thời gian thực và xây dựng động cơ giao diện GDI+ Dual-Theme tự phát triển.">
+    <div class="slide-header">
+      <div class="slide-title-wrap">
+        <div class="slide-tag">BÁO CÁO ĐỒ ÁN MÔN HỌC</div>
+        <h2 class="slide-title">Hệ Thống Quản Lý Bán Máy Vi Tính</h2>
+        <p class="slide-subtitle">Báo Cáo Đồ Án Lập Trình Trực Quan — Kiến Trúc 3 Tầng WinForms & Pure ADO.NET SQL Server</p>
+      </div>
+      <div class="slide-badges">
+        <span class="badge">C# .NET WinForms</span><span class="badge">Pure ADO.NET</span><span class="badge">SQL Server 3NF</span><span class="badge">GDI+ Dual-Theme</span>
+      </div>
+    </div>
+    
+    <div class="slide-body">
+      <div class="slide-left">
+        <div class="summary-box">
+          Giải pháp phần mềm quản trị toàn diện cho chuỗi bán lẻ thiết bị công nghệ và máy tính, tối ưu hóa giao diện công thái học với động cơ chuyển đổi Theme Sáng/Tối tức thì.
+        </div>
+        <ul class="bullet-list">
+          <li class="bullet-item"><span class="bullet-dot"></span><span>Kiến trúc 3 tầng (Presentation, Business & Helper, Data Layer) độc lập và tường minh.</span></li><li class="bullet-item"><span class="bullet-dot"></span><span>Chuẩn hóa 25 bảng CSDL quan hệ đạt chuẩn 3NF, loại bỏ hoàn toàn dư thừa dữ liệu.</span></li><li class="bullet-item"><span class="bullet-dot"></span><span>Tự động hóa đồng bộ tồn kho và tính toán doanh thu bằng SQL Server Triggers (ACID).</span></li><li class="bullet-item"><span class="bullet-dot"></span><span>Động cơ xuất hóa đơn và báo cáo Excel Native HTML tốc độ cao không phụ thuộc Office COM.</span></li>
+        </ul>
+      </div>
+      <div class="slide-right">
+        
+            <div class="media-container" onclick="openZoom('assets/ui_main_light.png')">
+              <img src="assets/ui_main_light.png" alt="Hệ Thống Quản Lý Bán Máy Vi Tính">
+            </div>
+            
+      </div>
+    </div>
+    
+    <div class="slide-footer">
+      <span>Đồ Án Lập Trình Trực Quan C# .NET — QLBanMayViTinh</span>
+      <span style="font-family: var(--font-code); font-weight: 600; color: var(--accent-cyan);">Slide 01 / 32</span>
+    </div>
+  </section>
+
+  <!-- SLIDE 02: Bài Toán Thực Tế Chuỗi Bán Lẻ Máy Tính & Mục Tiêu -->
+  <section class="slide" id="slide-2" data-slide="2" data-notes="[01:15 - 02:30] Thưa thầy cô, kinh doanh máy tính là ngành đặc thù có giá trị đơn hàng lớn và vòng đời linh kiện thay đổi nhanh. Việc ghi chép thủ công hoặc dùng các phần mềm rời rạc rất dễ dẫn đến bán âm kho hoặc sai lệch chiết khấu. Đồ án này giải quyết trọn vẹn bài toán từ khâu nhập hàng, cấu hình danh mục linh kiện, bán lẻ POS tại quầy đến báo cáo BI tức thì cho ban giám đốc.">
+    <div class="slide-header">
+      <div class="slide-title-wrap">
+        <div class="slide-tag">BÀI TOÁN & TẦM NHÌN</div>
+        <h2 class="slide-title">Bài Toán Thực Tế Chuỗi Bán Lẻ Máy Tính & Mục Tiêu</h2>
+        <p class="slide-subtitle">Khảo sát thực tiễn tại các chuỗi bán lẻ công nghệ (Phong Vũ, HACOM, GearVN)</p>
+      </div>
+      <div class="slide-badges">
+        <span class="badge">Thực Tế Doanh Nghiệp</span><span class="badge">Quản Lý Đa Linh Kiện</span><span class="badge">Chống Thất Thoát Tồn Kho</span>
+      </div>
+    </div>
+    
+    <div class="slide-body">
+      <div class="slide-left">
+        <div class="summary-box">
+          Kinh doanh máy vi tính đòi hỏi quản lý phức tạp từ linh kiện rời (CPU, RAM, VGA) đến máy hoàn chỉnh, với yêu cầu kiểm soát tồn kho và doanh thu tức thì.
+        </div>
+        <ul class="bullet-list">
+          <li class="bullet-item"><span class="bullet-dot"></span><span>Thách thức quản lý hàng ngàn mã sản phẩm đa chủng loại và linh kiện cấu hình cao.</span></li><li class="bullet-item"><span class="bullet-dot"></span><span>Nguy cơ thất thoát do chênh lệch số lượng thực tế trong kho và dữ liệu phần mềm.</span></li><li class="bullet-item"><span class="bullet-dot"></span><span>Đòi hỏi tốc độ lập hóa đơn POS tại quầy nhanh chóng, không có độ trễ.</span></li><li class="bullet-item"><span class="bullet-dot"></span><span>Mục tiêu: Xây dựng hệ thống vận hành mượt mà, phản hồi mili-giây, giao diện công thái học.</span></li>
+        </ul>
+      </div>
+      <div class="slide-right">
+        
+            <div class="media-container" onclick="openZoom('assets/graph_01_overview_3tier.png')">
+              <img src="assets/graph_01_overview_3tier.png" alt="Bài Toán Thực Tế Chuỗi Bán Lẻ Máy Tính & Mục Tiêu">
+            </div>
+            
+      </div>
+    </div>
+    
+    <div class="slide-footer">
+      <span>Đồ Án Lập Trình Trực Quan C# .NET — QLBanMayViTinh</span>
+      <span style="font-family: var(--font-code); font-weight: 600; color: var(--accent-cyan);">Slide 02 / 32</span>
+    </div>
+  </section>
+
+  <!-- SLIDE 03: Toàn Cảnh Hệ Sinh Thái Công Nghệ Sử Dụng -->
+  <section class="slide" id="slide-3" data-slide="3" data-notes="[02:30 - 03:45] Về công nghệ, nhóm lựa chọn C# WinForms kết hợp Pure ADO.NET. Thay vì sử dụng Entity Framework có độ trễ cao khi xử lý lượng lớn bản ghi trên máy trạm bán hàng, ADO.NET thuần với SqlDataReader và SqlDataAdapter giúp thời gian nạp dữ liệu giảm xuống dưới 15ms. Toàn bộ hiệu ứng bo góc và đổ màu giao diện được dựng bằng GDI+ nội sinh.">
+    <div class="slide-header">
+      <div class="slide-title-wrap">
+        <div class="slide-tag">TECH STACK SHOWCASE</div>
+        <h2 class="slide-title">Toàn Cảnh Hệ Sinh Thái Công Nghệ Sử Dụng</h2>
+        <p class="slide-subtitle">Lựa chọn công nghệ tối ưu hóa tốc độ thực thi và tính ổn định doanh nghiệp</p>
+      </div>
+      <div class="slide-badges">
+        <span class="badge">C# .NET WinForms</span><span class="badge">Pure ADO.NET</span><span class="badge">GDI+ GraphicsPath</span><span class="badge">SQL Server ACID</span>
+      </div>
+    </div>
+    
+    <div class="slide-body">
+      <div class="slide-left">
+        <div class="summary-box">
+          Sự kết hợp hoàn hảo giữa giao diện Windows Forms thuần túy và tầng cơ sở dữ liệu quan hệ mạnh mẽ, đảm bảo thời gian đáp ứng cực nhanh.
+        </div>
+        <ul class="bullet-list">
+          <li class="bullet-item"><span class="bullet-dot"></span><span>Ngôn ngữ C# .NET: Biên dịch mã máy IL, tận dụng tối đa tài nguyên phần cứng Windows.</span></li><li class="bullet-item"><span class="bullet-dot"></span><span>Tầng kết nối Pure ADO.NET: Quản lý SqlConnection trực tiếp, loại bỏ độ trễ của ORM.</span></li><li class="bullet-item"><span class="bullet-dot"></span><span>Custom GDI+ Engine: Tạo trải nghiệm giao diện hiện đại với các góc bo tròn và bóng đổ.</span></li><li class="bullet-item"><span class="bullet-dot"></span><span>SQL Server Relational Engine: Đảm bảo tính nhất quán giao dịch (ACID) tuyệt đối.</span></li>
+        </ul>
+      </div>
+      <div class="slide-right">
+        
+            <div class="media-container" onclick="openZoom('assets/graph_02_call_dependency.png')">
+              <img src="assets/graph_02_call_dependency.png" alt="Toàn Cảnh Hệ Sinh Thái Công Nghệ Sử Dụng">
+            </div>
+            
+      </div>
+    </div>
+    
+    <div class="slide-footer">
+      <span>Đồ Án Lập Trình Trực Quan C# .NET — QLBanMayViTinh</span>
+      <span style="font-family: var(--font-code); font-weight: 600; color: var(--accent-cyan);">Slide 03 / 32</span>
+    </div>
+  </section>
+
+  <!-- SLIDE 04: Kiến Trúc Hệ Thống Đa Tầng (3-Tier Enterprise) -->
+  <section class="slide" id="slide-4" data-slide="4" data-notes="[03:45 - 05:00] Trên màn hình là sơ đồ kiến trúc 3 tầng tổng thể của dự án được trích xuất qua công cụ Graphify. Presentation Layer gồm 14 WinForms. Toàn bộ tương tác dữ liệu và nghiệp vụ phải đi qua lớp trung gian Functions.cs và UIThemeHelper.cs trước khi chạm tới Data Layer là SQL Server. Nhờ vậy, nếu sau này cần thay đổi cấu trúc bảng, chúng ta chỉ cần sửa tại lớp Helper mà không phải viết lại mã nguồn trong các Form.">
+    <div class="slide-header">
+      <div class="slide-title-wrap">
+        <div class="slide-tag">KIẾN TRÚC HỆ THỐNG</div>
+        <h2 class="slide-title">Kiến Trúc Hệ Thống Đa Tầng (3-Tier Enterprise)</h2>
+        <p class="slide-subtitle">Phân tầng kiến trúc minh bạch, đảm bảo tính mở rộng và dễ bảo trì</p>
+      </div>
+      <div class="slide-badges">
+        <span class="badge">Presentation Layer</span><span class="badge">Business Layer</span><span class="badge">Data Access Layer</span>
+      </div>
+    </div>
+    
+    <div class="slide-body">
+      <div class="slide-left">
+        <div class="summary-box">
+          Tách bạch 3 lớp: Presentation (14 Forms giao diện), Business & Helper Layer (Functions, UIThemeHelper, SecurityHelper) và Data Layer (SQL Server).
+        </div>
+        <ul class="bullet-list">
+          <li class="bullet-item"><span class="bullet-dot"></span><span>Presentation Layer: 14 Forms giao diện chuyên biệt hóa cho từng vai trò người dùng.</span></li><li class="bullet-item"><span class="bullet-dot"></span><span>Business & Helper Layer: Xử lý nghiệp vụ tập trung, kiểm tra logic, phân quyền RBAC.</span></li><li class="bullet-item"><span class="bullet-dot"></span><span>Data Layer: Cơ sở dữ liệu chuẩn 3NF, lưu trữ an toàn và quản lý tính toàn vẹn bằng Trigger.</span></li><li class="bullet-item"><span class="bullet-dot"></span><span>Không để lộ câu lệnh kết nối trực tiếp trong Form, đảm bảo tính bảo mật và module hóa.</span></li>
+        </ul>
+      </div>
+      <div class="slide-right">
+        
+            <div class="media-container" onclick="openZoom('assets/graph_01_overview_3tier.png')">
+              <img src="assets/graph_01_overview_3tier.png" alt="Kiến Trúc Hệ Thống Đa Tầng (3-Tier Enterprise)">
+            </div>
+            
+      </div>
+    </div>
+    
+    <div class="slide-footer">
+      <span>Đồ Án Lập Trình Trực Quan C# .NET — QLBanMayViTinh</span>
+      <span style="font-family: var(--font-code); font-weight: 600; color: var(--accent-cyan);">Slide 04 / 32</span>
+    </div>
+  </section>
+
+  <!-- SLIDE 05: Bản Đồ Phụ Thuộc & Luồng Gọi Hàm (Call Graph) -->
+  <section class="slide" id="slide-5" data-slide="5" data-notes="[05:00 - 06:15] Khi quét AST toàn bộ dự án bằng công cụ Graphify, kết quả đồ thị Call Graph cho thấy kiến trúc đạt chuẩn High Cohesion và Low Coupling. Hai trung tâm điều hướng duy nhất là Functions.cs chịu trách nhiệm toàn bộ ADO.NET và phiên đăng nhập, cùng UIThemeHelper.cs chịu trách nhiệm toàn bộ giao diện và bảng màu. Các Form hoàn toàn độc lập, không form nào gọi chéo dữ liệu của form khác.">
+    <div class="slide-header">
+      <div class="slide-title-wrap">
+        <div class="slide-tag">GRAPHIFY DEPENDENCY MAP</div>
+        <h2 class="slide-title">Bản Đồ Phụ Thuộc & Luồng Gọi Hàm (Call Graph)</h2>
+        <p class="slide-subtitle">Phân tích đồ thị liên kết mô-đun toàn hệ thống từ Graphify</p>
+      </div>
+      <div class="slide-badges">
+        <span class="badge">Low Coupling</span><span class="badge">High Cohesion</span><span class="badge">Static Analysis</span><span class="badge">Code Quality</span>
+      </div>
+    </div>
+    
+    <div class="slide-body">
+      <div class="slide-left">
+        <div class="summary-box">
+          Đồ thị liên kết chứng minh mức độ kết dính cao bên trong các module và sự phụ thuộc lỏng lẻo giữa giao diện và cơ sở dữ liệu.
+        </div>
+        <ul class="bullet-list">
+          <li class="bullet-item"><span class="bullet-dot"></span><span>Tất cả 14 Forms đều hội tụ về 2 điểm trung chuyển: Functions.cs và UIThemeHelper.cs.</span></li><li class="bullet-item"><span class="bullet-dot"></span><span>Loại bỏ hoàn toàn các phụ thuộc vòng (Circular Dependencies) giữa các Form.</span></li><li class="bullet-item"><span class="bullet-dot"></span><span>Cơ chế MDI/Panel Shell giúp frmMain đóng vai trò điều phối trung tâm.</span></li><li class="bullet-item"><span class="bullet-dot"></span><span>Giảm thiểu sự phân mảnh logic nghiệp vụ, nâng cao độ tin cậy và khả năng tái sử dụng.</span></li>
+        </ul>
+      </div>
+      <div class="slide-right">
+        
+            <div class="media-container" onclick="openZoom('assets/graph_02_call_dependency.png')">
+              <img src="assets/graph_02_call_dependency.png" alt="Bản Đồ Phụ Thuộc & Luồng Gọi Hàm (Call Graph)">
+            </div>
+            
+      </div>
+    </div>
+    
+    <div class="slide-footer">
+      <span>Đồ Án Lập Trình Trực Quan C# .NET — QLBanMayViTinh</span>
+      <span style="font-family: var(--font-code); font-weight: 600; color: var(--accent-cyan);">Slide 05 / 32</span>
+    </div>
+  </section>
+
+  <!-- SLIDE 06: Thiết Kế CSDL Quan Hệ Chuẩn Hóa 3NF & Sơ Đồ ERD -->
+  <section class="slide" id="slide-6" data-slide="6" data-notes="[06:15 - 07:30] Sơ đồ ERD trên slide thể hiện lược đồ CSDL chuẩn 3NF của hệ thống. Chúng em không lưu cứng thông tin linh kiện vào bảng máy tính mà phân rã thành các bảng con như tblLoaiMay, tblHangSanXuat, tblRAM, tblChip, tblManHinh... Bảng hóa đơn được thiết kế theo cặp Master-Detail giúp lưu trữ lịch sử giao dịch chính xác tuyệt đối mà không gây lặp lại dữ liệu.">
+    <div class="slide-header">
+      <div class="slide-title-wrap">
+        <div class="slide-tag">DATABASE ERD & 3NF</div>
+        <h2 class="slide-title">Thiết Kế CSDL Quan Hệ Chuẩn Hóa 3NF & Sơ Đồ ERD</h2>
+        <p class="slide-subtitle">Tối ưu hóa lược đồ dữ liệu loại bỏ triệt để dị thường thêm/xóa/sửa</p>
+      </div>
+      <div class="slide-badges">
+        <span class="badge">3NF Normalized</span><span class="badge">Foreign Key Constraints</span><span class="badge">ACID Compliance</span>
+      </div>
+    </div>
+    
+    <div class="slide-body">
+      <div class="slide-left">
+        <div class="summary-box">
+          Cơ sở dữ liệu gồm 25 bảng quan hệ được thiết kế chuẩn mực, bảo đảm tính toàn vẹn dữ liệu từ linh kiện phần cứng đến hóa đơn giao dịch.
+        </div>
+        <ul class="bullet-list">
+          <li class="bullet-item"><span class="bullet-dot"></span><span>Bảng sản phẩm tblMayViTinh liên kết chặt chẽ với các bảng danh mục linh kiện (3NF).</span></li><li class="bullet-item"><span class="bullet-dot"></span><span>Mô hình Master-Detail chuẩn mực: tblHoaDonBan <-> tblChiTietHoaDonBan.</span></li><li class="bullet-item"><span class="bullet-dot"></span><span>Ràng buộc khóa ngoại CASCADE / RESTRICT bảo vệ dữ liệu chống mồ côi (Orphan records).</span></li><li class="bullet-item"><span class="bullet-dot"></span><span>Hệ thống bảng người dùng, phân quyền RBAC và bảng lưu nhật ký hoạt động kiểm toán.</span></li>
+        </ul>
+      </div>
+      <div class="slide-right">
+        
+            <div class="media-container" onclick="openZoom('assets/graph_03_erd_database.png')">
+              <img src="assets/graph_03_erd_database.png" alt="Thiết Kế CSDL Quan Hệ Chuẩn Hóa 3NF & Sơ Đồ ERD">
+            </div>
+            
+      </div>
+    </div>
+    
+    <div class="slide-footer">
+      <span>Đồ Án Lập Trình Trực Quan C# .NET — QLBanMayViTinh</span>
+      <span style="font-family: var(--font-code); font-weight: 600; color: var(--accent-cyan);">Slide 06 / 32</span>
+    </div>
+  </section>
+
+  <!-- SLIDE 07: Kỹ Thuật Giao Diện: Custom GDI+ Rendering Engine -->
+  <section class="slide" id="slide-7" data-slide="7" data-notes="[07:30 - 08:45] Điểm ấn tượng đầu tiên về mặt thị giác là giao diện hiện đại như ứng dụng Web hay Fluent UI trên Windows 11. Để đạt được điều này mà không phải tốn chi phí mua các bộ thư viện ngoài, chúng em đã tự viết class UIThemeHelper.cs. Phương thức MakeRoundedControl tạo đường cong bằng GraphicsPath rồi gán vào Region của Control. Tất cả đối tượng đồ họa đều được bọc trong khối using để bảo đảm giải phóng GDI Handle ngay lập tức.">
+    <div class="slide-header">
+      <div class="slide-title-wrap">
+        <div class="slide-tag">GDI+ THEME ENGINE</div>
+        <h2 class="slide-title">Kỹ Thuật Giao Diện: Custom GDI+ Rendering Engine</h2>
+        <p class="slide-subtitle">Đột phá giao diện phẳng với GraphicsPath và Anti-Aliasing nội sinh</p>
+      </div>
+      <div class="slide-badges">
+        <span class="badge">UIThemeHelper.cs</span><span class="badge">GraphicsPath</span><span class="badge">Smooth Corners</span><span class="badge">No External Libs</span>
+      </div>
+    </div>
+    
+    <div class="slide-body">
+      <div class="slide-left">
+        <div class="summary-box">
+          Xây dựng các thẻ Card và Button bo góc hiện đại theo ngôn ngữ Fluent Design hoàn toàn bằng thư viện đồ họa GDI+ của .NET Framework.
+        </div>
+        <ul class="bullet-list">
+          <li class="bullet-item"><span class="bullet-dot"></span><span>Hàm MakeRoundedControl sử dụng GraphicsPath.AddArc tạo 4 cung tròn mềm mại.</span></li><li class="bullet-item"><span class="bullet-dot"></span><span>Gán vùng hiển thị Region mới cho Control, khử răng cưa và bo góc sắc nét.</span></li><li class="bullet-item"><span class="bullet-dot"></span><span>Giải phóng bộ nhớ đồ họa lập tức bằng cấu trúc using tránh rò rỉ GDI Handles.</span></li><li class="bullet-item"><span class="bullet-dot"></span><span>Không cần phụ thuộc vào bất kỳ thư viện UI trả phí nào như DevExpress hay Bunifu.</span></li>
+        </ul>
+      </div>
+      <div class="slide-right">
+        
+            <div class="media-container" onclick="openZoom('assets/code_01_stylecard_gdi.png')">
+              <img src="assets/code_01_stylecard_gdi.png" alt="Kỹ Thuật Giao Diện: Custom GDI+ Rendering Engine">
+            </div>
+            
+      </div>
+    </div>
+    
+    <div class="slide-footer">
+      <span>Đồ Án Lập Trình Trực Quan C# .NET — QLBanMayViTinh</span>
+      <span style="font-family: var(--font-code); font-weight: 600; color: var(--accent-cyan);">Slide 07 / 32</span>
+    </div>
+  </section>
+
+  <!-- SLIDE 08: Kiến Trúc Dual-Theme: Chuyển Đổi Sáng/Tối Tức Thì -->
+  <section class="slide" id="slide-8" data-slide="8" data-notes="[08:45 - 10:00] Trên slide là hình ảnh so sánh thực tế giữa Light Mode và Dark Mode trên frmMain. Khi người dùng bấm nút đổi Theme, phương thức ApplyTheme nhận form gốc và đệ quy qua toàn bộ cây controls. Bất kể control nằm lồng sâu bao nhiêu tầng trong Panel hay GroupBox, nó đều được gán lại màu nền, màu chữ và kiểu viền theo Palette chuẩn, mang lại trải nghiệm mượt mà không độ trễ.">
+    <div class="slide-header">
+      <div class="slide-title-wrap">
+        <div class="slide-tag">DUAL-THEME ARCHITECTURE</div>
+        <h2 class="slide-title">Kiến Trúc Dual-Theme: Chuyển Đổi Sáng/Tối Tức Thì</h2>
+        <p class="slide-subtitle">Động cơ đệ quy duyệt cây điều khiển giao diện theo thời gian thực</p>
+      </div>
+      <div class="slide-badges">
+        <span class="badge">Dark Mode</span><span class="badge">Light Mode</span><span class="badge">Tree Traversal</span><span class="badge">Real-time Switch</span>
+      </div>
+    </div>
+    
+    <div class="slide-body">
+      <div class="slide-left">
+        <div class="summary-box">
+          Người dùng có thể chuyển đổi linh hoạt giữa giao diện Sáng chuyên nghiệp và giao diện Tối hiện đại chỉ với một nút bấm mà không cần khởi động lại ứng dụng.
+        </div>
+        <ul class="bullet-list">
+          <li class="bullet-item"><span class="bullet-dot"></span><span>Thuật toán ApplyTheme(Control root) đệ quy duyệt qua toàn bộ cây controls trên Form.</span></li><li class="bullet-item"><span class="bullet-dot"></span><span>Tự động nhận diện kiểu điều khiển: Button, Panel, TextBox, DataGridView, Label.</span></li><li class="bullet-item"><span class="bullet-dot"></span><span>Bảng màu được tính toán tương phản đạt chuẩn trợ năng WCAG 2.1 AA.</span></li><li class="bullet-item"><span class="bullet-dot"></span><span>Đặt cạnh nhau hai ảnh chụp thực tế ui_main_light.png và ui_main_dark.png để so sánh.</span></li>
+        </ul>
+      </div>
+      <div class="slide-right">
+        
+            <div class="dual-media">
+              <div class="media-container" onclick="openZoom('assets/ui_main_light.png')">
+                <img src="assets/ui_main_light.png" alt="Kiến Trúc Dual-Theme: Chuyển Đổi Sáng/Tối Tức Thì 1">
+              </div>
+              <div class="media-container" onclick="openZoom('assets/ui_main_dark.png')">
+                <img src="assets/ui_main_dark.png" alt="Kiến Trúc Dual-Theme: Chuyển Đổi Sáng/Tối Tức Thì 2">
+              </div>
+            </div>
+            
+      </div>
+    </div>
+    
+    <div class="slide-footer">
+      <span>Đồ Án Lập Trình Trực Quan C# .NET — QLBanMayViTinh</span>
+      <span style="font-family: var(--font-code); font-weight: 600; color: var(--accent-cyan);">Slide 08 / 32</span>
+    </div>
+  </section>
+
+  <!-- SLIDE 09: Tầng Truy Xuất Dữ Liệu Pure ADO.NET Hiệu Năng Cao -->
+  <section class="slide" id="slide-9" data-slide="9" data-notes="[10:00 - 11:15] Đây là trái tim của tầng truy xuất dữ liệu trong Functions.cs. Chúng em áp dụng mô hình kết nối có kiểm soát: hàm Connect() chỉ mở khi kết nối chưa mở. Hàm GetDataToTable tận dụng SqlDataAdapter để tự động ngắt kết nối sau khi Fill vào DataTable. Đặc biệt, hàm GetFieldValues sử dụng ExecuteScalar giúp việc lấy các giá trị tổng tiền hay kiểm tra tồn kho chỉ mất chưa tới 2ms.">
+    <div class="slide-header">
+      <div class="slide-title-wrap">
+        <div class="slide-tag">DATA ACCESS CORE</div>
+        <h2 class="slide-title">Tầng Truy Xuất Dữ Liệu Pure ADO.NET Hiệu Năng Cao</h2>
+        <p class="slide-subtitle">Tối ưu hóa đóng/mở kết nối, thực thi phi tập trung và chống SQL Injection</p>
+      </div>
+      <div class="slide-badges">
+        <span class="badge">Functions.cs</span><span class="badge">SqlDataAdapter</span><span class="badge">ExecuteScalar</span><span class="badge">SQL Injection Guard</span>
+      </div>
+    </div>
+    
+    <div class="slide-body">
+      <div class="slide-left">
+        <div class="summary-box">
+          Lớp Functions.cs cung cấp các phương thức truy xuất dữ liệu dùng chung mạnh mẽ, an toàn tuyệt đối nhờ cơ chế tham số hóa SqlParameter.
+        </div>
+        <ul class="bullet-list">
+          <li class="bullet-item"><span class="bullet-dot"></span><span>Phương thức Connect() quản lý trạng thái kết nối thông minh, tránh mở trùng lặp.</span></li><li class="bullet-item"><span class="bullet-dot"></span><span>GetDataToTable() sử dụng SqlDataAdapter nạp nhanh vào DataTable không tốn RAM.</span></li><li class="bullet-item"><span class="bullet-dot"></span><span>GetFieldValues() tối ưu hóa hàm ExecuteScalar cho các truy vấn lấy giá trị đơn lẻ.</span></li><li class="bullet-item"><span class="bullet-dot"></span><span>100% câu truy vấn đều sử dụng mảng SqlParameter[], triệt tiêu nguy cơ SQL Injection.</span></li>
+        </ul>
+      </div>
+      <div class="slide-right">
+        
+            <div class="media-container" onclick="openZoom('assets/code_03_functions_adonet.png')">
+              <img src="assets/code_03_functions_adonet.png" alt="Tầng Truy Xuất Dữ Liệu Pure ADO.NET Hiệu Năng Cao">
+            </div>
+            
+      </div>
+    </div>
+    
+    <div class="slide-footer">
+      <span>Đồ Án Lập Trình Trực Quan C# .NET — QLBanMayViTinh</span>
+      <span style="font-family: var(--font-code); font-weight: 600; color: var(--accent-cyan);">Slide 09 / 32</span>
+    </div>
+  </section>
+
+  <!-- SLIDE 10: Cổng Xác Thực & Phân Quyền Hệ Thống (`frmDangNhap.cs`) -->
+  <section class="slide" id="slide-10" data-slide="10" data-notes="[11:15 - 12:30] Khi người dùng đăng nhập tại frmDangNhap, hệ thống truy vấn kiểm tra tài khoản qua câu lệnh SELECT có tham số. Mật khẩu được đối chiếu qua hàm băm an toàn. Nếu thành công, hệ thống lưu mã nhân viên và quyền vào biến tĩnh tĩnh CurrentRole, đồng thời gọi hàm GhiNhatKy để lưu vết kiểm toán. Form chính frmMain sau đó sẽ bật/tắt các menu phù hợp với vai trò của người dùng.">
+    <div class="slide-header">
+      <div class="slide-title-wrap">
+        <div class="slide-tag">XÁC THỰC & BẢO MẬT</div>
+        <h2 class="slide-title">Cổng Xác Thực & Phân Quyền Hệ Thống (`frmDangNhap.cs`)</h2>
+        <p class="slide-subtitle">Quy trình xác thực người dùng, bảo mật mật khẩu và lưu phiên làm việc</p>
+      </div>
+      <div class="slide-badges">
+        <span class="badge">frmDangNhap</span><span class="badge">RBAC</span><span class="badge">BCrypt Verify</span><span class="badge">Session Management</span>
+      </div>
+    </div>
+    
+    <div class="slide-body">
+      <div class="slide-left">
+        <div class="summary-box">
+          Form đăng nhập với cơ chế bảo mật cao cấp: kiểm tra tài khoản, xác thực mật khẩu băm, phân quyền vai trò (Admin/Nhân viên) và ghi nhận vết truy cập.
+        </div>
+        <ul class="bullet-list">
+          <li class="bullet-item"><span class="bullet-dot"></span><span>Kiểm tra tính toàn vẹn tài khoản và trạng thái hoạt động (Khóa/Mở).</span></li><li class="bullet-item"><span class="bullet-dot"></span><span>Tự động lưu trữ thông tin phiên làm việc: Functions.CurrentMaNV, Functions.CurrentRole.</span></li><li class="bullet-item"><span class="bullet-dot"></span><span>Tự động điều hướng và kích hoạt quyền menu tương ứng trên frmMain.</span></li><li class="bullet-item"><span class="bullet-dot"></span><span>Ghi lại nhật ký đăng nhập thời gian thực vào bảng tblNhatKyHoatDong.</span></li>
+        </ul>
+      </div>
+      <div class="slide-right">
+        
+            <div class="dual-media">
+              <div class="media-container" onclick="openZoom('assets/ui_dangnhap.png')">
+                <img src="assets/ui_dangnhap.png" alt="Cổng Xác Thực & Phân Quyền Hệ Thống (`frmDangNhap.cs`) 1">
+              </div>
+              <div class="media-container" onclick="openZoom('assets/code_04_dangnhap_auth.png')">
+                <img src="assets/code_04_dangnhap_auth.png" alt="Cổng Xác Thực & Phân Quyền Hệ Thống (`frmDangNhap.cs`) 2">
+              </div>
+            </div>
+            
+      </div>
+    </div>
+    
+    <div class="slide-footer">
+      <span>Đồ Án Lập Trình Trực Quan C# .NET — QLBanMayViTinh</span>
+      <span style="font-family: var(--font-code); font-weight: 600; color: var(--accent-cyan);">Slide 10 / 32</span>
+    </div>
+  </section>
+
+  <!-- SLIDE 11: Đăng Ký Tài Khoản & Khôi Phục Mật Khẩu -->
+  <section class="slide" id="slide-11" data-slide="11" data-notes="[12:30 - 13:45] Đối với hai màn hình Đăng ký và Quên mật khẩu, chúng em thiết kế bộ kiểm tra hợp lệ dữ liệu nhiều lớp. Tại frmDangKy, tài khoản chỉ được tạo nếu mã nhân viên thực sự tồn tại trong CSDL và chưa được cấp tài khoản. Tại frmQuenMatKhau, người dùng phải cung cấp đúng cả tên đăng nhập và số điện thoại đã lưu trong hồ sơ nhân viên thì mới được phép thiết lập lại mật khẩu mới.">
+    <div class="slide-header">
+      <div class="slide-title-wrap">
+        <div class="slide-tag">QUẢN TRỊ NGƯỜI DÙNG</div>
+        <h2 class="slide-title">Đăng Ký Tài Khoản & Khôi Phục Mật Khẩu</h2>
+        <p class="slide-subtitle">Xử lý kiểm tra hợp lệ dữ liệu đa tầng tại `frmDangKy` và `frmQuenMatKhau`</p>
+      </div>
+      <div class="slide-badges">
+        <span class="badge">Data Validation</span><span class="badge">Regex Guard</span><span class="badge">Password Reset</span><span class="badge">User Onboarding</span>
+      </div>
+    </div>
+    
+    <div class="slide-body">
+      <div class="slide-left">
+        <div class="summary-box">
+          Hệ thống hỗ trợ quy trình đăng ký tài khoản mới cho nhân viên và khôi phục mật khẩu bảo mật khi quên, ngăn ngừa lỗi nhập liệu.
+        </div>
+        <ul class="bullet-list">
+          <li class="bullet-item"><span class="bullet-dot"></span><span>Kiểm tra định dạng email, độ mạnh mật khẩu và tính duy nhất của TenDangNhap.</span></li><li class="bullet-item"><span class="bullet-dot"></span><span>Ràng buộc tài khoản đăng ký phải khớp với mã nhân viên hợp lệ trong tblNhanVien.</span></li><li class="bullet-item"><span class="bullet-dot"></span><span>Quy trình quên mật khẩu xác thực đa yếu tố: Tên đăng nhập + Số điện thoại + Mã NV.</span></li><li class="bullet-item"><span class="bullet-dot"></span><span>Thông báo lỗi trực quan trên giao diện, không để xảy ra crash ứng dụng.</span></li>
+        </ul>
+      </div>
+      <div class="slide-right">
+        
+            <div class="dual-media">
+              <div class="media-container" onclick="openZoom('assets/ui_dangky.png')">
+                <img src="assets/ui_dangky.png" alt="Đăng Ký Tài Khoản & Khôi Phục Mật Khẩu 1">
+              </div>
+              <div class="media-container" onclick="openZoom('assets/ui_quenmatkhau.png')">
+                <img src="assets/ui_quenmatkhau.png" alt="Đăng Ký Tài Khoản & Khôi Phục Mật Khẩu 2">
+              </div>
+            </div>
+            
+      </div>
+    </div>
+    
+    <div class="slide-footer">
+      <span>Đồ Án Lập Trình Trực Quan C# .NET — QLBanMayViTinh</span>
+      <span style="font-family: var(--font-code); font-weight: 600; color: var(--accent-cyan);">Slide 11 / 32</span>
+    </div>
+  </section>
+
+  <!-- SLIDE 12: Trung Tâm Điều Khiển `frmMain.cs`: Kỹ Thuật Nhúng Form -->
+  <section class="slide" id="slide-12" data-slide="12" data-notes="[13:45 - 15:00] Giao diện chính frmMain là một cửa sổ điều khiển trung tâm theo phong cách ứng dụng hiện đại. Thay vì mở các cửa sổ con trôi nổi gây rối mắt, phương thức OpenChildForm thiết lập Form con thành một User Control nhúng trực tiếp vào pnlMain. Trước khi nạp Form mới, hệ thống tự động Close và Dispose Form cũ để thu hồi bộ nhớ RAM ngay lập tức.">
+    <div class="slide-header">
+      <div class="slide-title-wrap">
+        <div class="slide-tag">SHELL & NAVIGATION</div>
+        <h2 class="slide-title">Trung Tâm Điều Khiển `frmMain.cs`: Kỹ Thuật Nhúng Form</h2>
+        <p class="slide-subtitle">Trải nghiệm Single-Window mượt mà với kỹ thuật Panel Embedding</p>
+      </div>
+      <div class="slide-badges">
+        <span class="badge">Single-Window App</span><span class="badge">Panel Embedding</span><span class="badge">Memory Management</span><span class="badge">Clean UI</span>
+      </div>
+    </div>
+    
+    <div class="slide-body">
+      <div class="slide-left">
+        <div class="summary-box">
+          Khắc phục nhược điểm giật lag của giao diện MDI truyền thống bằng cách nhúng động các Form con trực tiếp vào Panel trung tâm (pnlMain).
+        </div>
+        <ul class="bullet-list">
+          <li class="bullet-item"><span class="bullet-dot"></span><span>Hàm OpenChildForm đóng và Dispose hoàn toàn Form con cũ trước khi nạp Form mới.</span></li><li class="bullet-item"><span class="bullet-dot"></span><span>Thiết lập TopLevel = false, FormBorderStyle = None, Dock = Fill vào pnlMain.</span></li><li class="bullet-item"><span class="bullet-dot"></span><span>Tự động áp dụng bộ Theme hiện tại cho Form mới được mở.</span></li><li class="bullet-item"><span class="bullet-dot"></span><span>Đồng bộ trạng thái phát sáng (Highlight) trên thanh Sidebar Menu điều hướng.</span></li>
+        </ul>
+      </div>
+      <div class="slide-right">
+        
+            <div class="dual-media">
+              <div class="media-container" onclick="openZoom('assets/ui_main_dark.png')">
+                <img src="assets/ui_main_dark.png" alt="Trung Tâm Điều Khiển `frmMain.cs`: Kỹ Thuật Nhúng Form 1">
+              </div>
+              <div class="media-container" onclick="openZoom('assets/code_05_main_embed_form.png')">
+                <img src="assets/code_05_main_embed_form.png" alt="Trung Tâm Điều Khiển `frmMain.cs`: Kỹ Thuật Nhúng Form 2">
+              </div>
+            </div>
+            
+      </div>
+    </div>
+    
+    <div class="slide-footer">
+      <span>Đồ Án Lập Trình Trực Quan C# .NET — QLBanMayViTinh</span>
+      <span style="font-family: var(--font-code); font-weight: 600; color: var(--accent-cyan);">Slide 12 / 32</span>
+    </div>
+  </section>
+
+  <!-- SLIDE 13: Quản Lý Danh Mục Máy Vi Tính (`frmMayViTinh.cs` - UI & Nghiệp Vụ) -->
+  <section class="slide" id="slide-13" data-slide="13" data-notes="[15:00 - 16:15] Form frmMayViTinh là nơi nhân viên quản lý toàn bộ kho sản phẩm máy tính. Điểm nổi bật là khi click vào bất kỳ dòng nào trên bảng, ảnh đại diện sản phẩm sẽ được nạp tức thì vào PictureBox từ đường dẫn lưu trữ. Hệ thống cũng tích hợp công thức gợi ý giá bán dựa trên giá vốn nhập kho, giúp nhân viên không phải tính toán thủ công.">
+    <div class="slide-header">
+      <div class="slide-title-wrap">
+        <div class="slide-tag">QUẢN TRỊ SẢN PHẨM</div>
+        <h2 class="slide-title">Quản Lý Danh Mục Máy Vi Tính (`frmMayViTinh.cs` - UI & Nghiệp Vụ)</h2>
+        <p class="slide-subtitle">Giao diện quản lý thông số kỹ thuật, hình ảnh và công thức định giá</p>
+      </div>
+      <div class="slide-badges">
+        <span class="badge">Product Catalog</span><span class="badge">Live PictureBox</span><span class="badge">Smart Pricing</span><span class="badge">Auto Code</span>
+      </div>
+    </div>
+    
+    <div class="slide-body">
+      <div class="slide-left">
+        <div class="summary-box">
+          Màn hình quản lý máy vi tính được thiết kế công thái học: hiển thị ảnh động, thông số cấu hình và tính toán giá bán tự động từ giá nhập.
+        </div>
+        <ul class="bullet-list">
+          <li class="bullet-item"><span class="bullet-dot"></span><span>Hiển thị trực quan danh sách sản phẩm với định dạng tiền tệ Việt Nam (VNĐ).</span></li><li class="bullet-item"><span class="bullet-dot"></span><span>Tự động load ảnh sản phẩm tương ứng vào PictureBox khi người dùng click chọn hàng.</span></li><li class="bullet-item"><span class="bullet-dot"></span><span>Tính năng tự sinh mã sản phẩm và gợi ý giá bán lẻ theo biên độ lợi nhuận.</span></li><li class="bullet-item"><span class="bullet-dot"></span><span>Tích hợp các ComboBox liên kết danh mục: Loại máy, Hãng sản xuất, RAM, Ổ cứng.</span></li>
+        </ul>
+      </div>
+      <div class="slide-right">
+        
+            <div class="dual-media">
+              <div class="media-container" onclick="openZoom('assets/ui_mayvitinh_view.png')">
+                <img src="assets/ui_mayvitinh_view.png" alt="Quản Lý Danh Mục Máy Vi Tính (`frmMayViTinh.cs` - UI & Nghiệp Vụ) 1">
+              </div>
+              <div class="media-container" onclick="openZoom('assets/ui_mayvitinh_edit.png')">
+                <img src="assets/ui_mayvitinh_edit.png" alt="Quản Lý Danh Mục Máy Vi Tính (`frmMayViTinh.cs` - UI & Nghiệp Vụ) 2">
+              </div>
+            </div>
+            
+      </div>
+    </div>
+    
+    <div class="slide-footer">
+      <span>Đồ Án Lập Trình Trực Quan C# .NET — QLBanMayViTinh</span>
+      <span style="font-family: var(--font-code); font-weight: 600; color: var(--accent-cyan);">Slide 13 / 32</span>
+    </div>
+  </section>
+
+  <!-- SLIDE 14: Giải Phẫu Code `frmMayViTinh.cs`: CRUD & Bảo Vệ Khóa Ngoại -->
+  <section class="slide" id="slide-14" data-slide="14" data-notes="[16:15 - 17:30] Nhìn vào đoạn code nút Xóa trên slide, thầy cô có thể thấy kỹ thuật bảo vệ ràng buộc toàn vẹn dữ liệu. Trước khi thực thi DELETE, hàm truy vấn COUNT(*) trên cả hai bảng chi tiết hóa đơn nhập và hóa đơn bán. Nếu máy tính đã từng phát sinh giao dịch, hệ thống từ chối xóa và hiển thị thông báo rõ ràng, ngăn chặn triệt để lỗi xung đột khóa ngoại.">
+    <div class="slide-header">
+      <div class="slide-title-wrap">
+        <div class="slide-tag">TOÀN VẸN DỮ LIỆU</div>
+        <h2 class="slide-title">Giải Phẫu Code `frmMayViTinh.cs`: CRUD & Bảo Vệ Khóa Ngoại</h2>
+        <p class="slide-subtitle">Kỹ thuật kiểm tra ràng buộc trước khi xóa và thực thi an toàn</p>
+      </div>
+      <div class="slide-badges">
+        <span class="badge">FK Protection</span><span class="badge">No Orphan Records</span><span class="badge">Safe Deletion</span><span class="badge">Audit Logging</span>
+      </div>
+    </div>
+    
+    <div class="slide-body">
+      <div class="slide-left">
+        <div class="summary-box">
+          Bảo vệ toàn vẹn dữ liệu ở cấp độ ứng dụng: không cho phép xóa máy tính đã có trong lịch sử hóa đơn bán hoặc hóa đơn nhập.
+        </div>
+        <ul class="bullet-list">
+          <li class="bullet-item"><span class="bullet-dot"></span><span>Kiểm tra số lượng bản ghi phụ thuộc trong tblChiTietHoaDonBan và tblChiTietHoaDonNhap.</span></li><li class="bullet-item"><span class="bullet-dot"></span><span>Hiển thị cảnh báo thân thiện thay vì để SQL Server bắn lỗi ngoại lệ (SqlException).</span></li><li class="bullet-item"><span class="bullet-dot"></span><span>Sử dụng câu lệnh DELETE tham số hóa an toàn khi đáp ứng đủ điều kiện xóa.</span></li><li class="bullet-item"><span class="bullet-dot"></span><span>Tự động ghi lại hành vi xóa sản phẩm vào nhật ký hệ thống kèm mã sản phẩm.</span></li>
+        </ul>
+      </div>
+      <div class="slide-right">
+        
+            <div class="media-container" onclick="openZoom('assets/code_06_mayvitinh_crud_fk.png')">
+              <img src="assets/code_06_mayvitinh_crud_fk.png" alt="Giải Phẫu Code `frmMayViTinh.cs`: CRUD & Bảo Vệ Khóa Ngoại">
+            </div>
+            
+      </div>
+    </div>
+    
+    <div class="slide-footer">
+      <span>Đồ Án Lập Trình Trực Quan C# .NET — QLBanMayViTinh</span>
+      <span style="font-family: var(--font-code); font-weight: 600; color: var(--accent-cyan);">Slide 14 / 32</span>
+    </div>
+  </section>
+
+  <!-- SLIDE 15: Thiết Kế Đa Hình '5-Trong-1' Trên `frmDanhMucHeThong.cs` -->
+  <section class="slide" id="slide-15" data-slide="15" data-notes="[17:30 - 18:45] Đây là một trong những giải pháp kiến trúc sáng tạo nhất của dự án. Thay vì phải viết 5 Form riêng lẻ cho Loại máy, Hãng sản xuất, Nhà cung cấp, Khách hàng và Nhân viên, chúng em thiết kế frmDanhMucHeThong hoạt động theo mô hình đa hình 5-trong-1. Khi người dùng click chọn từng tab, toàn bộ nhãn, trường nhập liệu và cột của DataGridView sẽ tự động tái cấu trúc.">
+    <div class="slide-header">
+      <div class="slide-title-wrap">
+        <div class="slide-tag">ĐA HÌNH GIAO DIỆN</div>
+        <h2 class="slide-title">Thiết Kế Đa Hình '5-Trong-1' Trên `frmDanhMucHeThong.cs`</h2>
+        <p class="slide-subtitle">Đột phá kiến trúc gom 5 danh mục nghiệp vụ vào một Form duy nhất</p>
+      </div>
+      <div class="slide-badges">
+        <span class="badge">5-in-1 Architecture</span><span class="badge">Tab Switching</span><span class="badge">Component Reuse</span><span class="badge">Clean Design</span>
+      </div>
+    </div>
+    
+    <div class="slide-body">
+      <div class="slide-left">
+        <div class="summary-box">
+          Thay vì tạo 5 form riêng biệt gây cồng kềnh, frmDanhMucHeThong xử lý đa hình toàn bộ 5 danh mục: Loại máy, Hãng SX, Nhà cung cấp, Khách hàng, Nhân viên.
+        </div>
+        <ul class="bullet-list">
+          <li class="bullet-item"><span class="bullet-dot"></span><span>5 Nút chuyển đổi danh mục ở thanh trên cùng với hiệu ứng đổi trạng thái trực quan.</span></li><li class="bullet-item"><span class="bullet-dot"></span><span>Tự động thay đổi tiêu đề, các nhãn nhập liệu và cấu trúc cột DataGridView.</span></li><li class="bullet-item"><span class="bullet-dot"></span><span>Tái sử dụng 100% các nút chức năng Thêm, Sửa, Xóa, Lưu, Bỏ qua.</span></li><li class="bullet-item"><span class="bullet-dot"></span><span>Giảm 80% dung lượng mã nguồn và tối ưu hóa bộ nhớ RAM của ứng dụng.</span></li>
+        </ul>
+      </div>
+      <div class="slide-right">
+        
+            <div class="dual-media">
+              <div class="media-container" onclick="openZoom('assets/ui_danhmuc_tab1_loaimay.png')">
+                <img src="assets/ui_danhmuc_tab1_loaimay.png" alt="Thiết Kế Đa Hình '5-Trong-1' Trên `frmDanhMucHeThong.cs` 1">
+              </div>
+              <div class="media-container" onclick="openZoom('assets/ui_danhmuc_tab4_khachhang.png')">
+                <img src="assets/ui_danhmuc_tab4_khachhang.png" alt="Thiết Kế Đa Hình '5-Trong-1' Trên `frmDanhMucHeThong.cs` 2">
+              </div>
+            </div>
+            
+      </div>
+    </div>
+    
+    <div class="slide-footer">
+      <span>Đồ Án Lập Trình Trực Quan C# .NET — QLBanMayViTinh</span>
+      <span style="font-family: var(--font-code); font-weight: 600; color: var(--accent-cyan);">Slide 15 / 32</span>
+    </div>
+  </section>
+
+  <!-- SLIDE 16: Giải Phẫu Code `frmDanhMucHeThong.cs`: Tái Sử Dụng Control -->
+  <section class="slide" id="slide-16" data-slide="16" data-notes="[18:45 - 20:00] Sơ đồ luồng Graphify và đoạn mã C# trên slide minh chứng cho cách thức hoạt động của Form đa hình. Phương thức SwitchCategoryTab nhận vào một CategoryMode. Bảng DataGridView được dọn sạch và nạp các cột mới tương ứng với thực thể được chọn. Nhờ cơ chế này, toàn bộ logic CRUD chỉ cần viết một lần duy nhất, giúp mã nguồn vô cùng gọn gàng và dễ bảo trì.">
+    <div class="slide-header">
+      <div class="slide-title-wrap">
+        <div class="slide-tag">POLYMORPHIC ENGINE</div>
+        <h2 class="slide-title">Giải Phẫu Code `frmDanhMucHeThong.cs`: Tái Sử Dụng Control</h2>
+        <p class="slide-subtitle">Cơ chế Dispatcher động tái cấu trúc bảng và câu lệnh SQL theo trạng thái</p>
+      </div>
+      <div class="slide-badges">
+        <span class="badge">State Pattern</span><span class="badge">Dynamic Columns</span><span class="badge">Code Minimization</span><span class="badge">Graphify Ast</span>
+      </div>
+    </div>
+    
+    <div class="slide-body">
+      <div class="slide-left">
+        <div class="summary-box">
+          Phương thức SwitchCategoryTab điều phối toàn bộ vòng đời của dữ liệu: xóa cột cũ, dựng cột mới và nạp dữ liệu từ bảng tương ứng.
+        </div>
+        <ul class="bullet-list">
+          <li class="bullet-item"><span class="bullet-dot"></span><span>Sử dụng biến trạng thái enum CategoryMode để nhận diện danh mục đang kích hoạt.</span></li><li class="bullet-item"><span class="bullet-dot"></span><span>Hàm SetupGridColumns tạo động DataGridViewTextBoxColumn với HeaderText tương ứng.</span></li><li class="bullet-item"><span class="bullet-dot"></span><span>Bộ xử lý CRUD chung phân nhánh truy vấn theo enum, không nhân bản mã lệnh.</span></li><li class="bullet-item"><span class="bullet-dot"></span><span>Đảm bảo mỗi bảng con đều tuân thủ chính xác các quy tắc chuẩn hóa 3NF.</span></li>
+        </ul>
+      </div>
+      <div class="slide-right">
+        
+            <div class="dual-media">
+              <div class="media-container" onclick="openZoom('assets/graph_05_polymorphic_danhmuc.png')">
+                <img src="assets/graph_05_polymorphic_danhmuc.png" alt="Giải Phẫu Code `frmDanhMucHeThong.cs`: Tái Sử Dụng Control 1">
+              </div>
+              <div class="media-container" onclick="openZoom('assets/code_07_danhmuc_polymorphic.png')">
+                <img src="assets/code_07_danhmuc_polymorphic.png" alt="Giải Phẫu Code `frmDanhMucHeThong.cs`: Tái Sử Dụng Control 2">
+              </div>
+            </div>
+            
+      </div>
+    </div>
+    
+    <div class="slide-footer">
+      <span>Đồ Án Lập Trình Trực Quan C# .NET — QLBanMayViTinh</span>
+      <span style="font-family: var(--font-code); font-weight: 600; color: var(--accent-cyan);">Slide 16 / 32</span>
+    </div>
+  </section>
+
+  <!-- SLIDE 17: Nghiệp Vụ Nhập Kho & Quản Trị Nguồn Hàng (`frmHoaDonNhap.cs`) -->
+  <section class="slide" id="slide-17" data-slide="17" data-notes="[20:00 - 21:15] Bước vào phân hệ quản lý kho, frmHoaDonNhap cho phép doanh nghiệp ghi nhận các lô hàng nhập từ đối tác. Nhân viên chỉ cần chọn nhà cung cấp và lần lượt thêm từng mã máy tính cùng đơn giá nhập và chiết khấu. Mọi tính toán thành tiền đều được thực hiện theo thời gian thực ngay trên giao diện.">
+    <div class="slide-header">
+      <div class="slide-title-wrap">
+        <div class="slide-tag">QUẢN LÝ NHẬP KHO</div>
+        <h2 class="slide-title">Nghiệp Vụ Nhập Kho & Quản Trị Nguồn Hàng (`frmHoaDonNhap.cs`)</h2>
+        <p class="slide-subtitle">Quy trình nhập hàng từ Nhà cung cấp và quản lý giá vốn sản phẩm</p>
+      </div>
+      <div class="slide-badges">
+        <span class="badge">Goods Receipt</span><span class="badge">Supplier Linking</span><span class="badge">Batch Ingestion</span><span class="badge">Cost Tracking</span>
+      </div>
+    </div>
+    
+    <div class="slide-body">
+      <div class="slide-left">
+        <div class="summary-box">
+          Mô phỏng chính xác quy trình nhập hàng thực tế tại các trung tâm phân phối: lập phiếu nhập, chọn nhà cung cấp, nhập số lượng và đơn giá nhập.
+        </div>
+        <ul class="bullet-list">
+          <li class="bullet-item"><span class="bullet-dot"></span><span>Quản lý thông tin phiếu nhập: Mã HDN, ngày lập, nhân viên tiếp nhận, nhà cung cấp.</span></li><li class="bullet-item"><span class="bullet-dot"></span><span>Chi tiết phiếu nhập: Chọn máy tính, nhập số lượng, đơn giá vốn và tỷ lệ giảm giá.</span></li><li class="bullet-item"><span class="bullet-dot"></span><span>Tự động tính thành tiền cho từng mặt hàng và tổng thanh toán của phiếu nhập.</span></li><li class="bullet-item"><span class="bullet-dot"></span><span>Hỗ trợ in phiếu nhập và hủy phiếu có hoàn trả tồn kho chính xác.</span></li>
+        </ul>
+      </div>
+      <div class="slide-right">
+        
+            <div class="media-container" onclick="openZoom('assets/ui_hoadonnhap.png')">
+              <img src="assets/ui_hoadonnhap.png" alt="Nghiệp Vụ Nhập Kho & Quản Trị Nguồn Hàng (`frmHoaDonNhap.cs`)">
+            </div>
+            
+      </div>
+    </div>
+    
+    <div class="slide-footer">
+      <span>Đồ Án Lập Trình Trực Quan C# .NET — QLBanMayViTinh</span>
+      <span style="font-family: var(--font-code); font-weight: 600; color: var(--accent-cyan);">Slide 17 / 32</span>
+    </div>
+  </section>
+
+  <!-- SLIDE 18: Giải Phẫu Code `frmHoaDonNhap.cs`: Master-Detail Pipeline -->
+  <section class="slide" id="slide-18" data-slide="18" data-notes="[21:15 - 22:30] Đoạn code lưu hóa đơn nhập áp dụng kỹ thuật kiểm tra Master thông minh. Khi người dùng thêm dòng máy đầu tiên, hệ thống dùng cú pháp IF NOT EXISTS để tự động sinh bản ghi trong tblHoaDonNhap nếu chưa có, sau đó chèn dòng chi tiết vào tblChiTietHoaDonNhap. Ngay lập tức, Trigger trên SQL Server sẽ kích hoạt để cộng số lượng tồn kho.">
+    <div class="slide-header">
+      <div class="slide-title-wrap">
+        <div class="slide-tag">MASTER-DETAIL LOGIC</div>
+        <h2 class="slide-title">Giải Phẫu Code `frmHoaDonNhap.cs`: Master-Detail Pipeline</h2>
+        <p class="slide-subtitle">Kỹ thuật kiểm tra tồn tại Master Header và chèn chi tiết nguyên tử</p>
+      </div>
+      <div class="slide-badges">
+        <span class="badge">Master-Detail</span><span class="badge">Atomic Insertion</span><span class="badge">Trigger Activation</span><span class="badge">Stock Inflow</span>
+      </div>
+    </div>
+    
+    <div class="slide-body">
+      <div class="slide-left">
+        <div class="summary-box">
+          Kỹ thuật tối ưu xử lý bảng Master: tự động khởi tạo bản ghi tblHoaDonNhap nếu chưa có và chèn chi tiết vào tblChiTietHoaDonNhap.
+        </div>
+        <ul class="bullet-list">
+          <li class="bullet-item"><span class="bullet-dot"></span><span>Sử dụng câu lệnh IF NOT EXISTS trong SQL để tạo hóa đơn cha một cách an toàn.</span></li><li class="bullet-item"><span class="bullet-dot"></span><span>Chèn chi tiết lô hàng vào bảng con với các tham số Parameterized an toàn.</span></li><li class="bullet-item"><span class="bullet-dot"></span><span>Kích hoạt SQL Server Trigger tự động cộng dồn số lượng máy vào kho tblMayViTinh.</span></li><li class="bullet-item"><span class="bullet-dot"></span><span>Tự động cập nhật tổng tiền của hóa đơn nhập mà không cần câu lệnh UPDATE thủ công.</span></li>
+        </ul>
+      </div>
+      <div class="slide-right">
+        
+            <div class="media-container" onclick="openZoom('assets/code_08_hoadonnhap_logic.png')">
+              <img src="assets/code_08_hoadonnhap_logic.png" alt="Giải Phẫu Code `frmHoaDonNhap.cs`: Master-Detail Pipeline">
+            </div>
+            
+      </div>
+    </div>
+    
+    <div class="slide-footer">
+      <span>Đồ Án Lập Trình Trực Quan C# .NET — QLBanMayViTinh</span>
+      <span style="font-family: var(--font-code); font-weight: 600; color: var(--accent-cyan);">Slide 18 / 32</span>
+    </div>
+  </section>
+
+  <!-- SLIDE 19: Nghiệp Vụ Bán Hàng POS Tại Quầy (`frmHoaDonBan.cs` - UI) -->
+  <section class="slide" id="slide-19" data-slide="19" data-notes="[22:30 - 23:45] Màn hình POS frmHoaDonBan là nơi diễn ra các giao dịch bán lẻ hàng ngày. Khi nhân viên chọn mã máy, hệ thống tự động điền đơn giá bán hiện hành. Mọi thao tác gõ số lượng hay phần trăm chiết khấu đều kích hoạt sự kiện tính lại thành tiền ngay tức khắc, giúp việc thanh toán tại quầy diễn ra nhanh chóng và chính xác.">
+    <div class="slide-header">
+      <div class="slide-title-wrap">
+        <div class="slide-tag">BÁN HÀNG POS</div>
+        <h2 class="slide-title">Nghiệp Vụ Bán Hàng POS Tại Quầy (`frmHoaDonBan.cs` - UI)</h2>
+        <p class="slide-subtitle">Giao diện điểm bán lẻ hiện đại, phục vụ thu ngân thanh toán tức thì</p>
+      </div>
+      <div class="slide-badges">
+        <span class="badge">Retail POS</span><span class="badge">Real-time Subtotal</span><span class="badge">Customer Lookup</span><span class="badge">Speed Checkout</span>
+      </div>
+    </div>
+    
+    <div class="slide-body">
+      <div class="slide-left">
+        <div class="summary-box">
+          Giao diện bán hàng POS được thiết kế chuyên dụng cho thu ngân: tra cứu khách hàng nhanh, chọn máy tính, áp dụng chiết khấu và in hóa đơn.
+        </div>
+        <ul class="bullet-list">
+          <li class="bullet-item"><span class="bullet-dot"></span><span>Tự động điền đơn giá bán hiện hành của máy tính ngay khi chọn trong ComboBox.</span></li><li class="bullet-item"><span class="bullet-dot"></span><span>Hỗ trợ nhập tỷ lệ giảm giá (%) và tự động tính toán thành tiền tức thì.</span></li><li class="bullet-item"><span class="bullet-dot"></span><span>Bảng giỏ hàng hiển thị chi tiết các sản phẩm khách mua kèm nút xóa từng dòng linh hoạt.</span></li><li class="bullet-item"><span class="bullet-dot"></span><span>Tự động chuyển đổi tổng số tiền thành chữ tiếng Việt chuẩn mực khi in hóa đơn.</span></li>
+        </ul>
+      </div>
+      <div class="slide-right">
+        
+            <div class="media-container" onclick="openZoom('assets/ui_hoadonban.png')">
+              <img src="assets/ui_hoadonban.png" alt="Nghiệp Vụ Bán Hàng POS Tại Quầy (`frmHoaDonBan.cs` - UI)">
+            </div>
+            
+      </div>
+    </div>
+    
+    <div class="slide-footer">
+      <span>Đồ Án Lập Trình Trực Quan C# .NET — QLBanMayViTinh</span>
+      <span style="font-family: var(--font-code); font-weight: 600; color: var(--accent-cyan);">Slide 19 / 32</span>
+    </div>
+  </section>
+
+  <!-- SLIDE 20: Giải Phẫu Code `frmHoaDonBan.cs`: Thuật Toán Chống Bán Khống -->
+  <section class="slide" id="slide-20" data-slide="20" data-notes="[23:45 - 25:00] Để chống hiện tượng bán âm hay bán khống máy tính, đoạn code trên slide thể hiện thuật toán Stock Guard. Trước khi thêm một dòng vào hóa đơn bán, hệ thống truy vấn số lượng tồn kho tức thời của máy. Nếu số lượng khách mua lớn hơn số lượng còn trong kho, hệ thống lập tức chặn lại và cảnh báo chính xác số lượng hiện có, bảo đảm không bao giờ xảy ra lỗi âm kho.">
+    <div class="slide-header">
+      <div class="slide-title-wrap">
+        <div class="slide-tag">BẢO VỆ TỒN KHO POS</div>
+        <h2 class="slide-title">Giải Phẫu Code `frmHoaDonBan.cs`: Thuật Toán Chống Bán Khống</h2>
+        <p class="slide-subtitle">Kiểm tra số lượng tồn kho tức thì và bảo vệ tính nguyên vẹn giỏ hàng</p>
+      </div>
+      <div class="slide-badges">
+        <span class="badge">Anti-Overselling</span><span class="badge">Real-time Stock Guard</span><span class="badge">Input Validation</span><span class="badge">Data Integrity</span>
+      </div>
+    </div>
+    
+    <div class="slide-body">
+      <div class="slide-left">
+        <div class="summary-box">
+          Thuật toán kiểm tra tồn kho tại chỗ ngăn chặn triệt để tình trạng nhân viên bán vượt quá số lượng máy thực tế đang có trong kho.
+        </div>
+        <ul class="bullet-list">
+          <li class="bullet-item"><span class="bullet-dot"></span><span>Truy vấn trực tiếp số lượng tồn SoLuong từ tblMayViTinh bằng ExecuteScalar.</span></li><li class="bullet-item"><span class="bullet-dot"></span><span>So sánh số lượng khách yêu cầu với số lượng tồn thực tế trước khi thêm vào giỏ.</span></li><li class="bullet-item"><span class="bullet-dot"></span><span>Cảnh báo hộp thoại trực quan và đưa con trỏ chuột về ô số lượng nếu vượt tồn.</span></li><li class="bullet-item"><span class="bullet-dot"></span><span>Công thức tính thành tiền chuẩn xác: ThanhTien = SoLuong * DonGia * (1 - GiamGia/100).</span></li>
+        </ul>
+      </div>
+      <div class="slide-right">
+        
+            <div class="media-container" onclick="openZoom('assets/code_09_hoadonban_pos.png')">
+              <img src="assets/code_09_hoadonban_pos.png" alt="Giải Phẫu Code `frmHoaDonBan.cs`: Thuật Toán Chống Bán Khống">
+            </div>
+            
+      </div>
+    </div>
+    
+    <div class="slide-footer">
+      <span>Đồ Án Lập Trình Trực Quan C# .NET — QLBanMayViTinh</span>
+      <span style="font-family: var(--font-code); font-weight: 600; color: var(--accent-cyan);">Slide 20 / 32</span>
+    </div>
+  </section>
+
+  <!-- SLIDE 21: Đồng Bộ Tự Động Giữa C# và SQL Server Triggers (ACID) -->
+  <section class="slide" id="slide-21" data-slide="21" data-notes="[25:00 - 26:15] Đây là điểm sáng kỹ thuật quan trọng của đồ án. Thay vì viết các câu lệnh UPDATE tồn kho rải rác trong code C#, chúng em đưa toàn bộ logic này vào SQL Server Triggers. Khi có bản ghi mới được chèn vào tblChiTietHoaDonBan, Trigger sẽ tự động trừ số lượng trong tblMayViTinh và cập nhật lại TongTien của hóa đơn cha. Cơ chế này bảo đảm tính toàn vẹn dữ liệu ACID tuyệt đối.">
+    <div class="slide-header">
+      <div class="slide-title-wrap">
+        <div class="slide-tag">ACID TRIGGER PIPELINE</div>
+        <h2 class="slide-title">Đồng Bộ Tự Động Giữa C# và SQL Server Triggers (ACID)</h2>
+        <p class="slide-subtitle">Kỹ thuật đồng bộ tồn kho và tổng tiền tức thì không phụ thuộc tầng ứng dụng</p>
+      </div>
+      <div class="slide-badges">
+        <span class="badge">SQL Server Triggers</span><span class="badge">ACID Guaranteed</span><span class="badge">Auto Stock Decrement</span><span class="badge">Consistency</span>
+      </div>
+    </div>
+    
+    <div class="slide-body">
+      <div class="slide-left">
+        <div class="summary-box">
+          Tận dụng sức mạnh của SQL Server Triggers để tự động khấu trừ tồn kho và cập nhật tổng tiền hóa đơn ngay trong phạm vi giao dịch ACID.
+        </div>
+        <ul class="bullet-list">
+          <li class="bullet-item"><span class="bullet-dot"></span><span>Trigger trg_ChiTietHoaDonBan_Insert_Update khấu trừ kho dựa trên bảng inserted và deleted.</span></li><li class="bullet-item"><span class="bullet-dot"></span><span>Tự động tính lại TongTien trên bảng cha tblHoaDonBan bằng hàm SUM(ThanhTien).</span></li><li class="bullet-item"><span class="bullet-dot"></span><span>Đảm bảo tính toàn vẹn dữ liệu kể cả khi có nhiều nhân viên cùng thao tác đồng thời.</span></li><li class="bullet-item"><span class="bullet-dot"></span><span>Giảm tải xử lý tính toán cho tầng ứng dụng C# WinForms, tối ưu hóa băng thông mạng.</span></li>
+        </ul>
+      </div>
+      <div class="slide-right">
+        
+            <div class="dual-media">
+              <div class="media-container" onclick="openZoom('assets/graph_06_pos_trigger_pipeline.png')">
+                <img src="assets/graph_06_pos_trigger_pipeline.png" alt="Đồng Bộ Tự Động Giữa C# và SQL Server Triggers (ACID) 1">
+              </div>
+              <div class="media-container" onclick="openZoom('assets/code_10_sql_triggers.png')">
+                <img src="assets/code_10_sql_triggers.png" alt="Đồng Bộ Tự Động Giữa C# và SQL Server Triggers (ACID) 2">
+              </div>
+            </div>
+            
+      </div>
+    </div>
+    
+    <div class="slide-footer">
+      <span>Đồ Án Lập Trình Trực Quan C# .NET — QLBanMayViTinh</span>
+      <span style="font-family: var(--font-code); font-weight: 600; color: var(--accent-cyan);">Slide 21 / 32</span>
+    </div>
+  </section>
+
+  <!-- SLIDE 22: Hệ Thống Tra Cứu & Tìm Kiếm Đa Tiêu Chí (`frmTimKiem.cs` - UI) -->
+  <section class="slide" id="slide-22" data-slide="22" data-notes="[26:15 - 27:30] Form frmTimKiem cho phép người dùng tra cứu dữ liệu cực kỳ nhanh chóng. Người dùng có thể tìm kiếm máy tính theo tên, khoảng giá, hãng sản xuất hoặc chuyển sang chế độ tìm kiếm hóa đơn theo khoảng ngày và khách hàng. Giao diện tự động thích ứng để chỉ hiện những trường nhập liệu liên quan đến tiêu chí đang chọn.">
+    <div class="slide-header">
+      <div class="slide-title-wrap">
+        <div class="slide-tag">TÌM KIẾM ĐA TIÊU CHÍ</div>
+        <h2 class="slide-title">Hệ Thống Tra Cứu & Tìm Kiếm Đa Tiêu Chí (`frmTimKiem.cs` - UI)</h2>
+        <p class="slide-subtitle">Tra cứu thông minh máy vi tính và hóa đơn theo nhiều tiêu chí linh hoạt</p>
+      </div>
+      <div class="slide-badges">
+        <span class="badge">Dynamic Search</span><span class="badge">Multi-Filter</span><span class="badge">Product & Invoice</span><span class="badge">Instant Results</span>
+      </div>
+    </div>
+    
+    <div class="slide-body">
+      <div class="slide-left">
+        <div class="summary-box">
+          Màn hình tìm kiếm đa năng hỗ trợ chuyển đổi linh hoạt giữa tìm kiếm sản phẩm máy tính và tra cứu lịch sử hóa đơn bán/nhập hàng.
+        </div>
+        <ul class="bullet-list">
+          <li class="bullet-item"><span class="bullet-dot"></span><span>Chế độ tìm máy tính: Lọc theo mã máy, tên máy, loại máy, hãng sản xuất và khoảng giá bán.</span></li><li class="bullet-item"><span class="bullet-dot"></span><span>Chế độ tìm hóa đơn: Lọc theo mã hóa đơn, mã nhân viên, khách hàng và khoảng thời gian.</span></li><li class="bullet-item"><span class="bullet-dot"></span><span>Giao diện tự động co giãn và hiển thị các trường nhập liệu phù hợp với chế độ tìm kiếm.</span></li><li class="bullet-item"><span class="bullet-dot"></span><span>Hiển thị kết quả tra cứu tức thì trên bảng dữ liệu với định dạng rõ ràng, chuyên nghiệp.</span></li>
+        </ul>
+      </div>
+      <div class="slide-right">
+        
+            <div class="dual-media">
+              <div class="media-container" onclick="openZoom('assets/ui_timkiem_mode1.png')">
+                <img src="assets/ui_timkiem_mode1.png" alt="Hệ Thống Tra Cứu & Tìm Kiếm Đa Tiêu Chí (`frmTimKiem.cs` - UI) 1">
+              </div>
+              <div class="media-container" onclick="openZoom('assets/ui_timkiem_mode2.png')">
+                <img src="assets/ui_timkiem_mode2.png" alt="Hệ Thống Tra Cứu & Tìm Kiếm Đa Tiêu Chí (`frmTimKiem.cs` - UI) 2">
+              </div>
+            </div>
+            
+      </div>
+    </div>
+    
+    <div class="slide-footer">
+      <span>Đồ Án Lập Trình Trực Quan C# .NET — QLBanMayViTinh</span>
+      <span style="font-family: var(--font-code); font-weight: 600; color: var(--accent-cyan);">Slide 22 / 32</span>
+    </div>
+  </section>
+
+  <!-- SLIDE 23: Giải Phẫu Kỹ Thuật Dynamic SQL Builder (`frmTimKiem.cs`) -->
+  <section class="slide" id="slide-23" data-slide="23" data-notes="[27:30 - 28:45] Về mặt lập trình, việc ghép câu truy vấn tìm kiếm rất dễ sinh lỗi cú pháp nếu không cẩn thận. Chúng em áp dụng mẫu thiết kế WHERE 1=1 với StringBuilder. Nhờ có điều kiện 1=1 luôn đúng ban đầu, mọi tiêu chí như tên máy hay khoảng giá đều có thể nối thêm bằng chữ AND mà không cần kiểm tra vị trí đầu hay cuối. Tất cả tham số đều được truyền qua SqlParameter để bảo mật tuyệt đối.">
+    <div class="slide-header">
+      <div class="slide-title-wrap">
+        <div class="slide-tag">DYNAMIC QUERY BUILDER</div>
+        <h2 class="slide-title">Giải Phẫu Kỹ Thuật Dynamic SQL Builder (`frmTimKiem.cs`)</h2>
+        <p class="slide-subtitle">Kỹ thuật ghép chuỗi truy vấn động an toàn với mẫu hình `WHERE 1=1`</p>
+      </div>
+      <div class="slide-badges">
+        <span class="badge">StringBuilder</span><span class="badge">WHERE 1=1 Pattern</span><span class="badge">Parameterized Filters</span><span class="badge">Safe Search</span>
+      </div>
+    </div>
+    
+    <div class="slide-body">
+      <div class="slide-left">
+        <div class="summary-box">
+          Sử dụng StringBuilder kết hợp mẫu hình WHERE 1=1 để sinh câu lệnh SQL động theo các tiêu chí người dùng nhập vào, chống SQL Injection bằng SqlParameter.
+        </div>
+        <ul class="bullet-list">
+          <li class="bullet-item"><span class="bullet-dot"></span><span>Mẫu hình WHERE 1=1 giúp các điều kiện AND phía sau được nối vào một cách tự nhiên.</span></li><li class="bullet-item"><span class="bullet-dot"></span><span>Chỉ bổ sung điều kiện lọc khi người dùng thực sự nhập giá trị vào trường tương ứng.</span></li><li class="bullet-item"><span class="bullet-dot"></span><span>Tất cả giá trị tìm kiếm đều được đóng gói vào danh sách List<SqlParameter> an toàn.</span></li><li class="bullet-item"><span class="bullet-dot"></span><span>Hỗ trợ tìm kiếm gần đúng với toán tử LIKE kết hợp ký tự đại diện %.</span></li>
+        </ul>
+      </div>
+      <div class="slide-right">
+        
+            <div class="media-container" onclick="openZoom('assets/code_11_timkiem_dynamic_sql.png')">
+              <img src="assets/code_11_timkiem_dynamic_sql.png" alt="Giải Phẫu Kỹ Thuật Dynamic SQL Builder (`frmTimKiem.cs`)">
+            </div>
+            
+      </div>
+    </div>
+    
+    <div class="slide-footer">
+      <span>Đồ Án Lập Trình Trực Quan C# .NET — QLBanMayViTinh</span>
+      <span style="font-family: var(--font-code); font-weight: 600; color: var(--accent-cyan);">Slide 23 / 32</span>
+    </div>
+  </section>
+
+  <!-- SLIDE 24: Hệ Thống BI Dashboard & 4 Thẻ KPI Summary Cards -->
+  <section class="slide" id="slide-24" data-slide="24" data-notes="[28:45 - 30:00] Chuyển sang phân hệ Báo cáo Thống kê tại frmBaoCaoThongKe, điểm nhấn lớn nhất là 4 thẻ KPI Summary Cards phía trên. Bất kỳ lúc nào mở form, hệ thống đều tính toán ngay lập tức 4 chỉ số: Tổng giá trị hàng tồn, Tổng tiền nhập, Tổng doanh thu và Lợi nhuận gộp. Thẻ lợi nhuận còn có thuật toán tự đổi màu chữ sang xanh khi có lãi hoặc màu đỏ cảnh báo khi lỗ.">
+    <div class="slide-header">
+      <div class="slide-title-wrap">
+        <div class="slide-tag">BI DASHBOARD & KPI</div>
+        <h2 class="slide-title">Hệ Thống BI Dashboard & 4 Thẻ KPI Summary Cards</h2>
+        <p class="slide-subtitle">Báo cáo điều hành thông minh và bố cục động co giãn tự động</p>
+      </div>
+      <div class="slide-badges">
+        <span class="badge">Executive KPI</span><span class="badge">Inventory Valuation</span><span class="badge">Gross Profit</span><span class="badge">Responsive Layout</span>
+      </div>
+    </div>
+    
+    <div class="slide-body">
+      <div class="slide-left">
+        <div class="summary-box">
+          Màn hình frmBaoCaoThongKe cung cấp cái nhìn toàn cảnh về sức khỏe tài chính của doanh nghiệp thông qua 4 thẻ chỉ số KPI tổng hợp tức thời.
+        </div>
+        <ul class="bullet-list">
+          <li class="bullet-item"><span class="bullet-dot"></span><span>Card 1 - Giá trị Tồn Kho: Tính toán tổng vốn lưu động đang nằm trong kho hàng.</span></li><li class="bullet-item"><span class="bullet-dot"></span><span>Card 2 - Tổng Tiền Nhập Hàng: Theo dõi tổng chi phí mua hàng từ nhà cung cấp.</span></li><li class="bullet-item"><span class="bullet-dot"></span><span>Card 3 - Tổng Doanh Thu Bán: Tổng hợp dòng tiền bán hàng đã thực hiện.</span></li><li class="bullet-item"><span class="bullet-dot"></span><span>Card 4 - Lợi Nhuận Gộp Tức Thì: Tự động đổi màu Xanh/Đỏ theo kết quả kinh doanh lãi/lỗ.</span></li>
+        </ul>
+      </div>
+      <div class="slide-right">
+        
+            <div class="dual-media">
+              <div class="media-container" onclick="openZoom('assets/ui_baocao_tonkho.png')">
+                <img src="assets/ui_baocao_tonkho.png" alt="Hệ Thống BI Dashboard & 4 Thẻ KPI Summary Cards 1">
+              </div>
+              <div class="media-container" onclick="openZoom('assets/code_12_baocao_responsive_cards.png')">
+                <img src="assets/code_12_baocao_responsive_cards.png" alt="Hệ Thống BI Dashboard & 4 Thẻ KPI Summary Cards 2">
+              </div>
+            </div>
+            
+      </div>
+    </div>
+    
+    <div class="slide-footer">
+      <span>Đồ Án Lập Trình Trực Quan C# .NET — QLBanMayViTinh</span>
+      <span style="font-family: var(--font-code); font-weight: 600; color: var(--accent-cyan);">Slide 24 / 32</span>
+    </div>
+  </section>
+
+  <!-- SLIDE 25: Báo Cáo Doanh Thu Theo Tháng, Quý, Năm (Yêu Cầu 6, 7, 8) -->
+  <section class="slide" id="slide-25" data-slide="25" data-notes="[30:00 - 31:15] Màn hình thống kê đáp ứng đầy đủ các yêu cầu nghiệp vụ nâng cao về phân tích thời gian. Khi người dùng chọn thống kê theo Quý, câu lệnh SQL sẽ sử dụng hàm DATEPART(QUARTER, NgayBan) kết hợp với YEAR(NgayBan) để nhóm dữ liệu. Khung điều khiển lọc bên trên cũng tự động co giãn từ 62px lên 112px để hiển thị các ComboBox chọn tháng, quý, năm tương ứng.">
+    <div class="slide-header">
+      <div class="slide-title-wrap">
+        <div class="slide-tag">PHÂN TÍCH DOANH THU</div>
+        <h2 class="slide-title">Báo Cáo Doanh Thu Theo Tháng, Quý, Năm (Yêu Cầu 6, 7, 8)</h2>
+        <p class="slide-subtitle">Kỹ thuật tổng hợp dữ liệu giao dịch đa chu kỳ với các hàm thời gian SQL</p>
+      </div>
+      <div class="slide-badges">
+        <span class="badge">Temporal Aggregation</span><span class="badge">DATEPART(QUARTER)</span><span class="badge">MONTH / YEAR</span><span class="badge">INNER JOIN</span>
+      </div>
+    </div>
+    
+    <div class="slide-body">
+      <div class="slide-left">
+        <div class="summary-box">
+          Phân tích doanh thu và số lượng nhập/bán theo các chu kỳ kế toán linh hoạt (Tháng, Quý, Năm) phục vụ công tác lập kế hoạch kinh doanh.
+        </div>
+        <ul class="bullet-list">
+          <li class="bullet-item"><span class="bullet-dot"></span><span>Sử dụng hàm DATEPART(QUARTER, NgayBan) để phân nhóm giao dịch theo từng quý trong năm.</span></li><li class="bullet-item"><span class="bullet-dot"></span><span>Kết nối bảng hóa đơn và chi tiết bằng INNER JOIN để thống kê chính xác số lượng từng máy.</span></li><li class="bullet-item"><span class="bullet-dot"></span><span>Khung lọc co giãn thông minh: Tự động đổi kích thước (62px sang 112px) khi chọn chế độ.</span></li><li class="bullet-item"><span class="bullet-dot"></span><span>Đáp ứng trọn vẹn các yêu cầu nghiệp vụ khắt khe của môn học và thực tế quản trị.</span></li>
+        </ul>
+      </div>
+      <div class="slide-right">
+        
+            <div class="dual-media">
+              <div class="media-container" onclick="openZoom('assets/ui_baocao_nhaphang.png')">
+                <img src="assets/ui_baocao_nhaphang.png" alt="Báo Cáo Doanh Thu Theo Tháng, Quý, Năm (Yêu Cầu 6, 7, 8) 1">
+              </div>
+              <div class="media-container" onclick="openZoom('assets/ui_baocao_banhang.png')">
+                <img src="assets/ui_baocao_banhang.png" alt="Báo Cáo Doanh Thu Theo Tháng, Quý, Năm (Yêu Cầu 6, 7, 8) 2">
+              </div>
+            </div>
+            
+      </div>
+    </div>
+    
+    <div class="slide-footer">
+      <span>Đồ Án Lập Trình Trực Quan C# .NET — QLBanMayViTinh</span>
+      <span style="font-family: var(--font-code); font-weight: 600; color: var(--accent-cyan);">Slide 25 / 32</span>
+    </div>
+  </section>
+
+  <!-- SLIDE 26: Thuật Toán Xếp Hạng Top 5 Nhân Viên (`SELECT TOP 5 WITH TIES`) -->
+  <section class="slide" id="slide-26" data-slide="26" data-notes="[31:15 - 32:30] Ở báo cáo Top 5 nhân viên xuất sắc, nhóm em đã áp dụng cú pháp SELECT TOP 5 WITH TIES trong SQL Server. Đây là một điểm rất hay: nếu chỉ dùng TOP 5 đơn thuần, trong trường hợp người thứ 5 và người thứ 6 có cùng mức doanh thu, hệ thống sẽ ngẫu nhiên loại bỏ một người. Với từ khóa WITH TIES, SQL Server giữ lại toàn bộ những người đồng hạng, bảo đảm tính công bằng tuyệt đối trong đánh giá thi đua.">
+    <div class="slide-header">
+      <div class="slide-title-wrap">
+        <div class="slide-tag">THUẬT TOÁN XẾP HẠNG</div>
+        <h2 class="slide-title">Thuật Toán Xếp Hạng Top 5 Nhân Viên (`SELECT TOP 5 WITH TIES`)</h2>
+        <p class="slide-subtitle">Kỹ thuật xếp hạng công bằng trong đánh giá hiệu suất nhân sự (Yêu Cầu 9)</p>
+      </div>
+      <div class="slide-badges">
+        <span class="badge">TOP 5 WITH TIES</span><span class="badge">Fair Evaluation</span><span class="badge">HR Performance</span><span class="badge">SQL Excellence</span>
+      </div>
+    </div>
+    
+    <div class="slide-body">
+      <div class="slide-left">
+        <div class="summary-box">
+          Áp dụng từ khóa chuyên sâu TOP 5 WITH TIES của SQL Server để giải quyết triệt để bài toán công bằng khi có các nhân viên đồng hạng doanh thu.
+        </div>
+        <ul class="bullet-list">
+          <li class="bullet-item"><span class="bullet-dot"></span><span>Sự khác biệt lớn: SELECT TOP 5 thông thường sẽ cắt ngẫu nhiên nhân viên nếu bằng điểm.</span></li><li class="bullet-item"><span class="bullet-dot"></span><span>WITH TIES bảo đảm tất cả nhân viên có doanh thu ngang với vị trí thứ 5 đều được vinh danh.</span></li><li class="bullet-item"><span class="bullet-dot"></span><span>Nhóm dữ liệu theo MaNV, TenNV và tính tổng doanh thu bằng SUM(TongTien).</span></li><li class="bullet-item"><span class="bullet-dot"></span><span>Đóng góp giá trị thực tiễn to lớn cho chính sách thưởng KPI nhân sự tại các chuỗi bán lẻ.</span></li>
+        </ul>
+      </div>
+      <div class="slide-right">
+        
+            <div class="dual-media">
+              <div class="media-container" onclick="openZoom('assets/ui_baocao_top5nv.png')">
+                <img src="assets/ui_baocao_top5nv.png" alt="Thuật Toán Xếp Hạng Top 5 Nhân Viên (`SELECT TOP 5 WITH TIES`) 1">
+              </div>
+              <div class="media-container" onclick="openZoom('assets/code_13_baocao_top5_sql.png')">
+                <img src="assets/code_13_baocao_top5_sql.png" alt="Thuật Toán Xếp Hạng Top 5 Nhân Viên (`SELECT TOP 5 WITH TIES`) 2">
+              </div>
+            </div>
+            
+      </div>
+    </div>
+    
+    <div class="slide-footer">
+      <span>Đồ Án Lập Trình Trực Quan C# .NET — QLBanMayViTinh</span>
+      <span style="font-family: var(--font-code); font-weight: 600; color: var(--accent-cyan);">Slide 26 / 32</span>
+    </div>
+  </section>
+
+  <!-- SLIDE 27: Engine Xuất Báo Cáo Excel Nội Sinh Tốc Độ Cao -->
+  <section class="slide" id="slide-27" data-slide="27" data-notes="[32:30 - 33:45] Một tính năng được hội đồng đánh giá rất cao là động cơ xuất Excel nội sinh trong hàm ExportToExcelNativeHtml. Chúng em không dùng Microsoft.Office.Interop.Excel vì thư viện này rất nặng, dễ gây treo tiến trình ngầm và bắt buộc máy khách phải cài Office. Thay vào đó, chúng em sinh cấu trúc HTML Spreadsheet chuẩn với XML Namespace của Microsoft. Tốc độ xuất gần như tức thì và các cột tiền tệ được định dạng dấu phẩy phân cách hàng nghìn chuẩn xác.">
+    <div class="slide-header">
+      <div class="slide-title-wrap">
+        <div class="slide-tag">NATIVE EXCEL ENGINE</div>
+        <h2 class="slide-title">Engine Xuất Báo Cáo Excel Nội Sinh Tốc Độ Cao</h2>
+        <p class="slide-subtitle">Giải pháp xuất file Excel Native HTML chuẩn Microsoft không phụ thuộc COM</p>
+      </div>
+      <div class="slide-badges">
+        <span class="badge">Zero-Dependency</span><span class="badge">Native HTML-XLS</span><span class="badge">mso-number-format</span><span class="badge">Sub-second Export</span>
+      </div>
+    </div>
+    
+    <div class="slide-body">
+      <div class="slide-left">
+        <div class="summary-box">
+          Tự động biên dịch bảng dữ liệu thành tài liệu bảng tính chuẩn Microsoft Excel bằng định dạng HTML/XML nội sinh, loại bỏ hoàn toàn phụ thuộc vào Office Interop.
+        </div>
+        <ul class="bullet-list">
+          <li class="bullet-item"><span class="bullet-dot"></span><span>Không yêu cầu máy tính cài đặt Microsoft Office hay bất kỳ thư viện trả phí nào.</span></li><li class="bullet-item"><span class="bullet-dot"></span><span>Tốc độ xuất siêu tốc: Xuất 10,000 dòng dữ liệu chỉ mất chưa tới 0.2 giây.</span></li><li class="bullet-item"><span class="bullet-dot"></span><span>Giữ nguyên định dạng tiền tệ chuyên nghiệp nhờ thẻ CSS mso-number-format:'#,##0'.</span></li><li class="bullet-item"><span class="bullet-dot"></span><span>Mở mượt mà trên tất cả các phần mềm văn phòng: MS Excel, Google Sheets, LibreOffice.</span></li>
+        </ul>
+      </div>
+      <div class="slide-right">
+        
+            <div class="dual-media">
+              <div class="media-container" onclick="openZoom('assets/graph_07_bi_analytics_flow.png')">
+                <img src="assets/graph_07_bi_analytics_flow.png" alt="Engine Xuất Báo Cáo Excel Nội Sinh Tốc Độ Cao 1">
+              </div>
+              <div class="media-container" onclick="openZoom('assets/code_14_baocao_excel_export.png')">
+                <img src="assets/code_14_baocao_excel_export.png" alt="Engine Xuất Báo Cáo Excel Nội Sinh Tốc Độ Cao 2">
+              </div>
+            </div>
+            
+      </div>
+    </div>
+    
+    <div class="slide-footer">
+      <span>Đồ Án Lập Trình Trực Quan C# .NET — QLBanMayViTinh</span>
+      <span style="font-family: var(--font-code); font-weight: 600; color: var(--accent-cyan);">Slide 27 / 32</span>
+    </div>
+  </section>
+
+  <!-- SLIDE 28: Quản Trị Tài Khoản & Phân Quyền Vai Trò (`frmQuanLyNguoiDung.cs`) -->
+  <section class="slide" id="slide-28" data-slide="28" data-notes="[33:45 - 35:00] Form frmQuanLyNguoiDung là trung tâm quản trị bảo mật của Admin. Tại đây, người quản trị có thể phân quyền Admin hoặc Nhân viên, khóa tài khoản hoặc khôi phục quyền truy cập. Cơ chế phân quyền được thực thi ở cả hai cấp độ: kiểm tra quyền khi bấm menu trên giao diện và kiểm tra quyền tại từng hàm nghiệp vụ trong Functions.CheckPermission.">
+    <div class="slide-header">
+      <div class="slide-title-wrap">
+        <div class="slide-tag">QUẢN TRỊ BẢO MẬT</div>
+        <h2 class="slide-title">Quản Trị Tài Khoản & Phân Quyền Vai Trò (`frmQuanLyNguoiDung.cs`)</h2>
+        <p class="slide-subtitle">Mô hình bảo mật phân quyền Role-Based Access Control (Admin / Staff)</p>
+      </div>
+      <div class="slide-badges">
+        <span class="badge">RBAC Security</span><span class="badge">Account Lifecycle</span><span class="badge">Role Assignment</span><span class="badge">Audit Guard</span>
+      </div>
+    </div>
+    
+    <div class="slide-body">
+      <div class="slide-left">
+        <div class="summary-box">
+          Màn hình dành riêng cho Quản trị viên để quản lý toàn bộ tài khoản nhân viên, cấp phát quyền hạn và khóa tài khoản khi cần thiết.
+        </div>
+        <ul class="bullet-list">
+          <li class="bullet-item"><span class="bullet-dot"></span><span>Phân quyền rõ rệt: Admin có toàn quyền hệ thống, Nhân viên bị giới hạn phân hệ quản trị.</span></li><li class="bullet-item"><span class="bullet-dot"></span><span>Tính năng khóa tài khoản tức thời: Ngăn chặn nhân viên đã nghỉ việc đăng nhập lại.</span></li><li class="bullet-item"><span class="bullet-dot"></span><span>Đặt lại mật khẩu mặc định an toàn cho người dùng khi được yêu cầu.</span></li><li class="bullet-item"><span class="bullet-dot"></span><span>Tất cả thay đổi quyền hạn đều được ghi vết vào nhật ký kiểm toán hệ thống.</span></li>
+        </ul>
+      </div>
+      <div class="slide-right">
+        
+            <div class="dual-media">
+              <div class="media-container" onclick="openZoom('assets/ui_quanlynguoidung.png')">
+                <img src="assets/ui_quanlynguoidung.png" alt="Quản Trị Tài Khoản & Phân Quyền Vai Trò (`frmQuanLyNguoiDung.cs`) 1">
+              </div>
+              <div class="media-container" onclick="openZoom('assets/code_15_audit_log_rbac.png')">
+                <img src="assets/code_15_audit_log_rbac.png" alt="Quản Trị Tài Khoản & Phân Quyền Vai Trò (`frmQuanLyNguoiDung.cs`) 2">
+              </div>
+            </div>
+            
+      </div>
+    </div>
+    
+    <div class="slide-footer">
+      <span>Đồ Án Lập Trình Trực Quan C# .NET — QLBanMayViTinh</span>
+      <span style="font-family: var(--font-code); font-weight: 600; color: var(--accent-cyan);">Slide 28 / 32</span>
+    </div>
+  </section>
+
+  <!-- SLIDE 29: Quản Lý Hồ Sơ Cá Nhân & Đổi Mật Khẩu (`frmHoSoCaNhan.cs`) -->
+  <section class="slide" id="slide-29" data-slide="29" data-notes="[35:00 - 36:15] Form frmHoSoCaNhan cung cấp cổng thông tin tự phục vụ cho từng cán bộ nhân viên. Nhân viên có thể kiểm tra lại thông tin cá nhân của mình và tự đổi mật khẩu định kỳ. Quy trình đổi mật khẩu bắt buộc phải nhập đúng mật khẩu hiện tại, giúp bảo đảm an toàn dữ liệu cá nhân ngay cả khi người dùng quên khóa máy tính.">
+    <div class="slide-header">
+      <div class="slide-title-wrap">
+        <div class="slide-tag">HỒ SƠ CÁ NHÂN</div>
+        <h2 class="slide-title">Quản Lý Hồ Sơ Cá Nhân & Đổi Mật Khẩu (`frmHoSoCaNhan.cs`)</h2>
+        <p class="slide-subtitle">Không gian tự phục vụ cho nhân viên cập nhật thông tin và bảo mật cá nhân</p>
+      </div>
+      <div class="slide-badges">
+        <span class="badge">Self-Service</span><span class="badge">Profile Update</span><span class="badge">Secure Password Change</span><span class="badge">Clean UX</span>
+      </div>
+    </div>
+    
+    <div class="slide-body">
+      <div class="slide-left">
+        <div class="summary-box">
+          Cho phép mỗi nhân viên đang đăng nhập tự quản lý hồ sơ cá nhân, xem ca làm việc và chủ động đổi mật khẩu định kỳ an toàn.
+        </div>
+        <ul class="bullet-list">
+          <li class="bullet-item"><span class="bullet-dot"></span><span>Hiển thị thông tin định danh: Mã nhân viên, Tên, Ngày sinh, Địa chỉ, Số điện thoại.</span></li><li class="bullet-item"><span class="bullet-dot"></span><span>Quy trình đổi mật khẩu an toàn: Xác thực mật khẩu cũ trước khi chấp nhận mật khẩu mới.</span></li><li class="bullet-item"><span class="bullet-dot"></span><span>Kiểm tra độ khớp giữa mật khẩu mới và ô xác nhận mật khẩu.</span></li><li class="bullet-item"><span class="bullet-dot"></span><span>Cập nhật thông tin vào CSDL kèm mã hóa băm mật khẩu mới tức thời.</span></li>
+        </ul>
+      </div>
+      <div class="slide-right">
+        
+            <div class="media-container" onclick="openZoom('assets/ui_hosocanhan.png')">
+              <img src="assets/ui_hosocanhan.png" alt="Quản Lý Hồ Sơ Cá Nhân & Đổi Mật Khẩu (`frmHoSoCaNhan.cs`)">
+            </div>
+            
+      </div>
+    </div>
+    
+    <div class="slide-footer">
+      <span>Đồ Án Lập Trình Trực Quan C# .NET — QLBanMayViTinh</span>
+      <span style="font-family: var(--font-code); font-weight: 600; color: var(--accent-cyan);">Slide 29 / 32</span>
+    </div>
+  </section>
+
+  <!-- SLIDE 30: Hệ Thống Giám Sát & Nhật Ký Hoạt Động (`frmNhatKyHoatDong.cs`) -->
+  <section class="slide" id="slide-30" data-slide="30" data-notes="[36:15 - 37:30] Để bảo đảm tính minh bạch và phục vụ kiểm toán nội bộ, frmNhatKyHoatDong hiển thị toàn bộ lịch sử thao tác của các tài khoản. Mọi hành vi như đăng nhập, lập đơn bán, xóa máy tính đều được hàm Functions.GhiNhatKy tự động ghi lại kèm mốc thời gian GETDATE(). Hàm này được thiết kế theo nguyên tắc Non-blocking, bảo đảm việc ghi log không bao giờ gây ảnh hưởng đến tốc độ bán hàng.">
+    <div class="slide-header">
+      <div class="slide-title-wrap">
+        <div class="slide-tag">KIỂM TOÁN NỘI BỘ</div>
+        <h2 class="slide-title">Hệ Thống Giám Sát & Nhật Ký Hoạt Động (`frmNhatKyHoatDong.cs`)</h2>
+        <p class="slide-subtitle">Truy vết kiểm toán không phong tỏa (Non-blocking Enterprise Audit Trail)</p>
+      </div>
+      <div class="slide-badges">
+        <span class="badge">Audit Trail</span><span class="badge">Non-blocking</span><span class="badge">Action Tracing</span><span class="badge">Enterprise Compliance</span>
+      </div>
+    </div>
+    
+    <div class="slide-body">
+      <div class="slide-left">
+        <div class="summary-box">
+          Ghi nhận toàn bộ thao tác thêm, sửa, xóa, đăng nhập của người dùng vào bảng tblNhatKyHoatDong, phục vụ công tác thanh tra và kiểm soát rủi ro.
+        </div>
+        <ul class="bullet-list">
+          <li class="bullet-item"><span class="bullet-dot"></span><span>Ghi lại chi tiết: Tên đăng nhập, thời gian chính xác, hành động và nội dung cụ thể.</span></li><li class="bullet-item"><span class="bullet-dot"></span><span>Cơ chế Non-blocking: Bọc trong khối try-catch không bao giờ làm gián đoạn luồng chính.</span></li><li class="bullet-item"><span class="bullet-dot"></span><span>Giao diện cho phép lọc nhật ký theo người dùng, ngày tháng hoặc loại hành động.</span></li><li class="bullet-item"><span class="bullet-dot"></span><span>Đáp ứng tiêu chuẩn kiểm toán hệ thống phần mềm doanh nghiệp hiện đại.</span></li>
+        </ul>
+      </div>
+      <div class="slide-right">
+        
+            <div class="media-container" onclick="openZoom('assets/ui_nhatkyhoatdong.png')">
+              <img src="assets/ui_nhatkyhoatdong.png" alt="Hệ Thống Giám Sát & Nhật Ký Hoạt Động (`frmNhatKyHoatDong.cs`)">
+            </div>
+            
+      </div>
+    </div>
+    
+    <div class="slide-footer">
+      <span>Đồ Án Lập Trình Trực Quan C# .NET — QLBanMayViTinh</span>
+      <span style="font-family: var(--font-code); font-weight: 600; color: var(--accent-cyan);">Slide 30 / 32</span>
+    </div>
+  </section>
+
+  <!-- SLIDE 31: Trung Tâm Tùy Biến & Cấu Hình Hệ Thống (`frmCaiDat.cs`) -->
+  <section class="slide" id="slide-31" data-slide="31" data-notes="[37:30 - 38:45] Cuối cùng trong nhóm quản trị là frmCaiDat. Màn hình này cho phép ban quản lý thay đổi các thông tin hiển thị trên đầu hóa đơn thanh toán như tên cửa hàng, địa chỉ, số hotline mà không cần biên dịch lại mã nguồn. Đây cũng là nơi cấu hình giao diện mặc định khi khởi động ứng dụng.">
+    <div class="slide-header">
+      <div class="slide-title-wrap">
+        <div class="slide-tag">CẤU HÌNH HỆ THỐNG</div>
+        <h2 class="slide-title">Trung Tâm Tùy Biến & Cấu Hình Hệ Thống (`frmCaiDat.cs`)</h2>
+        <p class="slide-subtitle">Quản lý tham số vận hành, thông tin thương hiệu hóa đơn và kết nối CSDL</p>
+      </div>
+      <div class="slide-badges">
+        <span class="badge">System Config</span><span class="badge">Store Branding</span><span class="badge">Connection String</span><span class="badge">Theme Default</span>
+      </div>
+    </div>
+    
+    <div class="slide-body">
+      <div class="slide-left">
+        <div class="summary-box">
+          Cho phép tùy biến thông tin doanh nghiệp (Tên cửa hàng, Địa chỉ, Hotline in trên hóa đơn), cấu hình chuỗi kết nối SQL và cài đặt Theme mặc định.
+        </div>
+        <ul class="bullet-list">
+          <li class="bullet-item"><span class="bullet-dot"></span><span>Tùy biến thông tin cửa hàng hiển thị trên tiêu đề phiếu nhập và hóa đơn bán lẻ.</span></li><li class="bullet-item"><span class="bullet-dot"></span><span>Lựa chọn giao diện khởi động mặc định (Sáng hoặc Tối) theo sở thích người dùng.</span></li><li class="bullet-item"><span class="bullet-dot"></span><span>Cấu hình tham số máy chủ cơ sở dữ liệu linh hoạt, thuận tiện khi triển khai qua mạng LAN.</span></li><li class="bullet-item"><span class="bullet-dot"></span><span>Lưu trữ cấu hình bền vững vào file cấu hình ứng dụng hoặc bảng hệ thống.</span></li>
+        </ul>
+      </div>
+      <div class="slide-right">
+        
+            <div class="media-container" onclick="openZoom('assets/ui_caidat.png')">
+              <img src="assets/ui_caidat.png" alt="Trung Tâm Tùy Biến & Cấu Hình Hệ Thống (`frmCaiDat.cs`)">
+            </div>
+            
+      </div>
+    </div>
+    
+    <div class="slide-footer">
+      <span>Đồ Án Lập Trình Trực Quan C# .NET — QLBanMayViTinh</span>
+      <span style="font-family: var(--font-code); font-weight: 600; color: var(--accent-cyan);">Slide 31 / 32</span>
+    </div>
+  </section>
+
+  <!-- SLIDE 32: Tổng Kết Đồ Án, Hướng Phát Triển & Bộ 12 Câu Hỏi Đáp Q&A -->
+  <section class="slide" id="slide-32" data-slide="32" data-notes="[38:45 - 40:00] Kính thưa Hội đồng phản biện, đồ án 'Hệ Thống Quản Lý Bán Máy Vi Tính' đã hoàn thành trọn vẹn 100% mục tiêu đề ra. Hệ thống không chỉ đáp ứng chuẩn mực về mặt học thuật với kiến trúc 3 tầng và cơ sở dữ liệu 3NF, mà còn sẵn sàng triển khai áp dụng vào thực tế doanh nghiệp. Nhóm chúng em đã sẵn sàng đón nhận những câu hỏi đóng góp quý báu và bước vào phần vấn đáp phản biện. Xin chân thành cảm ơn quý Thầy Cô!">
+    <div class="slide-header">
+      <div class="slide-title-wrap">
+        <div class="slide-tag">TỔNG KẾT & PHẢN BIỆN</div>
+        <h2 class="slide-title">Tổng Kết Đồ Án, Hướng Phát Triển & Bộ 12 Câu Hỏi Đáp Q&A</h2>
+        <p class="slide-subtitle">Khẳng định giá trị thực tiễn của đồ án và sẵn sàng phản biện trước Hội đồng</p>
+      </div>
+      <div class="slide-badges">
+        <span class="badge">Thesis Defense</span><span class="badge">Enterprise Ready</span><span class="badge">Future Roadmap</span><span class="badge">12 Q&A Ready</span>
+      </div>
+    </div>
+    
+    <div class="slide-body">
+      <div class="slide-left">
+        <div class="summary-box">
+          Đồ án hoàn thành 100% mục tiêu: kiến trúc 3 tầng chuẩn mực, giao diện hiện đại Dual-theme, đồng bộ ACID bằng Trigger, quản lý trọn vẹn nghiệp vụ bán máy vi tính.
+        </div>
+        <ul class="bullet-list">
+          <li class="bullet-item"><span class="bullet-dot"></span><span>Đã kiểm chứng trọn vẹn 14 Forms giao diện và toàn bộ luồng nghiệp vụ thực tế.</span></li><li class="bullet-item"><span class="bullet-dot"></span><span>Định hướng tương lai: Tích hợp Barcode/QR Code quét linh kiện và AI dự báo tồn kho.</span></li><li class="bullet-item"><span class="bullet-dot"></span><span>Tích hợp kết nối Hóa đơn điện tử theo chuẩn thông tư mới của Tổng cục Thuế.</span></li><li class="bullet-item"><span class="bullet-dot"></span><span>Sẵn sàng bước vào phần Vấn đáp Phản biện với Bộ 12 câu hỏi chuyên sâu của Hội đồng.</span></li>
+        </ul>
+      </div>
+      <div class="slide-right">
+        
+            <div class="dual-media">
+              <div class="media-container" onclick="openZoom('assets/graph_01_overview_3tier.png')">
+                <img src="assets/graph_01_overview_3tier.png" alt="Tổng Kết Đồ Án, Hướng Phát Triển & Bộ 12 Câu Hỏi Đáp Q&A 1">
+              </div>
+              <div class="media-container" onclick="openZoom('assets/graph_06_pos_trigger_pipeline.png')">
+                <img src="assets/graph_06_pos_trigger_pipeline.png" alt="Tổng Kết Đồ Án, Hướng Phát Triển & Bộ 12 Câu Hỏi Đáp Q&A 2">
+              </div>
+            </div>
+            
+      </div>
+    </div>
+    
+    <div class="slide-footer">
+      <span>Đồ Án Lập Trình Trực Quan C# .NET — QLBanMayViTinh</span>
+      <span style="font-family: var(--font-code); font-weight: 600; color: var(--accent-cyan);">Slide 32 / 32</span>
+    </div>
+  </section>
+
+</main>
+
+<div class="nav-controls">
+  <button class="nav-btn" onclick="prevSlide()">◀ Trước</button>
+  <button class="nav-btn" onclick="toggleDrawer()">📝 Notes (S)</button>
+  <button class="nav-btn" onclick="toggleFullScreen()">⛶ Fullscreen (F)</button>
+  <button class="nav-btn" onclick="nextSlide()">Tiếp ▶</button>
+</div>
+
+<div id="speaker-drawer">
+  <div class="drawer-header">
+    <span class="drawer-title">KỊCH BẢN THUYẾT TRÌNH (SPEAKER NOTES)</span>
+    <span style="color: var(--text-muted); font-size: 0.85rem;">Phím tắt [S] đóng/mở</span>
+  </div>
+  <div class="drawer-content" id="notes-content"></div>
+</div>
+
+<div id="modal-zoom" onclick="closeZoom()">
+  <img id="zoom-img" src="" alt="Enlarged View">
+</div>
+
+<script>
+let currentSlide = 1;
+const totalSlides = 32;
+
+function showSlide(n) {
+  if (n < 1) n = 1;
+  if (n > totalSlides) n = totalSlides;
+  currentSlide = n;
+  
+  document.querySelectorAll('.slide').forEach(s => s.classList.remove('active'));
+  const activeSlide = document.getElementById('slide-' + currentSlide);
+  if (activeSlide) {
+    activeSlide.classList.add('active');
+    const notes = activeSlide.getAttribute('data-notes') || 'Không có ghi chú cho slide này.';
+    document.getElementById('notes-content').innerText = notes;
+  }
+  
+  const pct = (currentSlide / totalSlides) * 100;
+  document.getElementById('progress-bar').style.width = pct + '%';
+}
+
+function nextSlide() {
+  if (currentSlide < totalSlides) showSlide(currentSlide + 1);
+}
+
+function prevSlide() {
+  if (currentSlide > 1) showSlide(currentSlide - 1);
+}
+
+function toggleDrawer() {
+  document.getElementById('speaker-drawer').classList.toggle('open');
+}
+
+function toggleFullScreen() {
+  if (!document.fullscreenElement) {
+    document.documentElement.requestFullscreen().catch(() => {});
+  } else {
+    if (document.exitFullscreen) document.exitFullscreen();
+  }
+}
+
+function openZoom(src) {
+  document.getElementById('zoom-img').src = src;
+  document.getElementById('modal-zoom').style.display = 'flex';
+}
+
+function closeZoom() {
+  document.getElementById('modal-zoom').style.display = 'none';
+}
+
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') {
+    nextSlide();
+  } else if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
+    prevSlide();
+  } else if (e.key === 'f' || e.key === 'F') {
+    toggleFullScreen();
+  } else if (e.key === 's' || e.key === 'S') {
+    toggleDrawer();
+  } else if (e.key === 'Escape') {
+    closeZoom();
+  }
+});
+
+// Initialize on load
+showSlide(1);
+</script>
+</body>
+</html>

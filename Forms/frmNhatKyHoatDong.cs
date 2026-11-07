@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.ComponentModel;
 using System.Data;
 using System.Data.SqlClient;
@@ -82,12 +82,20 @@ namespace QLBanMayViTinh.Forms
                 DataTable dt = Functions.GetDataToTable(sql);
                 dgvAlerts.DataSource = dt;
 
-                if (dgvAlerts.Columns.Contains("MaMayVT")) dgvAlerts.Columns["MaMayVT"].HeaderText = "Mã";
-                if (dgvAlerts.Columns.Contains("TenMayVT")) dgvAlerts.Columns["TenMayVT"].HeaderText = "Tên Máy Vi Tính";
+                if (dgvAlerts.Columns.Contains("MaMayVT"))
+                {
+                    dgvAlerts.Columns["MaMayVT"].HeaderText = "Mã";
+                    dgvAlerts.Columns["MaMayVT"].Width = 50;
+                }
+                if (dgvAlerts.Columns.Contains("TenMayVT"))
+                {
+                    dgvAlerts.Columns["TenMayVT"].HeaderText = "Tên Máy Vi Tính";
+                    dgvAlerts.Columns["TenMayVT"].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+                }
                 if (dgvAlerts.Columns.Contains("SoLuong"))
                 {
                     dgvAlerts.Columns["SoLuong"].HeaderText = "Tồn";
-                    dgvAlerts.Columns["SoLuong"].Width = 60;
+                    dgvAlerts.Columns["SoLuong"].Width = 80;
                     dgvAlerts.Columns["SoLuong"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
                     dgvAlerts.Columns["SoLuong"].DefaultCellStyle.ForeColor = Color.FromArgb(239, 68, 68);
                     dgvAlerts.Columns["SoLuong"].DefaultCellStyle.Font = new Font("Segoe UI", 9.5F, FontStyle.Bold);

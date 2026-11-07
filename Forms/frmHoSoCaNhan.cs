@@ -1,8 +1,9 @@
-﻿using System;
+using System;
 using System.ComponentModel;
 using System.Data;
 using System.Data.SqlClient;
 using System.Drawing;
+using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using QLBanMayViTinh.Classes;
 
@@ -27,6 +28,8 @@ namespace QLBanMayViTinh.Forms
 
             UIThemeHelper.StyleButton(btnLuuThongTin, UIThemeHelper.ColorPrimary, Color.White);
             UIThemeHelper.StyleButton(btnDoiMatKhau, Color.FromArgb(16, 185, 129), Color.White);
+
+            txtDienThoai.KeyPress += (s, ev) => Functions.OnlyInteger(ev);
 
             LoadUserProfile();
             LoadUserHistory();
@@ -100,6 +103,31 @@ namespace QLBanMayViTinh.Forms
             if (string.IsNullOrEmpty(Functions.CurrentMaNV))
             {
                 MessageBox.Show("Tài khoản này là tài khoản hệ thống đặc biệt, không liên kết mã nhân viên!", "Thông Báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+
+            if (string.IsNullOrWhiteSpace(txtHoTen.Text))
+            {
+                MessageBox.Show("Vui lòng nhập Họ và tên!", "Thông Báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                txtHoTen.Focus();
+                return;
+            }
+            if (txtHoTen.Text.Trim().Length > 100)
+            {
+                MessageBox.Show("Họ và tên không được vượt quá 100 ký tự!", "Cảnh Báo Nhập Liệu", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                txtHoTen.Focus();
+                return;
+            }
+            if (!string.IsNullOrWhiteSpace(txtDienThoai.Text) && !Regex.IsMatch(txtDienThoai.Text.Trim(), @"^0[0-9]{9,10}$"))
+            {
+                MessageBox.Show("Số điện thoại không hợp lệ! Vui lòng nhập từ 10 đến 11 chữ số và bắt đầu bằng số 0.", "Cảnh Báo Nhập Liệu", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                txtDienThoai.Focus();
+                return;
+            }
+            if (!string.IsNullOrWhiteSpace(txtDiaChi.Text) && txtDiaChi.Text.Trim().Length > 250)
+            {
+                MessageBox.Show("Địa chỉ không được vượt quá 250 ký tự!", "Cảnh Báo Nhập Liệu", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                txtDiaChi.Focus();
                 return;
             }
 

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
@@ -18,22 +18,146 @@ namespace QLBanMayViTinh.Forms
 
         private void frmTimKiem_Load(object sender, EventArgs e)
         {
-            if (this.DesignMode || LicenseManager.UsageMode == LicenseUsageMode.Designtime)
+            if (this.DesignMode ||
+                LicenseManager.UsageMode == LicenseUsageMode.Designtime ||
+                System.Diagnostics.Process.GetCurrentProcess().ProcessName.Equals("devenv", StringComparison.OrdinalIgnoreCase))
+            {
                 return;
+            }
 
-            UIThemeHelper.StyleCard(pnlTopCard);
-            UIThemeHelper.StyleCard(pnlFilterCard);
-            UIThemeHelper.StyleCard(pnlActions);
-            UIThemeHelper.StyleCard(pnlGridCard);
+            UIThemeHelper.StyleCard(pnlTopCard, null, 8);
+            UIThemeHelper.StyleCard(pnlFilterCard, null, 8);
+            UIThemeHelper.StyleCard(pnlActions, null, 8);
+            UIThemeHelper.StyleCard(pnlGridCard, null, 8);
 
             UIThemeHelper.StyleDataGridView(dgvKetQua);
-            UIThemeHelper.StyleButton(btnTimKiem, UIThemeHelper.BtnTimColor, Color.White);
-            UIThemeHelper.StyleButton(btnLamMoi, UIThemeHelper.BtnHuyColor, Color.White);
-            UIThemeHelper.StyleButton(btnDong, Color.FromArgb(100, 116, 139), Color.White);
+            UIThemeHelper.StyleButton(btnTimKiem, UIThemeHelper.BtnTimColor, Color.White, 8);
+            UIThemeHelper.StyleButton(btnLamMoi, UIThemeHelper.BtnHuyColor, Color.White, 8);
+            UIThemeHelper.StyleButton(btnDong, Color.FromArgb(100, 116, 139), Color.White, 8);
+
+            UIThemeHelper.ApplyTheme(this);
+
+            pnlRadioSwitch.BorderStyle = BorderStyle.None;
+            pnlRadioSwitch.BackColor = Color.Transparent;
+            pnlMayTinh.BorderStyle = BorderStyle.None;
+            pnlMayTinh.BackColor = Color.Transparent;
+            pnlHoaDon.BorderStyle = BorderStyle.None;
+            pnlHoaDon.BackColor = Color.Transparent;
+
+            if (!this.TopLevel)
+            {
+                lblTieuDe.Visible = false;
+                lblSubTieuDe.Visible = false;
+                pnlTopCard.Height = 55;
+            }
 
             LoadCombos();
             rdoMayViTinh.Checked = true;
             HienThiDieuKien();
+
+            this.Resize += (s, ev) => LayoutDynamicControls();
+            this.Shown += (s, ev) => this.BeginInvoke((Action)(() => LayoutDynamicControls()));
+            LayoutDynamicControls();
+        }
+
+        private void LayoutDynamicControls()
+        {
+            if (pnlTopCard != null && pnlRadioSwitch != null && pnlTopCard.ClientSize.Width > 0)
+            {
+                pnlRadioSwitch.Width = 560;
+                pnlRadioSwitch.Location = new Point(Math.Max(300, pnlTopCard.ClientSize.Width - pnlRadioSwitch.Width - 15), 6);
+
+                rdoMayViTinh.AutoSize = true;
+                rdoMayViTinh.Location = new Point(10, 10);
+
+                rdoHoaDonNhap.AutoSize = true;
+                rdoHoaDonNhap.Location = new Point(rdoMayViTinh.Right + 12, 10);
+
+                rdoHoaDonBan.AutoSize = true;
+                rdoHoaDonBan.Location = new Point(rdoHoaDonNhap.Right + 12, 10);
+            }
+
+            if (pnlHoaDon != null && pnlHoaDon.ClientSize.Width > 0)
+            {
+                int curX = 14;
+                lblMaHD.AutoSize = true;
+                lblMaHD.Location = new Point(curX, 12);
+                curX = lblMaHD.Right + 5;
+
+                txtMaHD.Location = new Point(curX, 9);
+                txtMaHD.Width = 110;
+                curX = txtMaHD.Right + 16;
+
+                lblMatHang.AutoSize = true;
+                lblMatHang.Location = new Point(curX, 12);
+                curX = lblMatHang.Right + 5;
+
+                cboMatHang.Location = new Point(curX, 9);
+                cboMatHang.Width = 160;
+                curX = cboMatHang.Right + 16;
+
+                lblNhanVien.AutoSize = true;
+                lblNhanVien.Location = new Point(curX, 12);
+                curX = lblNhanVien.Right + 5;
+
+                cboNhanVien.Location = new Point(curX, 9);
+                cboNhanVien.Width = 150;
+                curX = cboNhanVien.Right + 16;
+
+                lblDoiTac.AutoSize = true;
+                lblDoiTac.Location = new Point(curX, 12);
+                curX = lblDoiTac.Right + 6;
+
+                cboDoiTac.Location = new Point(curX, 9);
+                int remW = pnlHoaDon.ClientSize.Width - curX - 15;
+                cboDoiTac.Width = Math.Max(140, remW);
+
+                chkNgay.AutoSize = true;
+                chkNgay.Location = new Point(14, 48);
+                dtpTuNgay.Location = new Point(chkNgay.Right + 6, 46);
+                dtpTuNgay.Width = 125;
+
+                lblDenNgay.AutoSize = true;
+                lblDenNgay.Location = new Point(dtpTuNgay.Right + 16, 48);
+                dtpDenNgay.Location = new Point(lblDenNgay.Right + 6, 46);
+                dtpDenNgay.Width = 125;
+            }
+
+            if (pnlMayTinh != null && pnlMayTinh.ClientSize.Width > 0)
+            {
+                int curX = 14;
+                lblMaMay.AutoSize = true;
+                lblMaMay.Location = new Point(curX, 20);
+                curX = lblMaMay.Right + 5;
+
+                txtMaMay.Location = new Point(curX, 18);
+                txtMaMay.Width = 130;
+                curX = txtMaMay.Right + 16;
+
+                lblTenMay.AutoSize = true;
+                lblTenMay.Location = new Point(curX, 20);
+                curX = lblTenMay.Right + 5;
+
+                txtTenMay.Location = new Point(curX, 18);
+                txtTenMay.Width = 170;
+                curX = txtTenMay.Right + 16;
+
+                lblLoai.AutoSize = true;
+                lblLoai.Location = new Point(curX, 20);
+                curX = lblLoai.Right + 5;
+
+                cboLoai.Location = new Point(curX, 18);
+                cboLoai.Width = 160;
+                curX = cboLoai.Right + 16;
+
+                lblHangSX.AutoSize = true;
+                lblHangSX.Location = new Point(curX, 20);
+                curX = lblHangSX.Right + 5;
+
+                cboHangSX.Location = new Point(curX, 18);
+                int remW = pnlMayTinh.ClientSize.Width - curX - 15;
+                cboHangSX.Width = Math.Max(150, remW);
+            }
         }
 
         private void LoadCombos()
@@ -41,8 +165,6 @@ namespace QLBanMayViTinh.Forms
             Functions.FillCombo("SELECT MaLoai, TenLoai FROM LoaiMay", cboLoai, "MaLoai", "TenLoai");
             Functions.FillCombo("SELECT MaHangSX, TenHangSX FROM HangSanXuat", cboHangSX, "MaHangSX", "TenHangSX");
             Functions.FillCombo("SELECT MaNV, TenNV FROM NhanVien", cboNhanVien, "MaNV", "TenNV");
-            Functions.FillCombo("SELECT MaKhach, TenKhach FROM KhachHang", cboKhachHang, "MaKhach", "TenKhach");
-            Functions.FillCombo("SELECT MaNCC, TenNCC FROM NhaCungCap", cboNCC, "MaNCC", "TenNCC");
             Functions.FillCombo("SELECT MaMayVT, TenMayVT FROM MayViTinh", cboMatHang, "MaMayVT", "TenMayVT");
         }
 
@@ -50,24 +172,31 @@ namespace QLBanMayViTinh.Forms
         {
             if (rdoMayViTinh.Checked)
             {
-
                 pnlMayTinh.Visible = true;
                 pnlHoaDon.Visible = false;
+                pnlFilterCard.Height = 80;
                 lblTieuDe.Text = "TÌM KIẾM SẢN PHẨM MÁY VI TÍNH (YÊU CẦU 4)";
             }
             else
             {
-
                 pnlMayTinh.Visible = false;
                 pnlHoaDon.Visible = true;
-                lblTieuDe.Text = rdoHoaDonNhap.Checked
-                    ? "TÌM KIẾM HÓA ĐƠN NHẬP HÀNG (YÊU CẦU 5)"
-                    : "TÌM KIẾM HÓA ĐƠN BÁN HÀNG (YÊU CẦU 5)";
-
-                lblDoiTac.Text = rdoHoaDonNhap.Checked ? "Nhà Cung Cấp:" : "Khách Hàng:";
-                cboNCC.Visible = rdoHoaDonNhap.Checked;
-                cboKhachHang.Visible = !rdoHoaDonNhap.Checked;
+                pnlFilterCard.Height = 98;
+                if (rdoHoaDonNhap.Checked)
+                {
+                    lblTieuDe.Text = "TÌM KIẾM HÓA ĐƠN NHẬP HÀNG (YÊU CẦU 5)";
+                    lblDoiTac.Text = "Nhà Cung Cấp:";
+                    Functions.FillCombo("SELECT MaNCC, TenNCC FROM NhaCungCap", cboDoiTac, "MaNCC", "TenNCC");
+                }
+                else
+                {
+                    lblTieuDe.Text = "TÌM KIẾM HÓA ĐƠN BÁN HÀNG (YÊU CẦU 5)";
+                    lblDoiTac.Text = "Khách Hàng:";
+                    Functions.FillCombo("SELECT MaKhach, TenKhach FROM KhachHang", cboDoiTac, "MaKhach", "TenKhach");
+                }
+                cboDoiTac.SelectedIndex = -1;
             }
+            LayoutDynamicControls();
         }
 
         private void rdoMayViTinh_CheckedChanged(object sender, EventArgs e)
@@ -145,8 +274,8 @@ namespace QLBanMayViTinh.Forms
                 if (cboNhanVien.SelectedIndex >= 0 && cboNhanVien.SelectedValue != null)
                     sql += " AND h.MaNV = N'" + cboNhanVien.SelectedValue.ToString() + "'";
 
-                if (cboNCC.SelectedIndex >= 0 && cboNCC.SelectedValue != null)
-                    sql += " AND h.MaNCC = N'" + cboNCC.SelectedValue.ToString() + "'";
+                if (cboDoiTac.SelectedIndex >= 0 && cboDoiTac.SelectedValue != null)
+                    sql += " AND h.MaNCC = N'" + cboDoiTac.SelectedValue.ToString() + "'";
 
                 if (chkNgay.Checked)
                 {
@@ -184,8 +313,8 @@ namespace QLBanMayViTinh.Forms
                 if (cboNhanVien.SelectedIndex >= 0 && cboNhanVien.SelectedValue != null)
                     sql += " AND h.MaNV = N'" + cboNhanVien.SelectedValue.ToString() + "'";
 
-                if (cboKhachHang.SelectedIndex >= 0 && cboKhachHang.SelectedValue != null)
-                    sql += " AND h.MaKhach = N'" + cboKhachHang.SelectedValue.ToString() + "'";
+                if (cboDoiTac.SelectedIndex >= 0 && cboDoiTac.SelectedValue != null)
+                    sql += " AND h.MaKhach = N'" + cboDoiTac.SelectedValue.ToString() + "'";
 
                 if (chkNgay.Checked)
                 {
@@ -219,8 +348,7 @@ namespace QLBanMayViTinh.Forms
             txtMaHD.Text = "";
             cboMatHang.SelectedIndex = -1;
             cboNhanVien.SelectedIndex = -1;
-            cboNCC.SelectedIndex = -1;
-            cboKhachHang.SelectedIndex = -1;
+            cboDoiTac.SelectedIndex = -1;
             chkNgay.Checked = false;
             dtpTuNgay.Value = DateTime.Now.AddMonths(-1);
             dtpDenNgay.Value = DateTime.Now;

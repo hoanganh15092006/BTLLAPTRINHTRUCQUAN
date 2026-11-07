@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
@@ -18,24 +18,170 @@ namespace QLBanMayViTinh.Forms
 
         private void frmHoaDonNhap_Load(object sender, EventArgs e)
         {
-            if (this.DesignMode || LicenseManager.UsageMode == LicenseUsageMode.Designtime)
+            if (this.DesignMode ||
+                LicenseManager.UsageMode == LicenseUsageMode.Designtime ||
+                System.Diagnostics.Process.GetCurrentProcess().ProcessName.Equals("devenv", StringComparison.OrdinalIgnoreCase))
+            {
                 return;
+            }
 
-            UIThemeHelper.StyleCard(pnlMasterCard);
-            UIThemeHelper.StyleCard(pnlDetailCard);
-            UIThemeHelper.StyleCard(pnlGridCard);
-            UIThemeHelper.StyleCard(pnlBottom);
+            UIThemeHelper.StyleCard(pnlMasterCard, null, 8);
+            UIThemeHelper.StyleCard(pnlDetailCard, null, 8);
+            UIThemeHelper.StyleCard(pnlGridCard, null, 8);
+            UIThemeHelper.StyleCard(pnlBottom, null, 8);
 
             UIThemeHelper.StyleDataGridView(dgvChiTiet);
-            UIThemeHelper.StyleButton(btnThemHD, UIThemeHelper.BtnThemColor, Color.White);
-            UIThemeHelper.StyleButton(btnLuuHD, UIThemeHelper.BtnLuuColor, Color.White);
-            UIThemeHelper.StyleButton(btnHuyHD, UIThemeHelper.BtnHuyColor, Color.White);
-            UIThemeHelper.StyleButton(btnInHD, UIThemeHelper.BtnInExcelColor, Color.White);
-            UIThemeHelper.StyleButton(btnDong, Color.FromArgb(100, 116, 139), Color.White);
+            UIThemeHelper.StyleButton(btnThemHD, UIThemeHelper.BtnThemColor, Color.White, 8);
+            UIThemeHelper.StyleButton(btnLuuHD, UIThemeHelper.BtnLuuColor, Color.White, 8);
+            UIThemeHelper.StyleButton(btnHuyHD, UIThemeHelper.BtnHuyColor, Color.White, 8);
+            UIThemeHelper.StyleButton(btnInHD, UIThemeHelper.BtnInExcelColor, Color.White, 8);
+            UIThemeHelper.StyleButton(btnDong, Color.FromArgb(100, 116, 139), Color.White, 8);
+
+            UIThemeHelper.ApplyTheme(this);
+
+            txtSoLuong.KeyPress += (s, ev) => Functions.OnlyInteger(ev);
+            txtDonGia.KeyPress += (s, ev) => Functions.OnlyInteger(ev);
+
+            pnlBottom.Resize += (s, ev) => LayoutBottomPanel();
+            pnlMasterCard.Resize += (s, ev) => LayoutMasterCard();
+            pnlDetailCard.Resize += (s, ev) => LayoutDetailCard();
+            this.Resize += (s, ev) =>
+            {
+                LayoutBottomPanel();
+                LayoutMasterCard();
+                LayoutDetailCard();
+            };
+            this.Shown += (s, ev) => this.BeginInvoke((Action)(() =>
+            {
+                LayoutBottomPanel();
+                LayoutMasterCard();
+                LayoutDetailCard();
+            }));
+            LayoutBottomPanel();
+            LayoutMasterCard();
+            LayoutDetailCard();
 
             LoadCombos();
             ResetForm();
         }
+
+        private void LayoutBottomPanel()
+
+        {
+
+            if (pnlBottom == null || pnlBottom.ClientSize.Width <= 0) return;
+
+            pnlTotalBox.Location = new Point(pnlBottom.ClientSize.Width - pnlTotalBox.Width - 15, 8);
+
+            pnlTotalBox.BringToFront();
+
+            pnlTotalBox.Visible = true;
+
+        }
+
+
+
+        private void LayoutMasterCard()
+        {
+            if (pnlMasterCard == null || pnlMasterCard.ClientSize.Width <= 0) return;
+            int w = pnlMasterCard.ClientSize.Width;
+            int leftMargin = 16;
+            int rightMargin = w - 16;
+
+            int col1X = leftMargin;
+            int col1LabelW = 80;
+            int col1InputX = col1X + col1LabelW;
+            int col1InputW = Math.Max(140, (w - 60) * 22 / 100);
+
+            lblMaHDN.Location = new Point(col1X, 36);
+            lblMaHDN.Size = new Size(col1LabelW, 20);
+            txtMaHDN.Location = new Point(col1InputX, 33);
+            txtMaHDN.Width = col1InputW;
+
+            lblNCC.Location = new Point(col1X, 72);
+            lblNCC.Size = new Size(col1LabelW, 20);
+            cboMaNCC.Location = new Point(col1InputX, 69);
+            cboMaNCC.Width = col1InputW;
+            
+            int col2X = col1InputX + col1InputW + 20;
+            int col2LabelW = 80;
+            int col2InputX = col2X + col2LabelW;
+            int col2InputW = Math.Max(150, (w - 60) * 23 / 100);
+
+            lblNgayNhap.Location = new Point(col2X, 36);
+            lblNgayNhap.Size = new Size(col2LabelW, 20);
+            dtpNgayNhap.Location = new Point(col2InputX, 33);
+            dtpNgayNhap.Width = col2InputW;
+
+            lblDienThoaiNCC.Location = new Point(col2X, 72);
+            lblDienThoaiNCC.Size = new Size(col2LabelW, 20);
+            txtDienThoaiNCC.Location = new Point(col2InputX, 69);
+            txtDienThoaiNCC.Width = col2InputW;
+
+            int col3X = col2InputX + col2InputW + 20;
+            int col3LabelW = 80;
+            int col3InputX = col3X + col3LabelW;
+
+            lblNhanVien.Location = new Point(col3X, 36);
+            lblNhanVien.Size = new Size(col3LabelW, 20);
+            cboMaNV.Location = new Point(col3InputX, 33);
+            cboMaNV.Width = Math.Max(160, rightMargin - col3InputX);
+            
+            lblDiaChiNCC.Location = new Point(col3X, 72);
+            lblDiaChiNCC.Size = new Size(col3LabelW, 20);
+            txtDiaChiNCC.Location = new Point(col3InputX, 69);
+            txtDiaChiNCC.Width = Math.Max(120, rightMargin - col3InputX);
+        }
+
+        private void LayoutDetailCard()
+        {
+            if (pnlDetailCard == null || pnlDetailCard.ClientSize.Width <= 0) return;
+            int w = pnlDetailCard.ClientSize.Width;
+            int leftMargin = 16;
+            int rightMargin = w - 16;
+            int curX = leftMargin;
+
+            lblMaMay.AutoSize = true;
+            lblMaMay.Location = new Point(curX, 38);
+            curX = lblMaMay.Right + 6;
+
+            cboMaMay.Location = new Point(curX, 35);
+            cboMaMay.Width = Math.Max(110, (w - 200) * 12 / 100);
+            curX = cboMaMay.Right + 12;
+
+            lblTenMay.AutoSize = true;
+            lblTenMay.Location = new Point(curX, 38);
+            curX = lblTenMay.Right + 6;
+
+            txtTenMay.Location = new Point(curX, 35);
+            txtTenMay.Width = Math.Max(140, (w - 200) * 20 / 100);
+            curX = txtTenMay.Right + 12;
+
+            lblSoLuong.AutoSize = true;
+            lblSoLuong.Location = new Point(curX, 38);
+            curX = lblSoLuong.Right + 6;
+
+            txtSoLuong.Location = new Point(curX, 35);
+            txtSoLuong.Width = 65;
+            curX = txtSoLuong.Right + 12;
+
+            lblDonGia.AutoSize = true;
+            lblDonGia.Location = new Point(curX, 38);
+            curX = lblDonGia.Right + 6;
+
+            txtDonGia.Location = new Point(curX, 35);
+            txtDonGia.Width = Math.Max(110, (w - 200) * 15 / 100);
+            curX = txtDonGia.Right + 12;
+
+            lblThanhTien.AutoSize = true;
+            lblThanhTien.Location = new Point(curX, 38);
+            curX = lblThanhTien.Right + 6;
+
+            txtThanhTien.Location = new Point(curX, 35);
+            txtThanhTien.Width = Math.Max(120, rightMargin - curX);
+        }
+
+
 
         private void LoadCombos()
         {
@@ -50,10 +196,8 @@ namespace QLBanMayViTinh.Forms
             txtMaHDN.Text = "";
             dtpNgayNhap.Value = DateTime.Now;
             cboMaNV.SelectedIndex = -1;
-            txtTenNV.Text = "";
-            cboMaNCC.SelectedIndex = -1;
-            txtTenNCC.Text = "";
-            txtDiaChiNCC.Text = "";
+                        cboMaNCC.SelectedIndex = -1;
+                        txtDiaChiNCC.Text = "";
             txtDienThoaiNCC.Text = "";
 
             cboMaMay.SelectedIndex = -1;
@@ -69,6 +213,12 @@ namespace QLBanMayViTinh.Forms
             btnHuyHD.Enabled = false;
             btnInHD.Enabled = false;
 
+            cboMaNV.Enabled = false;
+            cboMaNCC.Enabled = false;
+            dtpNgayNhap.Enabled = false;
+            cboMaNV.Enabled = false;
+            cboMaNCC.Enabled = false;
+            dtpNgayNhap.Enabled = false;
             cboMaMay.Enabled = false;
             txtSoLuong.Enabled = false;
             txtDonGia.Enabled = false;
@@ -91,16 +241,17 @@ namespace QLBanMayViTinh.Forms
             dgvChiTiet.Columns["DonGia"].HeaderText = "Đơn Giá Nhập";
             dgvChiTiet.Columns["ThanhTien"].HeaderText = "Thành Tiền";
 
+            dgvChiTiet.Columns["MaMayVT"].FillWeight = 15;
+            dgvChiTiet.Columns["TenMayVT"].FillWeight = 40;
+            dgvChiTiet.Columns["SoLuong"].FillWeight = 15;
+            dgvChiTiet.Columns["DonGia"].FillWeight = 15;
+            dgvChiTiet.Columns["ThanhTien"].FillWeight = 15;
+
             UIThemeHelper.FormatCurrencyColumns(dgvChiTiet, "DonGia", "ThanhTien");
         }
 
         private void cboMaNV_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (cboMaNV.SelectedValue != null && cboMaNV.SelectedIndex >= 0)
-            {
-                txtTenNV.Text = Functions.GetFieldValues("SELECT TenNV FROM NhanVien WHERE MaNV = N'" + cboMaNV.SelectedValue.ToString() + "'");
-            }
-            else txtTenNV.Text = "";
         }
 
         private void cboMaNCC_SelectedIndexChanged(object sender, EventArgs e)
@@ -111,15 +262,13 @@ namespace QLBanMayViTinh.Forms
                 DataTable dt = Functions.GetDataToTable("SELECT TenNCC, DiaChi, DienThoai FROM NhaCungCap WHERE MaNCC = N'" + id + "'");
                 if (dt.Rows.Count > 0)
                 {
-                    txtTenNCC.Text = dt.Rows[0]["TenNCC"].ToString();
-                    txtDiaChiNCC.Text = dt.Rows[0]["DiaChi"].ToString();
+                                        txtDiaChiNCC.Text = dt.Rows[0]["DiaChi"].ToString();
                     txtDienThoaiNCC.Text = dt.Rows[0]["DienThoai"].ToString();
                 }
             }
             else
             {
-                txtTenNCC.Text = "";
-                txtDiaChiNCC.Text = "";
+                                txtDiaChiNCC.Text = "";
                 txtDienThoaiNCC.Text = "";
             }
         }
@@ -128,14 +277,27 @@ namespace QLBanMayViTinh.Forms
         {
             if (cboMaMay.SelectedValue != null && cboMaMay.SelectedIndex >= 0)
             {
-                txtTenMay.Text = Functions.GetFieldValues("SELECT TenMayVT FROM MayViTinh WHERE MaMayVT = N'" + cboMaMay.SelectedValue.ToString() + "'");
+                string id = cboMaMay.SelectedValue.ToString();
+                DataTable dt = Functions.GetDataToTable("SELECT TenMayVT, GiaNhap FROM MayViTinh WHERE MaMayVT = N'" + id + "'");
+                if (dt.Rows.Count > 0)
+                {
+                    txtTenMay.Text = dt.Rows[0]["TenMayVT"].ToString();
+                    decimal giaNhap = Convert.ToDecimal(dt.Rows[0]["GiaNhap"]);
+                    txtDonGia.Text = string.Format("{0:N0}", giaNhap);
+                    TinhThanhTienLine();
+                }
             }
-            else txtTenMay.Text = "";
+            else
+            {
+                txtTenMay.Text = "";
+                txtDonGia.Text = "";
+                txtThanhTien.Text = "0";
+            }
         }
 
         private void TinhThanhTienLine()
         {
-            if (int.TryParse(txtSoLuong.Text, out int sl) && decimal.TryParse(txtDonGia.Text, out decimal dg))
+            if (int.TryParse(txtSoLuong.Text, out int sl) && decimal.TryParse(txtDonGia.Text.Replace(",", ""), out decimal dg))
             {
                 txtThanhTien.Text = string.Format("{0:N0}", sl * dg);
             }
@@ -163,9 +325,12 @@ namespace QLBanMayViTinh.Forms
             btnHuyHD.Enabled = true;
             btnThemHD.Enabled = false;
 
+            cboMaNV.Enabled = true;
+            cboMaNCC.Enabled = true;
+            dtpNgayNhap.Enabled = true;
             cboMaMay.Enabled = true;
             txtSoLuong.Enabled = true;
-            txtDonGia.Enabled = true;
+            txtDonGia.Enabled = false;
             cboMaNV.Focus();
         }
 
@@ -194,47 +359,68 @@ namespace QLBanMayViTinh.Forms
                 return;
             }
 
-            int sl = int.Parse(txtSoLuong.Text.Trim());
-            decimal dg = decimal.Parse(txtDonGia.Text.Trim().Replace(",", ""));
-            decimal tt = sl * dg;
-
-            string checkHD = "SELECT MaHDN FROM HoaDonNhap WHERE MaHDN = N'" + txtMaHDN.Text.Trim() + "'";
-            if (!Functions.CheckKey(checkHD))
+            int sl;
+            if (!int.TryParse(txtSoLuong.Text.Trim(), out sl) || sl <= 0)
             {
-                string sqlInsertHDN = string.Format(@"INSERT INTO HoaDonNhap (MaHDN, NgayNhap, MaNV, MaNCC, TongTien)
-                                                     VALUES (N'{0}', '{1:yyyy-MM-dd HH:mm:ss}', N'{2}', N'{3}', 0)",
-                    txtMaHDN.Text.Trim(), dtpNgayNhap.Value, cboMaNV.SelectedValue, cboMaNCC.SelectedValue);
-                Functions.RunSQL(sqlInsertHDN);
-            }
-
-            string checkItem = string.Format("SELECT MaMayVT FROM ChiTietHDN WHERE MaHDN = N'{0}' AND MaMayVT = N'{1}'",
-                txtMaHDN.Text.Trim(), cboMaMay.SelectedValue);
-            if (Functions.CheckKey(checkItem))
-            {
-                MessageBox.Show("Mặt hàng này đã có trong hóa đơn nhập, vui lòng nhấp đúp để xóa sửa!", "Trùng Hàng", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Số lượng nhập phải là số nguyên dương lớn hơn 0!", "Cảnh Báo Nhập Liệu", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                txtSoLuong.Focus();
                 return;
             }
 
-            string sqlInsertCT = string.Format(@"INSERT INTO ChiTietHDN (MaHDN, MaMayVT, SoLuong, DonGia, ThanhTien)
-                                                 VALUES (N'{0}', N'{1}', {2}, {3}, {4})",
-                txtMaHDN.Text.Trim(), cboMaMay.SelectedValue, sl, dg, tt);
-            Functions.RunSQL(sqlInsertCT);
-
-            LoadChiTietGrid(txtMaHDN.Text.Trim());
-
-            string tongTienStr = Functions.GetFieldValues("SELECT TongTien FROM HoaDonNhap WHERE MaHDN = N'" + txtMaHDN.Text.Trim() + "'");
-            if (decimal.TryParse(tongTienStr, out decimal tongTien))
+            decimal dg;
+            string cleanDg = txtDonGia.Text.Trim().Replace(",", "").Replace(".", "").Replace("VNĐ", "").Replace("đ", "").Trim();
+            if (!decimal.TryParse(cleanDg, out dg) || dg < 0)
             {
-                txtTongTien.Text = string.Format("{0:N0}", tongTien);
-                lblBangChu.Text = "Bằng chữ: " + Functions.ChuyenSoSangChu((double)tongTien);
+                MessageBox.Show("Đơn giá nhập không hợp lệ hoặc là số âm!", "Cảnh Báo Nhập Liệu", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                txtDonGia.Focus();
+                return;
             }
+            decimal tt = sl * dg;
 
-            cboMaMay.SelectedIndex = -1;
-            txtTenMay.Text = "";
-            txtSoLuong.Text = "";
-            txtDonGia.Text = "";
-            txtThanhTien.Text = "0";
-            btnInHD.Enabled = true;
+            try
+            {
+                string checkHD = "SELECT MaHDN FROM HoaDonNhap WHERE MaHDN = N'" + txtMaHDN.Text.Trim() + "'";
+                if (!Functions.CheckKey(checkHD))
+                {
+                    string sqlInsertHDN = string.Format(@"INSERT INTO HoaDonNhap (MaHDN, NgayNhap, MaNV, MaNCC, TongTien)
+                                                         VALUES (N'{0}', '{1:yyyy-MM-dd HH:mm:ss}', N'{2}', N'{3}', 0)",
+                        txtMaHDN.Text.Trim(), dtpNgayNhap.Value, cboMaNV.SelectedValue, cboMaNCC.SelectedValue);
+                    Functions.RunSQL(sqlInsertHDN, false);
+                }
+
+                string checkItem = string.Format("SELECT MaMayVT FROM ChiTietHDN WHERE MaHDN = N'{0}' AND MaMayVT = N'{1}'",
+                    txtMaHDN.Text.Trim(), cboMaMay.SelectedValue);
+                if (Functions.CheckKey(checkItem))
+                {
+                    MessageBox.Show("Mặt hàng này đã có trong hóa đơn nhập, vui lòng nhấp đúp để xóa sửa!", "Trùng Hàng", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+
+                string sqlInsertCT = string.Format(@"INSERT INTO ChiTietHDN (MaHDN, MaMayVT, SoLuong, DonGia, ThanhTien)
+                                                     VALUES (N'{0}', N'{1}', {2}, {3}, {4})",
+                    txtMaHDN.Text.Trim(), cboMaMay.SelectedValue, sl, dg, tt);
+                Functions.RunSQL(sqlInsertCT, false);
+
+                LoadChiTietGrid(txtMaHDN.Text.Trim());
+
+                string tongTienStr = Functions.GetFieldValues("SELECT TongTien FROM HoaDonNhap WHERE MaHDN = N'" + txtMaHDN.Text.Trim() + "'");
+                if (decimal.TryParse(tongTienStr, out decimal tongTien))
+                {
+                    txtTongTien.Text = string.Format("{0:N0}", tongTien);
+                    lblBangChu.Text = "Bằng chữ: " + Functions.ChuyenSoSangChu((double)tongTien);
+                }
+
+                cboMaMay.SelectedIndex = -1;
+                txtTenMay.Text = "";
+                txtSoLuong.Text = "";
+                txtDonGia.Text = "";
+                txtThanhTien.Text = "0";
+                btnInHD.Enabled = true;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Lỗi khi lưu chi tiết hóa đơn nhập:\n" + ex.Message, "Lỗi Cơ Sở Dữ Liệu", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private void dgvChiTiet_CellDoubleClick(object sender, DataGridViewCellEventArgs e)

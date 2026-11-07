@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Data;
 using System.Data.SqlClient;
 using System.Drawing;
@@ -98,6 +98,14 @@ namespace QLBanMayViTinh.Classes
                         KeyName NVARCHAR(100) NOT NULL PRIMARY KEY,
                         KeyValue NVARCHAR(1000) NULL
                     );
+                END;
+
+                IF EXISTS (
+                    SELECT 1 FROM INFORMATION_SCHEMA.COLUMNS 
+                    WHERE TABLE_NAME = 'MayViTinh' AND COLUMN_NAME = 'Anh' AND DATA_TYPE <> 'varbinary'
+                )
+                BEGIN
+                    ALTER TABLE MayViTinh ALTER COLUMN Anh VARBINARY(MAX) NULL;
                 END;";
 
                 using (SqlCommand cmd = new SqlCommand(sqlCheckTables, Conn))
@@ -270,7 +278,7 @@ namespace QLBanMayViTinh.Classes
             }
         }
 
-        public static DataTable GetDataToTable(string sql)
+        public static DataTable GetDataToTable(string sql, SqlParameter[] parameters = null)
         {
             DataTable table = new DataTable();
             try
@@ -278,6 +286,10 @@ namespace QLBanMayViTinh.Classes
                 Connect();
                 using (SqlCommand cmd = new SqlCommand(sql, Conn))
                 {
+                    if (parameters != null && parameters.Length > 0)
+                    {
+                        cmd.Parameters.AddRange(parameters);
+                    }
                     using (SqlDataAdapter dap = new SqlDataAdapter(cmd))
                     {
                         dap.Fill(table);
@@ -294,11 +306,20 @@ namespace QLBanMayViTinh.Classes
 
         public static void RunSQL(string sql, bool showMessageBox = true)
         {
+            RunSQL(sql, null, showMessageBox);
+        }
+
+        public static void RunSQL(string sql, SqlParameter[] parameters, bool showMessageBox = true)
+        {
             try
             {
                 Connect();
                 using (SqlCommand cmd = new SqlCommand(sql, Conn))
                 {
+                    if (parameters != null && parameters.Length > 0)
+                    {
+                        cmd.Parameters.AddRange(parameters);
+                    }
                     cmd.ExecuteNonQuery();
                 }
             }
@@ -424,6 +445,49 @@ namespace QLBanMayViTinh.Classes
                         ms.Position = 0;
                         return Image.FromStream(ms);
                     }
+                }
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
+        public static Image ByteArrayToImage(byte[] byteArray)
+        {
+            if (byteArray == null || byteArray.Length == 0)
+                return null;
+
+            try
+            {
+                using (MemoryStream ms = new MemoryStream(byteArray))
+                {
+                    using (Image temp = Image.FromStream(ms))
+                    {
+                        return new Bitmap(temp);
+                    }
+                }
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
+        public static byte[] ImageToByteArray(Image image)
+        {
+            if (image == null)
+                return null;
+
+            try
+            {
+                using (MemoryStream ms = new MemoryStream())
+                {
+                    using (Bitmap bmp = new Bitmap(image))
+                    {
+                        bmp.Save(ms, System.Drawing.Imaging.ImageFormat.Png);
+                    }
+                    return ms.ToArray();
                 }
             }
             catch

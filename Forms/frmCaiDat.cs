@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.ComponentModel;
 using System.Data;
 using System.Data.SqlClient;
@@ -17,22 +17,59 @@ namespace QLBanMayViTinh.Forms
 
         private void frmCaiDat_Load(object sender, EventArgs e)
         {
-            if (this.DesignMode || LicenseManager.UsageMode == LicenseUsageMode.Designtime)
+            if (this.DesignMode ||
+                LicenseManager.UsageMode == LicenseUsageMode.Designtime ||
+                System.Diagnostics.Process.GetCurrentProcess().ProcessName.Equals("devenv", StringComparison.OrdinalIgnoreCase))
+            {
                 return;
+            }
 
-            UIThemeHelper.StyleCard(pnlDbCard);
-            UIThemeHelper.StyleCard(pnlThemeCard);
-            UIThemeHelper.StyleCard(pnlStoreCard);
+            UIThemeHelper.StyleCard(pnlDbCard, null, 8);
+            UIThemeHelper.StyleCard(pnlThemeCard, null, 8);
+            UIThemeHelper.StyleCard(pnlStoreCard, null, 8);
 
-            UIThemeHelper.StyleButton(btnTestConnect, Color.FromArgb(79, 70, 229), Color.White);
-            UIThemeHelper.StyleButton(btnLuuConnect, UIThemeHelper.BtnThemColor, Color.White);
-            UIThemeHelper.StyleButton(btnLuuGiaoDien, UIThemeHelper.BtnLuuColor, Color.White);
-            UIThemeHelper.StyleButton(btnLuuCuaHang, UIThemeHelper.BtnSuaColor, Color.White);
+            UIThemeHelper.StyleButton(btnTestConnect, Color.FromArgb(79, 70, 229), Color.White, 8);
+            UIThemeHelper.StyleButton(btnLuuConnect, UIThemeHelper.BtnThemColor, Color.White, 8);
+            UIThemeHelper.StyleButton(btnLuuGiaoDien, UIThemeHelper.BtnLuuColor, Color.White, 8);
+            UIThemeHelper.StyleButton(btnLuuCuaHang, UIThemeHelper.BtnSuaColor, Color.White, 8);
+
+            UIThemeHelper.ApplyTheme(this);
+
+            this.Resize += (s, ev) => LayoutSettingsCards();
+            this.Shown += (s, ev) => this.BeginInvoke((Action)(() => LayoutSettingsCards()));
+            LayoutSettingsCards();
 
             rdoLight.Checked = !UIThemeHelper.IsDarkMode;
             rdoDark.Checked = UIThemeHelper.IsDarkMode;
 
             LoadStoreSettings();
+        }
+
+        private void LayoutSettingsCards()
+        {
+            if (this.ClientSize.Width <= 0) return;
+            int totalW = this.ClientSize.Width - 48;
+            int gap = 20;
+            int cardW = Math.Max(420, (totalW - gap) / 2);
+            int topY = 20;
+
+            pnlDbCard.Location = new Point(24, topY);
+            pnlDbCard.Size = new Size(cardW, 300);
+
+            txtServer.Width = cardW - 50;
+            txtDatabase.Width = cardW - 50;
+
+            pnlThemeCard.Location = new Point(24, topY + 315);
+            pnlThemeCard.Size = new Size(cardW, 230);
+            btnLuuGiaoDien.Width = cardW - 50;
+
+            pnlStoreCard.Location = new Point(24 + cardW + gap, topY);
+            pnlStoreCard.Size = new Size(cardW, 545);
+            txtTenCuaHang.Width = cardW - 50;
+            txtDiaChiCH.Width = cardW - 50;
+            txtHotline.Width = cardW - 50;
+            txtLoiChao.Width = cardW - 50;
+            btnLuuCuaHang.Width = cardW - 50;
         }
 
         private void LoadStoreSettings()
@@ -125,6 +162,12 @@ namespace QLBanMayViTinh.Forms
         private void btnLuuGiaoDien_Click(object sender, EventArgs e)
         {
             UIThemeHelper.IsDarkMode = rdoDark.Checked;
+            UIThemeHelper.SaveThemeToDatabase(UIThemeHelper.IsDarkMode);
+            UIThemeHelper.ApplyTheme(this);
+
+            this.Resize += (s, ev) => LayoutSettingsCards();
+            this.Shown += (s, ev) => this.BeginInvoke((Action)(() => LayoutSettingsCards()));
+            LayoutSettingsCards();
             Functions.LogAction("Đổi giao diện", "Chuyển giao diện sang: " + (UIThemeHelper.IsDarkMode ? "Dark Mode" : "Light Mode"));
             MessageBox.Show("Đã lưu chế độ giao diện: " + (UIThemeHelper.IsDarkMode ? "Dark Mode (Tối)" : "Light Mode (Sáng)") + "!\nGiao diện sẽ cập nhật khi chuyển đổi các phân hệ làm việc.",
                             "Thành Công", MessageBoxButtons.OK, MessageBoxIcon.Information);

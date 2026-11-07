@@ -5,7 +5,6 @@ using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Windows.Forms;
 using QLBanMayViTinh.Classes;
-using QLBanMayViTinh.Testing;
 
 namespace QLBanMayViTinh.Forms
 {
@@ -449,34 +448,6 @@ namespace QLBanMayViTinh.Forms
         {
             ActivateSidebarButton(btnNavCaiDat);
             OpenChildForm(new frmCaiDat(), "⚙️  CÀI ĐẶT HỆ THỐNG", "Cấu hình chuỗi kết nối SQL Server, chủ đề giao diện và thông tin hóa đơn");
-        }
-
-        private void btnNavAutoTest_Click(object sender, EventArgs e)
-        {
-            Cursor = Cursors.WaitCursor;
-            string testReport = SelfTestSuite.RunSelfTest();
-            Cursor = Cursors.Default;
-
-            using (Form frmReport = new Form())
-            {
-                frmReport.Text = "KẾT QUẢ TỰ ĐỘNG KIỂM THỬ HỆ THỐNG (SELF-TEST SUITE)";
-                frmReport.Size = new Size(800, 600);
-                frmReport.StartPosition = FormStartPosition.CenterParent;
-                frmReport.BackColor = Color.FromArgb(15, 23, 42);
-
-                TextBox txt = new TextBox();
-                txt.Multiline = true;
-                txt.ReadOnly = true;
-                txt.Dock = DockStyle.Fill;
-                txt.BackColor = Color.FromArgb(15, 23, 42);
-                txt.ForeColor = Color.FromArgb(248, 250, 252);
-                txt.Font = new Font("Consolas", 10.5F);
-                txt.ScrollBars = ScrollBars.Vertical;
-                txt.Text = testReport;
-
-                frmReport.Controls.Add(txt);
-                frmReport.ShowDialog(this);
-            }
         }
 
         private void btnBentoHDBan_Click(object sender, EventArgs e)

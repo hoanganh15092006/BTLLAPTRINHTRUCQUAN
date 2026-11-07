@@ -53,7 +53,6 @@
     <Compile Include="Classes\Functions.cs" />
     <Compile Include="Classes\SecurityHelper.cs" />
     <Compile Include="Classes\UIThemeHelper.cs" />
-    <Compile Include="Testing\SelfTestSuite.cs" />
     <Compile Include="Forms\frmMain.cs">
       <SubType>Form</SubType>
     </Compile>

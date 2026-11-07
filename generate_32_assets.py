@@ -656,3 +656,4 @@ if __name__ == "__main__":
     generate_7_graph_diagrams()
     copy_and_setup_all_ui_assets()
     print("=== ALL ASSETS GENERATED SUCCESSFULLY ===")
+

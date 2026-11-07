@@ -167,7 +167,7 @@ namespace QLBanMayViTinh.Forms
             this.rdoLight.Size = new System.Drawing.Size(380, 36);
             this.rdoLight.TabIndex = 1;
             this.rdoLight.TabStop = true;
-            this.rdoLight.Text = "☀️ Light Mode (Giao diện sáng chuẩn)";
+            this.rdoLight.Text = "Light Mode (Giao diện sáng chuẩn)";
             this.rdoLight.UseVisualStyleBackColor = true;
             this.lblThemeTitle.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold);
             this.lblThemeTitle.ForeColor = System.Drawing.Color.FromArgb(15, 23, 42);

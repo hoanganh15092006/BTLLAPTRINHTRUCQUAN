@@ -659,6 +659,11 @@ namespace QLBanMayViTinh.Classes
                 {
                     pnl.BackColor = IsDarkMode ? Color.FromArgb(15, 23, 42) : Color.FromArgb(30, 41, 59);
                 }
+                else if (pnl.Name == "pnlControls" || pnl.Name == "pnlThoiGian" || pnl.Name.StartsWith("pnlSub") || pnl.Name == "pnlRadioSwitch")
+                {
+                    pnl.BackColor = Color.Transparent;
+                    pnl.BorderStyle = BorderStyle.None;
+                }
                 else
                 {
                     pnl.BackColor = ColorCard;
@@ -685,6 +690,11 @@ namespace QLBanMayViTinh.Classes
                 }
                 else if (lbl.Name == "lblDbStatus" || lbl.Name == "lblStatus" || lbl.Name == "lblUserStatus")
                 {
+                }
+                else if (lbl.Name == "lblTieuDeBaoCao" || lbl.Name == "lblGridHint" || lbl.Name == "lblHeaderHardware" || lbl.Name == "lblHeaderMedia" || lbl.Name == "lblHeaderMaster" || lbl.Name == "lblHeaderDetail" || lbl.Name == "lblLogsTitle" || lbl.Name == "lblAlertTitle" || lbl.Name == "lblGridTitle")
+                {
+                    lbl.BackColor = IsDarkMode ? Color.FromArgb(30, 41, 59) : Color.FromArgb(238, 242, 255);
+                    lbl.ForeColor = IsDarkMode ? Color.FromArgb(248, 250, 252) : Color.FromArgb(67, 56, 202);
                 }
                 else
                 {

@@ -3,6 +3,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Data.SqlClient;
 using System.Drawing;
+using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using QLBanMayViTinh.Classes;
 
@@ -56,6 +57,9 @@ namespace QLBanMayViTinh.Forms
 
             UIThemeHelper.ApplyTheme(this);
 
+            txtDienThoaiKH.KeyPress += (s, ev) => Functions.OnlyInteger(ev);
+            txtDienThoaiNCC.KeyPress += (s, ev) => Functions.OnlyInteger(ev);
+            txtDienThoaiNV.KeyPress += (s, ev) => Functions.OnlyInteger(ev);
 
             this.Resize += (s, ev) => LayoutPanels();
             this.Shown += (s, ev) => this.BeginInvoke((Action)(() => LayoutPanels()));
@@ -206,65 +210,151 @@ namespace QLBanMayViTinh.Forms
 
         private void btnThemKH_Click(object sender, EventArgs e)
         {
-            if (string.IsNullOrWhiteSpace(txtMaKH.Text) || string.IsNullOrWhiteSpace(txtTenKH.Text))
+            if (string.IsNullOrWhiteSpace(txtMaKH.Text))
             {
-                MessageBox.Show("Vui lòng nhập Mã và Tên khách hàng!", "Thông Báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Vui lòng nhập Mã khách hàng!", "Thông Báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                txtMaKH.Focus();
+                return;
+            }
+            if (txtMaKH.Text.Trim().Length > 20)
+            {
+                MessageBox.Show("Mã khách hàng không được vượt quá 20 ký tự!", "Cảnh Báo Nhập Liệu", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                txtMaKH.Focus();
+                return;
+            }
+            if (string.IsNullOrWhiteSpace(txtTenKH.Text))
+            {
+                MessageBox.Show("Vui lòng nhập Tên khách hàng!", "Thông Báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                txtTenKH.Focus();
+                return;
+            }
+            if (txtTenKH.Text.Trim().Length > 100)
+            {
+                MessageBox.Show("Tên khách hàng không được vượt quá 100 ký tự!", "Cảnh Báo Nhập Liệu", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                txtTenKH.Focus();
+                return;
+            }
+            if (!string.IsNullOrWhiteSpace(txtDiaChiKH.Text) && txtDiaChiKH.Text.Trim().Length > 250)
+            {
+                MessageBox.Show("Địa chỉ không được vượt quá 250 ký tự!", "Cảnh Báo Nhập Liệu", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                txtDiaChiKH.Focus();
+                return;
+            }
+            if (!string.IsNullOrWhiteSpace(txtDienThoaiKH.Text) && !Regex.IsMatch(txtDienThoaiKH.Text.Trim(), @"^0[0-9]{9,10}$"))
+            {
+                MessageBox.Show("Số điện thoại không hợp lệ! Vui lòng nhập từ 10 đến 11 chữ số và bắt đầu bằng số 0.", "Cảnh Báo Nhập Liệu", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                txtDienThoaiKH.Focus();
                 return;
             }
             if (Functions.CheckKey("SELECT MaKhach FROM KhachHang WHERE MaKhach = N'" + txtMaKH.Text.Trim() + "'"))
             {
                 MessageBox.Show("Mã khách hàng này đã tồn tại!", "Trùng Khóa", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                txtMaKH.Focus();
                 return;
             }
 
-            string encDC = SecurityHelper.EncryptAES(txtDiaChiKH.Text.Trim());
-            string encDT = SecurityHelper.EncryptAES(txtDienThoaiKH.Text.Trim());
-
-            string sql = "INSERT INTO KhachHang (MaKhach, TenKhach, DiaChi, DienThoai) VALUES (@m, @t, @dc, @dt)";
-            using (SqlCommand cmd = new SqlCommand(sql, Functions.Conn))
+            try
             {
-                cmd.Parameters.AddWithValue("@m", txtMaKH.Text.Trim());
-                cmd.Parameters.AddWithValue("@t", txtTenKH.Text.Trim());
-                cmd.Parameters.AddWithValue("@dc", encDC);
-                cmd.Parameters.AddWithValue("@dt", encDT);
-                cmd.ExecuteNonQuery();
-            }
+                string encDC = SecurityHelper.EncryptAES(txtDiaChiKH.Text.Trim());
+                string encDT = SecurityHelper.EncryptAES(txtDienThoaiKH.Text.Trim());
 
-            Functions.LogAction("Thêm khách hàng", "Thêm khách hàng: " + txtTenKH.Text.Trim());
-            MessageBox.Show("Thêm mới khách hàng thành công!", "Thông Báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            btnLamMoiKH.PerformClick();
-            LoadDataKH();
+                string sql = "INSERT INTO KhachHang (MaKhach, TenKhach, DiaChi, DienThoai) VALUES (@m, @t, @dc, @dt)";
+                using (SqlCommand cmd = new SqlCommand(sql, Functions.Conn))
+                {
+                    cmd.Parameters.AddWithValue("@m", txtMaKH.Text.Trim());
+                    cmd.Parameters.AddWithValue("@t", txtTenKH.Text.Trim());
+                    cmd.Parameters.AddWithValue("@dc", encDC);
+                    cmd.Parameters.AddWithValue("@dt", encDT);
+                    cmd.ExecuteNonQuery();
+                }
+
+                Functions.LogAction("Thêm khách hàng", "Thêm khách hàng: " + txtTenKH.Text.Trim());
+                MessageBox.Show("Thêm mới khách hàng thành công!", "Thông Báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                btnLamMoiKH.PerformClick();
+                LoadDataKH();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Lỗi khi thêm khách hàng:\n" + ex.Message, "Lỗi Cơ Sở Dữ Liệu", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private void btnSuaKH_Click(object sender, EventArgs e)
         {
-            if (string.IsNullOrWhiteSpace(txtMaKH.Text)) return;
-            string encDC = SecurityHelper.EncryptAES(txtDiaChiKH.Text.Trim());
-            string encDT = SecurityHelper.EncryptAES(txtDienThoaiKH.Text.Trim());
-
-            string sql = "UPDATE KhachHang SET TenKhach = @t, DiaChi = @dc, DienThoai = @dt WHERE MaKhach = @m";
-            using (SqlCommand cmd = new SqlCommand(sql, Functions.Conn))
+            if (string.IsNullOrWhiteSpace(txtMaKH.Text))
             {
-                cmd.Parameters.AddWithValue("@t", txtTenKH.Text.Trim());
-                cmd.Parameters.AddWithValue("@dc", encDC);
-                cmd.Parameters.AddWithValue("@dt", encDT);
-                cmd.Parameters.AddWithValue("@m", txtMaKH.Text.Trim());
-                cmd.ExecuteNonQuery();
+                MessageBox.Show("Vui lòng chọn khách hàng cần sửa trên danh sách!", "Thông Báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+            if (string.IsNullOrWhiteSpace(txtTenKH.Text))
+            {
+                MessageBox.Show("Vui lòng nhập Tên khách hàng!", "Thông Báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                txtTenKH.Focus();
+                return;
+            }
+            if (txtTenKH.Text.Trim().Length > 100)
+            {
+                MessageBox.Show("Tên khách hàng không được vượt quá 100 ký tự!", "Cảnh Báo Nhập Liệu", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                txtTenKH.Focus();
+                return;
+            }
+            if (!string.IsNullOrWhiteSpace(txtDiaChiKH.Text) && txtDiaChiKH.Text.Trim().Length > 250)
+            {
+                MessageBox.Show("Địa chỉ không được vượt quá 250 ký tự!", "Cảnh Báo Nhập Liệu", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                txtDiaChiKH.Focus();
+                return;
+            }
+            if (!string.IsNullOrWhiteSpace(txtDienThoaiKH.Text) && !Regex.IsMatch(txtDienThoaiKH.Text.Trim(), @"^0[0-9]{9,10}$"))
+            {
+                MessageBox.Show("Số điện thoại không hợp lệ! Vui lòng nhập từ 10 đến 11 chữ số và bắt đầu bằng số 0.", "Cảnh Báo Nhập Liệu", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                txtDienThoaiKH.Focus();
+                return;
             }
 
-            Functions.LogAction("Sửa khách hàng", "Cập nhật khách hàng: " + txtMaKH.Text.Trim());
-            MessageBox.Show("Cập nhật khách hàng thành công!", "Thông Báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            LoadDataKH();
+            try
+            {
+                string encDC = SecurityHelper.EncryptAES(txtDiaChiKH.Text.Trim());
+                string encDT = SecurityHelper.EncryptAES(txtDienThoaiKH.Text.Trim());
+
+                string sql = "UPDATE KhachHang SET TenKhach = @t, DiaChi = @dc, DienThoai = @dt WHERE MaKhach = @m";
+                using (SqlCommand cmd = new SqlCommand(sql, Functions.Conn))
+                {
+                    cmd.Parameters.AddWithValue("@t", txtTenKH.Text.Trim());
+                    cmd.Parameters.AddWithValue("@dc", encDC);
+                    cmd.Parameters.AddWithValue("@dt", encDT);
+                    cmd.Parameters.AddWithValue("@m", txtMaKH.Text.Trim());
+                    cmd.ExecuteNonQuery();
+                }
+
+                Functions.LogAction("Sửa khách hàng", "Cập nhật khách hàng: " + txtMaKH.Text.Trim());
+                MessageBox.Show("Cập nhật khách hàng thành công!", "Thông Báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                LoadDataKH();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Lỗi khi cập nhật thông tin khách hàng:\n" + ex.Message, "Lỗi Cơ Sở Dữ Liệu", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private void btnXoaKH_Click(object sender, EventArgs e)
         {
-            if (string.IsNullOrWhiteSpace(txtMaKH.Text)) return;
+            if (string.IsNullOrWhiteSpace(txtMaKH.Text))
+            {
+                MessageBox.Show("Vui lòng chọn khách hàng cần xóa!", "Thông Báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
             if (MessageBox.Show("Bạn có chắc chắn muốn xóa khách hàng này?", "Xác Nhận", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
             {
-                Functions.RunSqlDel("DELETE FROM KhachHang WHERE MaKhach = N'" + txtMaKH.Text.Trim() + "'");
-                btnLamMoiKH.PerformClick();
-                LoadDataKH();
+                try
+                {
+                    Functions.RunSqlDel("DELETE FROM KhachHang WHERE MaKhach = N'" + txtMaKH.Text.Trim() + "'");
+                    btnLamMoiKH.PerformClick();
+                    LoadDataKH();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Lỗi khi xóa khách hàng:\n" + ex.Message, "Lỗi Cơ Sở Dữ Liệu", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
             }
         }
 
@@ -305,59 +395,145 @@ namespace QLBanMayViTinh.Forms
 
         private void btnThemNCC_Click(object sender, EventArgs e)
         {
-            if (string.IsNullOrWhiteSpace(txtMaNCC.Text) || string.IsNullOrWhiteSpace(txtTenNCC.Text))
+            if (string.IsNullOrWhiteSpace(txtMaNCC.Text))
             {
-                MessageBox.Show("Vui lòng nhập Mã và Tên nhà cung cấp!", "Thông Báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Vui lòng nhập Mã nhà cung cấp!", "Thông Báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                txtMaNCC.Focus();
+                return;
+            }
+            if (txtMaNCC.Text.Trim().Length > 20)
+            {
+                MessageBox.Show("Mã nhà cung cấp không được vượt quá 20 ký tự!", "Cảnh Báo Nhập Liệu", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                txtMaNCC.Focus();
+                return;
+            }
+            if (string.IsNullOrWhiteSpace(txtTenNCC.Text))
+            {
+                MessageBox.Show("Vui lòng nhập Tên nhà cung cấp!", "Thông Báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                txtTenNCC.Focus();
+                return;
+            }
+            if (txtTenNCC.Text.Trim().Length > 150)
+            {
+                MessageBox.Show("Tên nhà cung cấp không được vượt quá 150 ký tự!", "Cảnh Báo Nhập Liệu", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                txtTenNCC.Focus();
+                return;
+            }
+            if (!string.IsNullOrWhiteSpace(txtDiaChiNCC.Text) && txtDiaChiNCC.Text.Trim().Length > 250)
+            {
+                MessageBox.Show("Địa chỉ không được vượt quá 250 ký tự!", "Cảnh Báo Nhập Liệu", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                txtDiaChiNCC.Focus();
+                return;
+            }
+            if (!string.IsNullOrWhiteSpace(txtDienThoaiNCC.Text) && !Regex.IsMatch(txtDienThoaiNCC.Text.Trim(), @"^0[0-9]{9,10}$"))
+            {
+                MessageBox.Show("Số điện thoại không hợp lệ! Vui lòng nhập từ 10 đến 11 chữ số và bắt đầu bằng số 0.", "Cảnh Báo Nhập Liệu", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                txtDienThoaiNCC.Focus();
                 return;
             }
             if (Functions.CheckKey("SELECT MaNCC FROM NhaCungCap WHERE MaNCC = N'" + txtMaNCC.Text.Trim() + "'"))
             {
                 MessageBox.Show("Mã nhà cung cấp này đã tồn tại!", "Trùng Khóa", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                txtMaNCC.Focus();
                 return;
             }
 
-            string sql = "INSERT INTO NhaCungCap (MaNCC, TenNCC, DiaChi, DienThoai) VALUES (@m, @t, @dc, @dt)";
-            using (SqlCommand cmd = new SqlCommand(sql, Functions.Conn))
+            try
             {
-                cmd.Parameters.AddWithValue("@m", txtMaNCC.Text.Trim());
-                cmd.Parameters.AddWithValue("@t", txtTenNCC.Text.Trim());
-                cmd.Parameters.AddWithValue("@dc", txtDiaChiNCC.Text.Trim());
-                cmd.Parameters.AddWithValue("@dt", txtDienThoaiNCC.Text.Trim());
-                cmd.ExecuteNonQuery();
-            }
+                string sql = "INSERT INTO NhaCungCap (MaNCC, TenNCC, DiaChi, DienThoai) VALUES (@m, @t, @dc, @dt)";
+                using (SqlCommand cmd = new SqlCommand(sql, Functions.Conn))
+                {
+                    cmd.Parameters.AddWithValue("@m", txtMaNCC.Text.Trim());
+                    cmd.Parameters.AddWithValue("@t", txtTenNCC.Text.Trim());
+                    cmd.Parameters.AddWithValue("@dc", txtDiaChiNCC.Text.Trim());
+                    cmd.Parameters.AddWithValue("@dt", txtDienThoaiNCC.Text.Trim());
+                    cmd.ExecuteNonQuery();
+                }
 
-            Functions.LogAction("Thêm nhà cung cấp", "Thêm nhà cung cấp: " + txtTenNCC.Text.Trim());
-            MessageBox.Show("Thêm mới nhà cung cấp thành công!", "Thông Báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            btnLamMoiNCC.PerformClick();
-            LoadDataNCC();
+                Functions.LogAction("Thêm nhà cung cấp", "Thêm nhà cung cấp: " + txtTenNCC.Text.Trim());
+                MessageBox.Show("Thêm mới nhà cung cấp thành công!", "Thông Báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                btnLamMoiNCC.PerformClick();
+                LoadDataNCC();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Lỗi khi thêm nhà cung cấp:\n" + ex.Message, "Lỗi Cơ Sở Dữ Liệu", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private void btnSuaNCC_Click(object sender, EventArgs e)
         {
-            if (string.IsNullOrWhiteSpace(txtMaNCC.Text)) return;
-            string sql = "UPDATE NhaCungCap SET TenNCC = @t, DiaChi = @dc, DienThoai = @dt WHERE MaNCC = @m";
-            using (SqlCommand cmd = new SqlCommand(sql, Functions.Conn))
+            if (string.IsNullOrWhiteSpace(txtMaNCC.Text))
             {
-                cmd.Parameters.AddWithValue("@t", txtTenNCC.Text.Trim());
-                cmd.Parameters.AddWithValue("@dc", txtDiaChiNCC.Text.Trim());
-                cmd.Parameters.AddWithValue("@dt", txtDienThoaiNCC.Text.Trim());
-                cmd.Parameters.AddWithValue("@m", txtMaNCC.Text.Trim());
-                cmd.ExecuteNonQuery();
+                MessageBox.Show("Vui lòng chọn nhà cung cấp cần sửa trên danh sách!", "Thông Báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+            if (string.IsNullOrWhiteSpace(txtTenNCC.Text))
+            {
+                MessageBox.Show("Vui lòng nhập Tên nhà cung cấp!", "Thông Báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                txtTenNCC.Focus();
+                return;
+            }
+            if (txtTenNCC.Text.Trim().Length > 150)
+            {
+                MessageBox.Show("Tên nhà cung cấp không được vượt quá 150 ký tự!", "Cảnh Báo Nhập Liệu", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                txtTenNCC.Focus();
+                return;
+            }
+            if (!string.IsNullOrWhiteSpace(txtDiaChiNCC.Text) && txtDiaChiNCC.Text.Trim().Length > 250)
+            {
+                MessageBox.Show("Địa chỉ không được vượt quá 250 ký tự!", "Cảnh Báo Nhập Liệu", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                txtDiaChiNCC.Focus();
+                return;
+            }
+            if (!string.IsNullOrWhiteSpace(txtDienThoaiNCC.Text) && !Regex.IsMatch(txtDienThoaiNCC.Text.Trim(), @"^0[0-9]{9,10}$"))
+            {
+                MessageBox.Show("Số điện thoại không hợp lệ! Vui lòng nhập từ 10 đến 11 chữ số và bắt đầu bằng số 0.", "Cảnh Báo Nhập Liệu", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                txtDienThoaiNCC.Focus();
+                return;
             }
 
-            Functions.LogAction("Sửa nhà cung cấp", "Cập nhật nhà cung cấp: " + txtMaNCC.Text.Trim());
-            MessageBox.Show("Cập nhật nhà cung cấp thành công!", "Thông Báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            LoadDataNCC();
+            try
+            {
+                string sql = "UPDATE NhaCungCap SET TenNCC = @t, DiaChi = @dc, DienThoai = @dt WHERE MaNCC = @m";
+                using (SqlCommand cmd = new SqlCommand(sql, Functions.Conn))
+                {
+                    cmd.Parameters.AddWithValue("@t", txtTenNCC.Text.Trim());
+                    cmd.Parameters.AddWithValue("@dc", txtDiaChiNCC.Text.Trim());
+                    cmd.Parameters.AddWithValue("@dt", txtDienThoaiNCC.Text.Trim());
+                    cmd.Parameters.AddWithValue("@m", txtMaNCC.Text.Trim());
+                    cmd.ExecuteNonQuery();
+                }
+
+                Functions.LogAction("Sửa nhà cung cấp", "Cập nhật nhà cung cấp: " + txtMaNCC.Text.Trim());
+                MessageBox.Show("Cập nhật nhà cung cấp thành công!", "Thông Báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                LoadDataNCC();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Lỗi khi cập nhật nhà cung cấp:\n" + ex.Message, "Lỗi Cơ Sở Dữ Liệu", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private void btnXoaNCC_Click(object sender, EventArgs e)
         {
-            if (string.IsNullOrWhiteSpace(txtMaNCC.Text)) return;
+            if (string.IsNullOrWhiteSpace(txtMaNCC.Text))
+            {
+                MessageBox.Show("Vui lòng chọn nhà cung cấp cần xóa!", "Thông Báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
             if (MessageBox.Show("Bạn có chắc chắn muốn xóa nhà cung cấp này?", "Xác Nhận", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
             {
-                Functions.RunSqlDel("DELETE FROM NhaCungCap WHERE MaNCC = N'" + txtMaNCC.Text.Trim() + "'");
-                btnLamMoiNCC.PerformClick();
-                LoadDataNCC();
+                try
+                {
+                    Functions.RunSqlDel("DELETE FROM NhaCungCap WHERE MaNCC = N'" + txtMaNCC.Text.Trim() + "'");
+                    btnLamMoiNCC.PerformClick();
+                    LoadDataNCC();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Lỗi khi xóa nhà cung cấp:\n" + ex.Message, "Lỗi Cơ Sở Dữ Liệu", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
             }
         }
 
@@ -410,69 +586,173 @@ namespace QLBanMayViTinh.Forms
 
         private void btnThemNV_Click(object sender, EventArgs e)
         {
-            if (string.IsNullOrWhiteSpace(txtMaNV.Text) || string.IsNullOrWhiteSpace(txtTenNV.Text))
+            if (string.IsNullOrWhiteSpace(txtMaNV.Text))
             {
-                MessageBox.Show("Vui lòng nhập Mã và Tên nhân viên!", "Thông Báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Vui lòng nhập Mã nhân viên!", "Thông Báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                txtMaNV.Focus();
+                return;
+            }
+            if (txtMaNV.Text.Trim().Length > 20)
+            {
+                MessageBox.Show("Mã nhân viên không được vượt quá 20 ký tự!", "Cảnh Báo Nhập Liệu", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                txtMaNV.Focus();
+                return;
+            }
+            if (string.IsNullOrWhiteSpace(txtTenNV.Text))
+            {
+                MessageBox.Show("Vui lòng nhập Tên nhân viên!", "Thông Báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                txtTenNV.Focus();
+                return;
+            }
+            if (txtTenNV.Text.Trim().Length > 100)
+            {
+                MessageBox.Show("Tên nhân viên không được vượt quá 100 ký tự!", "Cảnh Báo Nhập Liệu", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                txtTenNV.Focus();
+                return;
+            }
+            if (dtpNgaySinhNV.Value > DateTime.Today)
+            {
+                MessageBox.Show("Ngày sinh nhân viên không hợp lệ (không được lớn hơn ngày hiện tại)!", "Cảnh Báo Nhập Liệu", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                dtpNgaySinhNV.Focus();
+                return;
+            }
+            if (DateTime.Today.Year - dtpNgaySinhNV.Value.Year < 15)
+            {
+                MessageBox.Show("Nhân viên phải từ 15 tuổi trở lên!", "Cảnh Báo Nhập Liệu", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                dtpNgaySinhNV.Focus();
+                return;
+            }
+            if (!string.IsNullOrWhiteSpace(txtDiaChiNV.Text) && txtDiaChiNV.Text.Trim().Length > 250)
+            {
+                MessageBox.Show("Địa chỉ không được vượt quá 250 ký tự!", "Cảnh Báo Nhập Liệu", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                txtDiaChiNV.Focus();
+                return;
+            }
+            if (!string.IsNullOrWhiteSpace(txtDienThoaiNV.Text) && !Regex.IsMatch(txtDienThoaiNV.Text.Trim(), @"^0[0-9]{9,10}$"))
+            {
+                MessageBox.Show("Số điện thoại không hợp lệ! Vui lòng nhập từ 10 đến 11 chữ số và bắt đầu bằng số 0.", "Cảnh Báo Nhập Liệu", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                txtDienThoaiNV.Focus();
                 return;
             }
             if (Functions.CheckKey("SELECT MaNV FROM NhanVien WHERE MaNV = N'" + txtMaNV.Text.Trim() + "'"))
             {
                 MessageBox.Show("Mã nhân viên này đã tồn tại!", "Trùng Khóa", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                txtMaNV.Focus();
                 return;
             }
 
-            string encDC = SecurityHelper.EncryptAES(txtDiaChiNV.Text.Trim());
-            string encDT = SecurityHelper.EncryptAES(txtDienThoaiNV.Text.Trim());
-
-            string sql = "INSERT INTO NhanVien (MaNV, TenNV, NgaySinh, GioiTinh, DiaChi, DienThoai) VALUES (@m, @t, @ns, @gt, @dc, @dt)";
-            using (SqlCommand cmd = new SqlCommand(sql, Functions.Conn))
+            try
             {
-                cmd.Parameters.AddWithValue("@m", txtMaNV.Text.Trim());
-                cmd.Parameters.AddWithValue("@t", txtTenNV.Text.Trim());
-                cmd.Parameters.AddWithValue("@ns", dtpNgaySinhNV.Value);
-                cmd.Parameters.AddWithValue("@gt", cboGioiTinhNV.SelectedItem != null ? cboGioiTinhNV.SelectedItem.ToString() : "Nam");
-                cmd.Parameters.AddWithValue("@dc", encDC);
-                cmd.Parameters.AddWithValue("@dt", encDT);
-                cmd.ExecuteNonQuery();
-            }
+                string encDC = SecurityHelper.EncryptAES(txtDiaChiNV.Text.Trim());
+                string encDT = SecurityHelper.EncryptAES(txtDienThoaiNV.Text.Trim());
 
-            Functions.LogAction("Thêm nhân viên", "Thêm nhân viên mới: " + txtTenNV.Text.Trim());
-            MessageBox.Show("Thêm mới nhân viên thành công!", "Thông Báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            btnLamMoiNV.PerformClick();
-            LoadDataNV();
+                string sql = "INSERT INTO NhanVien (MaNV, TenNV, NgaySinh, GioiTinh, DiaChi, DienThoai) VALUES (@m, @t, @ns, @gt, @dc, @dt)";
+                using (SqlCommand cmd = new SqlCommand(sql, Functions.Conn))
+                {
+                    cmd.Parameters.AddWithValue("@m", txtMaNV.Text.Trim());
+                    cmd.Parameters.AddWithValue("@t", txtTenNV.Text.Trim());
+                    cmd.Parameters.AddWithValue("@ns", dtpNgaySinhNV.Value);
+                    cmd.Parameters.AddWithValue("@gt", cboGioiTinhNV.SelectedItem != null ? cboGioiTinhNV.SelectedItem.ToString() : "Nam");
+                    cmd.Parameters.AddWithValue("@dc", encDC);
+                    cmd.Parameters.AddWithValue("@dt", encDT);
+                    cmd.ExecuteNonQuery();
+                }
+
+                Functions.LogAction("Thêm nhân viên", "Thêm nhân viên mới: " + txtTenNV.Text.Trim());
+                MessageBox.Show("Thêm mới nhân viên thành công!", "Thông Báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                btnLamMoiNV.PerformClick();
+                LoadDataNV();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Lỗi khi thêm nhân viên:\n" + ex.Message, "Lỗi Cơ Sở Dữ Liệu", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private void btnSuaNV_Click(object sender, EventArgs e)
         {
-            if (string.IsNullOrWhiteSpace(txtMaNV.Text)) return;
-            string encDC = SecurityHelper.EncryptAES(txtDiaChiNV.Text.Trim());
-            string encDT = SecurityHelper.EncryptAES(txtDienThoaiNV.Text.Trim());
-
-            string sql = "UPDATE NhanVien SET TenNV = @t, NgaySinh = @ns, GioiTinh = @gt, DiaChi = @dc, DienThoai = @dt WHERE MaNV = @m";
-            using (SqlCommand cmd = new SqlCommand(sql, Functions.Conn))
+            if (string.IsNullOrWhiteSpace(txtMaNV.Text))
             {
-                cmd.Parameters.AddWithValue("@t", txtTenNV.Text.Trim());
-                cmd.Parameters.AddWithValue("@ns", dtpNgaySinhNV.Value);
-                cmd.Parameters.AddWithValue("@gt", cboGioiTinhNV.SelectedItem != null ? cboGioiTinhNV.SelectedItem.ToString() : "Nam");
-                cmd.Parameters.AddWithValue("@dc", encDC);
-                cmd.Parameters.AddWithValue("@dt", encDT);
-                cmd.Parameters.AddWithValue("@m", txtMaNV.Text.Trim());
-                cmd.ExecuteNonQuery();
+                MessageBox.Show("Vui lòng chọn nhân viên cần sửa trên danh sách!", "Thông Báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+            if (string.IsNullOrWhiteSpace(txtTenNV.Text))
+            {
+                MessageBox.Show("Vui lòng nhập Tên nhân viên!", "Thông Báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                txtTenNV.Focus();
+                return;
+            }
+            if (txtTenNV.Text.Trim().Length > 100)
+            {
+                MessageBox.Show("Tên nhân viên không được vượt quá 100 ký tự!", "Cảnh Báo Nhập Liệu", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                txtTenNV.Focus();
+                return;
+            }
+            if (dtpNgaySinhNV.Value > DateTime.Today)
+            {
+                MessageBox.Show("Ngày sinh nhân viên không hợp lệ (không được lớn hơn ngày hiện tại)!", "Cảnh Báo Nhập Liệu", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                dtpNgaySinhNV.Focus();
+                return;
+            }
+            if (!string.IsNullOrWhiteSpace(txtDiaChiNV.Text) && txtDiaChiNV.Text.Trim().Length > 250)
+            {
+                MessageBox.Show("Địa chỉ không được vượt quá 250 ký tự!", "Cảnh Báo Nhập Liệu", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                txtDiaChiNV.Focus();
+                return;
+            }
+            if (!string.IsNullOrWhiteSpace(txtDienThoaiNV.Text) && !Regex.IsMatch(txtDienThoaiNV.Text.Trim(), @"^0[0-9]{9,10}$"))
+            {
+                MessageBox.Show("Số điện thoại không hợp lệ! Vui lòng nhập từ 10 đến 11 chữ số và bắt đầu bằng số 0.", "Cảnh Báo Nhập Liệu", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                txtDienThoaiNV.Focus();
+                return;
             }
 
-            Functions.LogAction("Sửa nhân viên", "Cập nhật nhân viên: " + txtMaNV.Text.Trim());
-            MessageBox.Show("Cập nhật thông tin nhân viên thành công!", "Thông Báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            LoadDataNV();
+            try
+            {
+                string encDC = SecurityHelper.EncryptAES(txtDiaChiNV.Text.Trim());
+                string encDT = SecurityHelper.EncryptAES(txtDienThoaiNV.Text.Trim());
+
+                string sql = "UPDATE NhanVien SET TenNV = @t, NgaySinh = @ns, GioiTinh = @gt, DiaChi = @dc, DienThoai = @dt WHERE MaNV = @m";
+                using (SqlCommand cmd = new SqlCommand(sql, Functions.Conn))
+                {
+                    cmd.Parameters.AddWithValue("@t", txtTenNV.Text.Trim());
+                    cmd.Parameters.AddWithValue("@ns", dtpNgaySinhNV.Value);
+                    cmd.Parameters.AddWithValue("@gt", cboGioiTinhNV.SelectedItem != null ? cboGioiTinhNV.SelectedItem.ToString() : "Nam");
+                    cmd.Parameters.AddWithValue("@dc", encDC);
+                    cmd.Parameters.AddWithValue("@dt", encDT);
+                    cmd.Parameters.AddWithValue("@m", txtMaNV.Text.Trim());
+                    cmd.ExecuteNonQuery();
+                }
+
+                Functions.LogAction("Sửa nhân viên", "Cập nhật nhân viên: " + txtMaNV.Text.Trim());
+                MessageBox.Show("Cập nhật thông tin nhân viên thành công!", "Thông Báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                LoadDataNV();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Lỗi khi cập nhật nhân viên:\n" + ex.Message, "Lỗi Cơ Sở Dữ Liệu", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private void btnXoaNV_Click(object sender, EventArgs e)
         {
-            if (string.IsNullOrWhiteSpace(txtMaNV.Text)) return;
+            if (string.IsNullOrWhiteSpace(txtMaNV.Text))
+            {
+                MessageBox.Show("Vui lòng chọn nhân viên cần xóa!", "Thông Báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
             if (MessageBox.Show("Bạn có chắc chắn muốn xóa nhân viên này?", "Xác Nhận", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
             {
-                Functions.RunSqlDel("DELETE FROM NhanVien WHERE MaNV = N'" + txtMaNV.Text.Trim() + "'");
-                btnLamMoiNV.PerformClick();
-                LoadDataNV();
+                try
+                {
+                    Functions.RunSqlDel("DELETE FROM NhanVien WHERE MaNV = N'" + txtMaNV.Text.Trim() + "'");
+                    btnLamMoiNV.PerformClick();
+                    LoadDataNV();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Lỗi khi xóa nhân viên:\n" + ex.Message, "Lỗi Cơ Sở Dữ Liệu", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
             }
         }
 
@@ -539,9 +819,28 @@ namespace QLBanMayViTinh.Forms
 
         private void btnThemLK_Click(object sender, EventArgs e)
         {
-            if (string.IsNullOrWhiteSpace(txtMaLK.Text) || string.IsNullOrWhiteSpace(txtTenLK.Text))
+            if (string.IsNullOrWhiteSpace(txtMaLK.Text))
             {
-                MessageBox.Show("Vui lòng nhập Mã và Tên thông số linh kiện!", "Thông Báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Vui lòng nhập Mã danh mục!", "Thông Báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                txtMaLK.Focus();
+                return;
+            }
+            if (txtMaLK.Text.Trim().Length > 20)
+            {
+                MessageBox.Show("Mã danh mục không được vượt quá 20 ký tự!", "Cảnh Báo Nhập Liệu", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                txtMaLK.Focus();
+                return;
+            }
+            if (string.IsNullOrWhiteSpace(txtTenLK.Text))
+            {
+                MessageBox.Show("Vui lòng nhập Tên hoặc Thông số linh kiện!", "Thông Báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                txtTenLK.Focus();
+                return;
+            }
+            if (txtTenLK.Text.Trim().Length > 150)
+            {
+                MessageBox.Show("Tên linh kiện không được vượt quá 150 ký tự!", "Cảnh Báo Nhập Liệu", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                txtTenLK.Focus();
                 return;
             }
 
@@ -551,46 +850,89 @@ namespace QLBanMayViTinh.Forms
             if (Functions.CheckKey(string.Format("SELECT {0} FROM {1} WHERE {0} = N'{2}'", colMa, table, txtMaLK.Text.Trim())))
             {
                 MessageBox.Show("Mã mục này đã tồn tại trong bảng " + table + "!", "Trùng Lặp", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                txtMaLK.Focus();
                 return;
             }
 
-            string sql = string.Format("INSERT INTO {0} ({1}, {2}) VALUES (N'{3}', N'{4}')",
-                table, colMa, colTen, txtMaLK.Text.Trim(), txtTenLK.Text.Trim().Replace("'", "''"));
-            Functions.RunSQL(sql);
+            try
+            {
+                string sql = string.Format("INSERT INTO {0} ({1}, {2}) VALUES (N'{3}', N'{4}')",
+                    table, colMa, colTen, txtMaLK.Text.Trim(), txtTenLK.Text.Trim().Replace("'", "''"));
+                Functions.RunSQL(sql, false);
 
-            Functions.LogAction("Thêm danh mục", string.Format("Thêm mục [{0}] vào bảng {1}", txtTenLK.Text.Trim(), table));
-            MessageBox.Show("Thêm mới vào bảng " + table + " thành công!", "Thông Báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            btnLamMoiLK.PerformClick();
-            LoadDataLK();
+                Functions.LogAction("Thêm danh mục", string.Format("Thêm mục [{0}] vào bảng {1}", txtTenLK.Text.Trim(), table));
+                MessageBox.Show("Thêm mới vào bảng " + table + " thành công!", "Thông Báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                btnLamMoiLK.PerformClick();
+                LoadDataLK();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Lỗi khi thêm danh mục vào bảng " + table + ":\n" + ex.Message, "Lỗi Cơ Sở Dữ Liệu", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private void btnSuaLK_Click(object sender, EventArgs e)
         {
-            if (string.IsNullOrWhiteSpace(txtMaLK.Text)) return;
+            if (string.IsNullOrWhiteSpace(txtMaLK.Text))
+            {
+                MessageBox.Show("Vui lòng chọn mục cần sửa trong danh sách!", "Thông Báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+            if (string.IsNullOrWhiteSpace(txtTenLK.Text))
+            {
+                MessageBox.Show("Vui lòng nhập Tên hoặc Thông số linh kiện!", "Thông Báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                txtTenLK.Focus();
+                return;
+            }
+            if (txtTenLK.Text.Trim().Length > 150)
+            {
+                MessageBox.Show("Tên linh kiện không được vượt quá 150 ký tự!", "Cảnh Báo Nhập Liệu", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                txtTenLK.Focus();
+                return;
+            }
+
             string colMa, colTen;
             string table = GetCurrentTableName(out colMa, out colTen);
 
-            string sql = string.Format("UPDATE {0} SET {1} = N'{2}' WHERE {3} = N'{4}'",
-                table, colTen, txtTenLK.Text.Trim().Replace("'", "''"), colMa, txtMaLK.Text.Trim());
-            Functions.RunSQL(sql);
+            try
+            {
+                string sql = string.Format("UPDATE {0} SET {1} = N'{2}' WHERE {3} = N'{4}'",
+                    table, colTen, txtTenLK.Text.Trim().Replace("'", "''"), colMa, txtMaLK.Text.Trim());
+                Functions.RunSQL(sql, false);
 
-            Functions.LogAction("Sửa danh mục", string.Format("Cập nhật mã [{0}] trong bảng {1}", txtMaLK.Text.Trim(), table));
-            MessageBox.Show("Cập nhật thành công!", "Thông Báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            LoadDataLK();
+                Functions.LogAction("Sửa danh mục", string.Format("Cập nhật mã [{0}] trong bảng {1}", txtMaLK.Text.Trim(), table));
+                MessageBox.Show("Cập nhật thành công!", "Thông Báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                LoadDataLK();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Lỗi khi cập nhật danh mục bảng " + table + ":\n" + ex.Message, "Lỗi Cơ Sở Dữ Liệu", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private void btnXoaLK_Click(object sender, EventArgs e)
         {
-            if (string.IsNullOrWhiteSpace(txtMaLK.Text)) return;
+            if (string.IsNullOrWhiteSpace(txtMaLK.Text))
+            {
+                MessageBox.Show("Vui lòng chọn mục cần xóa trong danh sách!", "Thông Báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
             string colMa, colTen;
             string table = GetCurrentTableName(out colMa, out colTen);
 
             if (MessageBox.Show("Bạn có chắc chắn muốn xóa mục này khỏi bảng " + table + "?", "Xác Nhận", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
             {
-                string sql = string.Format("DELETE FROM {0} WHERE {1} = N'{2}'", table, colMa, txtMaLK.Text.Trim());
-                Functions.RunSqlDel(sql);
-                btnLamMoiLK.PerformClick();
-                LoadDataLK();
+                try
+                {
+                    string sql = string.Format("DELETE FROM {0} WHERE {1} = N'{2}'", table, colMa, txtMaLK.Text.Trim());
+                    Functions.RunSqlDel(sql);
+                    btnLamMoiLK.PerformClick();
+                    LoadDataLK();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Lỗi khi xóa danh mục bảng " + table + ":\n" + ex.Message, "Lỗi Cơ Sở Dữ Liệu", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
             }
         }
 

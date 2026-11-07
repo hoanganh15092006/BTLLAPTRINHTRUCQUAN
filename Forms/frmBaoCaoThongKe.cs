@@ -42,6 +42,11 @@ namespace QLBanMayViTinh.Forms
 
             UIThemeHelper.ApplyTheme(this);
 
+            pnlControls.BorderStyle = BorderStyle.None;
+            pnlControls.BackColor = Color.Transparent;
+            pnlThoiGian.BorderStyle = BorderStyle.None;
+            pnlThoiGian.BackColor = Color.Transparent;
+
             pnlCards.Resize += (s, ev) => LayoutSummaryCards();
             pnlFilterCard.Resize += (s, ev) => LayoutActionButtons();
             this.Resize += (s, ev) =>
@@ -66,6 +71,10 @@ namespace QLBanMayViTinh.Forms
             int currentYear = DateTime.Now.Year;
             for (int y = currentYear - 3; y <= currentYear + 1; y++) cboNam.Items.Add(y.ToString());
             cboNam.SelectedItem = currentYear.ToString();
+
+            cboThang.SelectedIndexChanged += (s, ev) => { if (!rdoTonKho.Checked && rdoLocThang.Checked) btnXemBaoCao.PerformClick(); };
+            cboQuy.SelectedIndexChanged += (s, ev) => { if (!rdoTonKho.Checked && rdoLocQuy.Checked) btnXemBaoCao.PerformClick(); };
+            cboNam.SelectedIndexChanged += (s, ev) => { if (!rdoTonKho.Checked) btnXemBaoCao.PerformClick(); };
 
             rdoTonKho.Checked = true;
             HienThiDieuKienLoc();
@@ -131,14 +140,14 @@ namespace QLBanMayViTinh.Forms
             if (rdoTonKho.Checked)
             {
                 pnlThoiGian.Visible = false;
-                pnlFilterCard.Height = 60;
+                pnlFilterCard.Height = 54;
                 lblTieuDeBaoCao.Text = "BÁO CÁO DANH SÁCH MÁY VI TÍNH TỒN KHO (YÊU CẦU 6)";
                 LayoutActionButtons();
             }
             else
             {
                 pnlThoiGian.Visible = true;
-                pnlFilterCard.Height = 110;
+                pnlFilterCard.Height = 98;
                 if (rdoNhapHang.Checked)
                     lblTieuDeBaoCao.Text = "BÁO CÁO DOANH THU NHẬP HÀNG THEO THỜI GIAN (YÊU CẦU 7)";
                 else if (rdoBanHang.Checked)
@@ -147,8 +156,12 @@ namespace QLBanMayViTinh.Forms
                     lblTieuDeBaoCao.Text = "TOP 5 NHÂN VIÊN DOANH THU CAO NHẤT (YÊU CẦU 9)";
                 LayoutActionButtons();
             }
+            pnlFilterCard.Invalidate();
+            pnlControls.Invalidate();
+            pnlThoiGian.Invalidate();
             pnlGridCard.Top = pnlFilterCard.Bottom + spacing;
             pnlGridCard.Height = pnlBottom.Top - pnlGridCard.Top - spacing;
+            pnlGridCard.Invalidate();
 
             LayoutActionButtons();
         }
@@ -157,7 +170,7 @@ namespace QLBanMayViTinh.Forms
         {
             if (pnlFilterCard == null || pnlFilterCard.ClientSize.Width <= 0) return;
             int rightEdge = pnlFilterCard.ClientSize.Width - 12;
-            int btnY = pnlThoiGian.Visible ? 50 : 8;
+            int btnY = pnlThoiGian.Visible ? 48 : 8;
             btnDong.Size = new Size(85, 36);
             btnXuatExcel.Size = new Size(105, 36);
             btnXemBaoCao.Size = new Size(115, 36);
@@ -171,22 +184,38 @@ namespace QLBanMayViTinh.Forms
 
         private void rdoTonKho_CheckedChanged(object sender, EventArgs e)
         {
-            HienThiDieuKienLoc();
+            if (rdoTonKho.Checked)
+            {
+                HienThiDieuKienLoc();
+                btnXemBaoCao.PerformClick();
+            }
         }
 
         private void rdoNhapHang_CheckedChanged(object sender, EventArgs e)
         {
-            HienThiDieuKienLoc();
+            if (rdoNhapHang.Checked)
+            {
+                HienThiDieuKienLoc();
+                btnXemBaoCao.PerformClick();
+            }
         }
 
         private void rdoBanHang_CheckedChanged(object sender, EventArgs e)
         {
-            HienThiDieuKienLoc();
+            if (rdoBanHang.Checked)
+            {
+                HienThiDieuKienLoc();
+                btnXemBaoCao.PerformClick();
+            }
         }
 
         private void rdoTop5NV_CheckedChanged(object sender, EventArgs e)
         {
-            HienThiDieuKienLoc();
+            if (rdoTop5NV.Checked)
+            {
+                HienThiDieuKienLoc();
+                btnXemBaoCao.PerformClick();
+            }
         }
 
         private void rdoLocThoiGian_CheckedChanged(object sender, EventArgs e)
@@ -194,6 +223,11 @@ namespace QLBanMayViTinh.Forms
             cboThang.Enabled = rdoLocThang.Checked;
             cboQuy.Enabled = rdoLocQuy.Checked;
             cboNam.Enabled = true;
+            RadioButton r = sender as RadioButton;
+            if (r != null && r.Checked && !rdoTonKho.Checked)
+            {
+                btnXemBaoCao.PerformClick();
+            }
         }
 
         private void btnXemBaoCao_Click(object sender, EventArgs e)

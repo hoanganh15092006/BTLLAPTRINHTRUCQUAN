@@ -1,4 +1,4 @@
-﻿namespace QLBanMayViTinh.Forms
+namespace QLBanMayViTinh.Forms
 {
     partial class frmNhatKyHoatDong
     {
@@ -195,7 +195,7 @@
             this.lblAlertTitle.Padding = new System.Windows.Forms.Padding(15, 8, 0, 0);
             this.lblAlertTitle.Size = new System.Drawing.Size(350, 35);
             this.lblAlertTitle.TabIndex = 0;
-            this.lblAlertTitle.Text = "⚠️ CẢNH BÁO TỒN KHO THẤP (<= 5 CÁI)";
+            this.lblAlertTitle.Text = "[!] CẢNH BÁO TỒN KHO THẤP (<= 5 CÁI)";
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(241, 245, 249);

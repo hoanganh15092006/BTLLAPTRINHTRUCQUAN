@@ -39,6 +39,9 @@ namespace QLBanMayViTinh.Forms
 
             UIThemeHelper.ApplyTheme(this);
 
+            txtSoLuong.KeyPress += (s, ev) => Functions.OnlyInteger(ev);
+            txtDonGia.KeyPress += (s, ev) => Functions.OnlyInteger(ev);
+
             pnlBottom.Resize += (s, ev) => LayoutBottomPanel();
             pnlMasterCard.Resize += (s, ev) => LayoutMasterCard();
             pnlDetailCard.Resize += (s, ev) => LayoutDetailCard();
@@ -131,77 +134,51 @@ namespace QLBanMayViTinh.Forms
         }
 
         private void LayoutDetailCard()
-
         {
-
             if (pnlDetailCard == null || pnlDetailCard.ClientSize.Width <= 0) return;
-
             int w = pnlDetailCard.ClientSize.Width;
-
             int leftMargin = 16;
-
             int rightMargin = w - 16;
-
             int curX = leftMargin;
 
+            lblMaMay.AutoSize = true;
             lblMaMay.Location = new Point(curX, 38);
-
-            lblMaMay.Size = new Size(78, 20);
-
-            curX += 80;
+            curX = lblMaMay.Right + 6;
 
             cboMaMay.Location = new Point(curX, 35);
-
             cboMaMay.Width = Math.Max(110, (w - 200) * 12 / 100);
-
             curX = cboMaMay.Right + 12;
 
+            lblTenMay.AutoSize = true;
             lblTenMay.Location = new Point(curX, 38);
-
-            lblTenMay.Size = new Size(68, 20);
-
-            curX += 70;
+            curX = lblTenMay.Right + 6;
 
             txtTenMay.Location = new Point(curX, 35);
-
-            txtTenMay.Width = Math.Max(140, (w - 200) * 22 / 100);
-
+            txtTenMay.Width = Math.Max(140, (w - 200) * 20 / 100);
             curX = txtTenMay.Right + 12;
 
+            lblSoLuong.AutoSize = true;
             lblSoLuong.Location = new Point(curX, 38);
-
-            lblSoLuong.Size = new Size(68, 20);
-
-            curX += 70;
+            curX = lblSoLuong.Right + 6;
 
             txtSoLuong.Location = new Point(curX, 35);
-
             txtSoLuong.Width = 65;
-
             curX = txtSoLuong.Right + 12;
 
+            lblDonGia.AutoSize = true;
             lblDonGia.Location = new Point(curX, 38);
-
-            lblDonGia.Size = new Size(68, 20);
-
-            curX += 70;
+            curX = lblDonGia.Right + 6;
 
             txtDonGia.Location = new Point(curX, 35);
-
             txtDonGia.Width = Math.Max(110, (w - 200) * 15 / 100);
-
             curX = txtDonGia.Right + 12;
 
+            lblThanhTien.AutoSize = true;
             lblThanhTien.Location = new Point(curX, 38);
-
-            lblThanhTien.Size = new Size(78, 20);
-
-            curX += 80;
+            curX = lblThanhTien.Right + 6;
 
             txtThanhTien.Location = new Point(curX, 35);
-
             txtThanhTien.Width = Math.Max(120, rightMargin - curX);
-
         }
 
 
@@ -382,47 +359,68 @@ namespace QLBanMayViTinh.Forms
                 return;
             }
 
-            int sl = int.Parse(txtSoLuong.Text.Trim());
-            decimal dg = decimal.Parse(txtDonGia.Text.Trim().Replace(",", ""));
-            decimal tt = sl * dg;
-
-            string checkHD = "SELECT MaHDN FROM HoaDonNhap WHERE MaHDN = N'" + txtMaHDN.Text.Trim() + "'";
-            if (!Functions.CheckKey(checkHD))
+            int sl;
+            if (!int.TryParse(txtSoLuong.Text.Trim(), out sl) || sl <= 0)
             {
-                string sqlInsertHDN = string.Format(@"INSERT INTO HoaDonNhap (MaHDN, NgayNhap, MaNV, MaNCC, TongTien)
-                                                     VALUES (N'{0}', '{1:yyyy-MM-dd HH:mm:ss}', N'{2}', N'{3}', 0)",
-                    txtMaHDN.Text.Trim(), dtpNgayNhap.Value, cboMaNV.SelectedValue, cboMaNCC.SelectedValue);
-                Functions.RunSQL(sqlInsertHDN);
-            }
-
-            string checkItem = string.Format("SELECT MaMayVT FROM ChiTietHDN WHERE MaHDN = N'{0}' AND MaMayVT = N'{1}'",
-                txtMaHDN.Text.Trim(), cboMaMay.SelectedValue);
-            if (Functions.CheckKey(checkItem))
-            {
-                MessageBox.Show("Mặt hàng này đã có trong hóa đơn nhập, vui lòng nhấp đúp để xóa sửa!", "Trùng Hàng", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Số lượng nhập phải là số nguyên dương lớn hơn 0!", "Cảnh Báo Nhập Liệu", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                txtSoLuong.Focus();
                 return;
             }
 
-            string sqlInsertCT = string.Format(@"INSERT INTO ChiTietHDN (MaHDN, MaMayVT, SoLuong, DonGia, ThanhTien)
-                                                 VALUES (N'{0}', N'{1}', {2}, {3}, {4})",
-                txtMaHDN.Text.Trim(), cboMaMay.SelectedValue, sl, dg, tt);
-            Functions.RunSQL(sqlInsertCT);
-
-            LoadChiTietGrid(txtMaHDN.Text.Trim());
-
-            string tongTienStr = Functions.GetFieldValues("SELECT TongTien FROM HoaDonNhap WHERE MaHDN = N'" + txtMaHDN.Text.Trim() + "'");
-            if (decimal.TryParse(tongTienStr, out decimal tongTien))
+            decimal dg;
+            string cleanDg = txtDonGia.Text.Trim().Replace(",", "").Replace(".", "").Replace("VNĐ", "").Replace("đ", "").Trim();
+            if (!decimal.TryParse(cleanDg, out dg) || dg < 0)
             {
-                txtTongTien.Text = string.Format("{0:N0}", tongTien);
-                lblBangChu.Text = "Bằng chữ: " + Functions.ChuyenSoSangChu((double)tongTien);
+                MessageBox.Show("Đơn giá nhập không hợp lệ hoặc là số âm!", "Cảnh Báo Nhập Liệu", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                txtDonGia.Focus();
+                return;
             }
+            decimal tt = sl * dg;
 
-            cboMaMay.SelectedIndex = -1;
-            txtTenMay.Text = "";
-            txtSoLuong.Text = "";
-            txtDonGia.Text = "";
-            txtThanhTien.Text = "0";
-            btnInHD.Enabled = true;
+            try
+            {
+                string checkHD = "SELECT MaHDN FROM HoaDonNhap WHERE MaHDN = N'" + txtMaHDN.Text.Trim() + "'";
+                if (!Functions.CheckKey(checkHD))
+                {
+                    string sqlInsertHDN = string.Format(@"INSERT INTO HoaDonNhap (MaHDN, NgayNhap, MaNV, MaNCC, TongTien)
+                                                         VALUES (N'{0}', '{1:yyyy-MM-dd HH:mm:ss}', N'{2}', N'{3}', 0)",
+                        txtMaHDN.Text.Trim(), dtpNgayNhap.Value, cboMaNV.SelectedValue, cboMaNCC.SelectedValue);
+                    Functions.RunSQL(sqlInsertHDN, false);
+                }
+
+                string checkItem = string.Format("SELECT MaMayVT FROM ChiTietHDN WHERE MaHDN = N'{0}' AND MaMayVT = N'{1}'",
+                    txtMaHDN.Text.Trim(), cboMaMay.SelectedValue);
+                if (Functions.CheckKey(checkItem))
+                {
+                    MessageBox.Show("Mặt hàng này đã có trong hóa đơn nhập, vui lòng nhấp đúp để xóa sửa!", "Trùng Hàng", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+
+                string sqlInsertCT = string.Format(@"INSERT INTO ChiTietHDN (MaHDN, MaMayVT, SoLuong, DonGia, ThanhTien)
+                                                     VALUES (N'{0}', N'{1}', {2}, {3}, {4})",
+                    txtMaHDN.Text.Trim(), cboMaMay.SelectedValue, sl, dg, tt);
+                Functions.RunSQL(sqlInsertCT, false);
+
+                LoadChiTietGrid(txtMaHDN.Text.Trim());
+
+                string tongTienStr = Functions.GetFieldValues("SELECT TongTien FROM HoaDonNhap WHERE MaHDN = N'" + txtMaHDN.Text.Trim() + "'");
+                if (decimal.TryParse(tongTienStr, out decimal tongTien))
+                {
+                    txtTongTien.Text = string.Format("{0:N0}", tongTien);
+                    lblBangChu.Text = "Bằng chữ: " + Functions.ChuyenSoSangChu((double)tongTien);
+                }
+
+                cboMaMay.SelectedIndex = -1;
+                txtTenMay.Text = "";
+                txtSoLuong.Text = "";
+                txtDonGia.Text = "";
+                txtThanhTien.Text = "0";
+                btnInHD.Enabled = true;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Lỗi khi lưu chi tiết hóa đơn nhập:\n" + ex.Message, "Lỗi Cơ Sở Dữ Liệu", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private void dgvChiTiet_CellDoubleClick(object sender, DataGridViewCellEventArgs e)

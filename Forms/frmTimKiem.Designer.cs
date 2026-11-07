@@ -93,14 +93,16 @@ namespace QLBanMayViTinh.Forms
             this.lblSubTieuDe.Text = "Chọn danh mục cần tra cứu bên dưới và nhập tiêu chí lọc thông minh";
 
             this.pnlRadioSwitch.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.pnlRadioSwitch.Location = new System.Drawing.Point(500, 12);
-            this.pnlRadioSwitch.Size = new System.Drawing.Size(515, 45);
+            this.pnlRadioSwitch.Location = new System.Drawing.Point(450, 12);
+            this.pnlRadioSwitch.Size = new System.Drawing.Size(565, 45);
             this.pnlRadioSwitch.BackColor = System.Drawing.Color.FromArgb(241, 245, 249);
             this.pnlRadioSwitch.Controls.Add(this.rdoHoaDonBan);
             this.pnlRadioSwitch.Controls.Add(this.rdoHoaDonNhap);
             this.pnlRadioSwitch.Controls.Add(this.rdoMayViTinh);
 
+            this.rdoMayViTinh.Name = "rdoMayViTinh";
             this.rdoMayViTinh.Checked = true;
+            this.rdoMayViTinh.AutoSize = true;
             this.rdoMayViTinh.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
             this.rdoMayViTinh.ForeColor = System.Drawing.Color.FromArgb(15, 23, 42);
             this.rdoMayViTinh.Location = new System.Drawing.Point(10, 10);
@@ -109,18 +111,22 @@ namespace QLBanMayViTinh.Forms
             this.rdoMayViTinh.UseVisualStyleBackColor = true;
             this.rdoMayViTinh.CheckedChanged += new System.EventHandler(this.rdoMayViTinh_CheckedChanged);
 
+            this.rdoHoaDonNhap.Name = "rdoHoaDonNhap";
+            this.rdoHoaDonNhap.AutoSize = true;
             this.rdoHoaDonNhap.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
             this.rdoHoaDonNhap.ForeColor = System.Drawing.Color.FromArgb(15, 23, 42);
-            this.rdoHoaDonNhap.Location = new System.Drawing.Point(180, 10);
+            this.rdoHoaDonNhap.Location = new System.Drawing.Point(175, 10);
             this.rdoHoaDonNhap.Size = new System.Drawing.Size(155, 24);
             this.rdoHoaDonNhap.Text = " Hóa Đơn Nhập";
             this.rdoHoaDonNhap.UseVisualStyleBackColor = true;
             this.rdoHoaDonNhap.CheckedChanged += new System.EventHandler(this.rdoHoaDonNhap_CheckedChanged);
 
+            this.rdoHoaDonBan.Name = "rdoHoaDonBan";
+            this.rdoHoaDonBan.AutoSize = true;
             this.rdoHoaDonBan.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
             this.rdoHoaDonBan.ForeColor = System.Drawing.Color.FromArgb(15, 23, 42);
-            this.rdoHoaDonBan.Location = new System.Drawing.Point(345, 10);
-            this.rdoHoaDonBan.Size = new System.Drawing.Size(165, 24);
+            this.rdoHoaDonBan.Location = new System.Drawing.Point(340, 10);
+            this.rdoHoaDonBan.Size = new System.Drawing.Size(185, 24);
             this.rdoHoaDonBan.Text = " Hóa Đơn Bán (YC5)";
             this.rdoHoaDonBan.UseVisualStyleBackColor = true;
             this.rdoHoaDonBan.CheckedChanged += new System.EventHandler(this.rdoHoaDonBan_CheckedChanged);
@@ -148,24 +154,28 @@ namespace QLBanMayViTinh.Forms
             this.pnlMayTinh.Controls.Add(this.txtMaMay);
             this.pnlMayTinh.Controls.Add(this.lblMaMay);
 
+            this.lblMaMay.AutoSize = true;
             this.lblMaMay.Location = new System.Drawing.Point(14, 20);
             this.lblMaMay.Size = new System.Drawing.Size(65, 20);
             this.lblMaMay.Text = "Mã máy:";
             this.txtMaMay.Location = new System.Drawing.Point(82, 18);
             this.txtMaMay.Size = new System.Drawing.Size(140, 25);
 
+            this.lblTenMay.AutoSize = true;
             this.lblTenMay.Location = new System.Drawing.Point(245, 20);
             this.lblTenMay.Size = new System.Drawing.Size(65, 20);
             this.lblTenMay.Text = "Tên máy:";
             this.txtTenMay.Location = new System.Drawing.Point(315, 18);
             this.txtTenMay.Size = new System.Drawing.Size(180, 25);
 
+            this.lblLoai.AutoSize = true;
             this.lblLoai.Location = new System.Drawing.Point(520, 20);
             this.lblLoai.Size = new System.Drawing.Size(70, 20);
             this.lblLoai.Text = "Loại máy:";
-            this.cboLoai.Location = new System.Drawing.Point(590, 18);
-            this.cboLoai.Size = new System.Drawing.Size(170, 25);
+            this.cboLoai.Location = new System.Drawing.Point(595, 18);
+            this.cboLoai.Size = new System.Drawing.Size(165, 25);
 
+            this.lblHangSX.AutoSize = true;
             this.lblHangSX.Location = new System.Drawing.Point(785, 20);
             this.lblHangSX.Size = new System.Drawing.Size(65, 20);
             this.lblHangSX.Text = "Hãng SX:";
@@ -189,31 +199,36 @@ namespace QLBanMayViTinh.Forms
             this.pnlHoaDon.Controls.Add(this.txtMaHD);
             this.pnlHoaDon.Controls.Add(this.lblMaHD);
 
+            this.lblMaHD.AutoSize = true;
             this.lblMaHD.Location = new System.Drawing.Point(14, 12);
             this.lblMaHD.Size = new System.Drawing.Size(65, 20);
             this.lblMaHD.Text = "Mã HĐ:";
-            this.txtMaHD.Location = new System.Drawing.Point(82, 10);
-            this.txtMaHD.Size = new System.Drawing.Size(130, 25);
+            this.txtMaHD.Location = new System.Drawing.Point(75, 10);
+            this.txtMaHD.Size = new System.Drawing.Size(120, 25);
 
-            this.lblMatHang.Location = new System.Drawing.Point(230, 12);
+            this.lblMatHang.AutoSize = true;
+            this.lblMatHang.Location = new System.Drawing.Point(208, 12);
             this.lblMatHang.Size = new System.Drawing.Size(75, 20);
             this.lblMatHang.Text = "Mặt hàng:";
-            this.cboMatHang.Location = new System.Drawing.Point(310, 10);
-            this.cboMatHang.Size = new System.Drawing.Size(185, 25);
+            this.cboMatHang.Location = new System.Drawing.Point(285, 10);
+            this.cboMatHang.Size = new System.Drawing.Size(165, 25);
 
-            this.lblNhanVien.Location = new System.Drawing.Point(515, 12);
+            this.lblNhanVien.AutoSize = true;
+            this.lblNhanVien.Location = new System.Drawing.Point(465, 12);
             this.lblNhanVien.Size = new System.Drawing.Size(75, 20);
             this.lblNhanVien.Text = "Nhân viên:";
-            this.cboNhanVien.Location = new System.Drawing.Point(595, 10);
-            this.cboNhanVien.Size = new System.Drawing.Size(165, 25);
+            this.cboNhanVien.Location = new System.Drawing.Point(545, 10);
+            this.cboNhanVien.Size = new System.Drawing.Size(155, 25);
 
-            this.lblDoiTac.Location = new System.Drawing.Point(780, 12);
-            this.lblDoiTac.Size = new System.Drawing.Size(90, 20);
-            this.lblDoiTac.Text = "Đối tác:";
+            this.lblDoiTac.AutoSize = true;
+            this.lblDoiTac.Location = new System.Drawing.Point(715, 12);
+            this.lblDoiTac.Size = new System.Drawing.Size(115, 20);
+            this.lblDoiTac.Text = "Nhà Cung Cấp:";
 
-            this.cboDoiTac.Location = new System.Drawing.Point(875, 10);
-            this.cboDoiTac.Size = new System.Drawing.Size(140, 25);
+            this.cboDoiTac.Location = new System.Drawing.Point(835, 10);
+            this.cboDoiTac.Size = new System.Drawing.Size(165, 25);
 
+            this.chkNgay.AutoSize = true;
             this.chkNgay.Location = new System.Drawing.Point(14, 48);
             this.chkNgay.Size = new System.Drawing.Size(110, 24);
             this.chkNgay.Text = "Lọc từ ngày:";
@@ -223,7 +238,8 @@ namespace QLBanMayViTinh.Forms
             this.dtpTuNgay.Size = new System.Drawing.Size(135, 25);
             this.dtpTuNgay.Format = System.Windows.Forms.DateTimePickerFormat.Short;
 
-            this.lblDenNgay.Location = new System.Drawing.Point(275, 50);
+            this.lblDenNgay.AutoSize = true;
+            this.lblDenNgay.Location = new System.Drawing.Point(280, 50);
             this.lblDenNgay.Size = new System.Drawing.Size(70, 20);
             this.lblDenNgay.Text = "đến ngày:";
 
@@ -244,16 +260,19 @@ namespace QLBanMayViTinh.Forms
             this.pnlActions.Size = new System.Drawing.Size(1030, 50);
             this.pnlActions.TabIndex = 2;
 
+            this.btnTimKiem.Name = "btnTimKiem";
             this.btnTimKiem.Location = new System.Drawing.Point(12, 8);
             this.btnTimKiem.Size = new System.Drawing.Size(135, 36);
             this.btnTimKiem.Text = "Bắt Đầu Tìm";
             this.btnTimKiem.Click += new System.EventHandler(this.btnTimKiem_Click);
 
+            this.btnLamMoi.Name = "btnLamMoi";
             this.btnLamMoi.Location = new System.Drawing.Point(160, 8);
             this.btnLamMoi.Size = new System.Drawing.Size(120, 36);
             this.btnLamMoi.Text = "Đặt Lại";
             this.btnLamMoi.Click += new System.EventHandler(this.btnLamMoi_Click);
 
+            this.btnDong.Name = "btnDong";
             this.btnDong.Location = new System.Drawing.Point(292, 8);
             this.btnDong.Size = new System.Drawing.Size(95, 36);
             this.btnDong.Text = "Đóng";
@@ -270,7 +289,7 @@ namespace QLBanMayViTinh.Forms
             this.pnlGridCard.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pnlGridCard.Location = new System.Drawing.Point(0, 227);
             this.pnlGridCard.Name = "pnlGridCard";
-            this.pnlGridCard.Padding = new System.Windows.Forms.Padding(0, 8, 0, 0);
+            this.pnlGridCard.Padding = new System.Windows.Forms.Padding(0);
             this.pnlGridCard.Controls.Add(this.dgvKetQua);
             this.pnlGridCard.TabIndex = 3;
 

@@ -174,7 +174,7 @@ namespace QLBanMayViTinh.Forms
             this.btnCaiDatDB.Name = "btnCaiDatDB";
             this.btnCaiDatDB.Size = new System.Drawing.Size(340, 34);
             this.btnCaiDatDB.TabIndex = 13;
-            this.btnCaiDatDB.Text = "⚙️ Cấu hình kết nối SQL Server";
+            this.btnCaiDatDB.Text = "Cấu hình kết nối SQL Server";
             this.btnCaiDatDB.UseVisualStyleBackColor = true;
             this.btnCaiDatDB.Click += new System.EventHandler(this.btnCaiDatDB_Click);
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);

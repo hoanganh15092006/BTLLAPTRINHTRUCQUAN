@@ -1,4 +1,4 @@
-﻿USE master;
+USE master;
 GO
 
 IF EXISTS (SELECT name FROM sys.databases WHERE name = N'QLBanMayViTinh')
@@ -90,22 +90,22 @@ CREATE TABLE NhanVien (
     TenNV NVARCHAR(100) NOT NULL,
     NgaySinh DATE NULL,
     GioiTinh NVARCHAR(10) NULL,
-    DiaChi NVARCHAR(250) NULL,
-    DienThoai NVARCHAR(20) NULL
+    DiaChi NVARCHAR(500) NULL,
+    DienThoai NVARCHAR(255) NULL
 );
 
 CREATE TABLE KhachHang (
     MaKhach NVARCHAR(20) NOT NULL PRIMARY KEY,
     TenKhach NVARCHAR(100) NOT NULL,
-    DiaChi NVARCHAR(250) NULL,
-    DienThoai NVARCHAR(20) NULL
+    DiaChi NVARCHAR(500) NULL,
+    DienThoai NVARCHAR(255) NULL
 );
 
 CREATE TABLE NhaCungCap (
     MaNCC NVARCHAR(20) NOT NULL PRIMARY KEY,
     TenNCC NVARCHAR(150) NOT NULL,
-    DiaChi NVARCHAR(250) NULL,
-    DienThoai NVARCHAR(20) NULL
+    DiaChi NVARCHAR(500) NULL,
+    DienThoai NVARCHAR(255) NULL
 );
 
 CREATE TABLE MayViTinh (

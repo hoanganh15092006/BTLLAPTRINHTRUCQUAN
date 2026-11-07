@@ -217,7 +217,6 @@ namespace QLBanMayViTinh.Forms
             this.lblGiaBan.Text = "Giá bán:";
             this.txtSoLuong.Location = new System.Drawing.Point(85, 202);
             this.txtSoLuong.Name = "txtSoLuong";
-            this.txtSoLuong.ReadOnly = true;
             this.txtSoLuong.Size = new System.Drawing.Size(65, 24);
             this.txtSoLuong.TabIndex = 13;
             this.lblSoLuong.Location = new System.Drawing.Point(14, 204);
@@ -484,7 +483,7 @@ namespace QLBanMayViTinh.Forms
             this.pnlGridCard.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pnlGridCard.Location = new System.Drawing.Point(0, 406);
             this.pnlGridCard.Name = "pnlGridCard";
-            this.pnlGridCard.Padding = new System.Windows.Forms.Padding(0, 10, 0, 0);
+            this.pnlGridCard.Padding = new System.Windows.Forms.Padding(0);
             this.pnlGridCard.Size = new System.Drawing.Size(1822, 394);
             this.pnlGridCard.TabIndex = 3;
             this.dgvMayViTinh.Dock = System.Windows.Forms.DockStyle.Fill;

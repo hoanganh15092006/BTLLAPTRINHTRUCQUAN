@@ -92,6 +92,11 @@ namespace QLBanMayViTinh.Forms
 
             UIThemeHelper.ApplyTheme(this);
 
+            txtGiaNhap.KeyPress += (s, ev) => Functions.OnlyInteger(ev);
+            txtGiaBan.KeyPress += (s, ev) => Functions.OnlyInteger(ev);
+            txtSoLuong.KeyPress += (s, ev) => Functions.OnlyInteger(ev);
+            txtBaoHanh.KeyPress += (s, ev) => Functions.OnlyInteger(ev);
+
             pnlKpiBar.Resize += (s, ev) => UpdateKpiCards();
 
             pnlHardwareCard.Resize += (s, ev) => LayoutHardwareCard();
@@ -117,6 +122,8 @@ namespace QLBanMayViTinh.Forms
             ResetValues();
 
             LoadDataGridView();
+
+            txtGiaNhap.TextChanged += txtGiaNhap_TextChanged;
 
         }
 
@@ -620,229 +627,270 @@ namespace QLBanMayViTinh.Forms
 
 
         private void btnLuu_Click(object sender, EventArgs e)
-
         {
-
             if (string.IsNullOrWhiteSpace(txtMaMay.Text))
-
             {
-
                 MessageBox.Show("Vui lòng nhập Mã máy vi tính!", "Thông Báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-
                 txtMaMay.Focus();
-
                 return;
-
             }
-
+            if (txtMaMay.Text.Trim().Length > 20)
+            {
+                MessageBox.Show("Mã máy vi tính không được vượt quá 20 ký tự!", "Cảnh Báo Nhập Liệu", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                txtMaMay.Focus();
+                return;
+            }
             if (string.IsNullOrWhiteSpace(txtTenMay.Text))
-
             {
-
                 MessageBox.Show("Vui lòng nhập Tên máy vi tính!", "Thông Báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-
                 txtTenMay.Focus();
-
                 return;
-
             }
-
-            if (cboMaLoai.SelectedIndex == -1 || cboMaHangSX.SelectedIndex == -1 || cboMaChip.SelectedIndex == -1 || cboMaRAM.SelectedIndex == -1)
-
+            if (txtTenMay.Text.Trim().Length > 150)
             {
-
-                MessageBox.Show("Vui lòng chọn đầy đủ các thông số cơ bản (Loại máy, Hãng SX, Chip, RAM)!", "Thông Báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-
+                MessageBox.Show("Tên máy vi tính không được vượt quá 150 ký tự!", "Cảnh Báo Nhập Liệu", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                txtTenMay.Focus();
                 return;
-
             }
-
-
+            if (cboMaLoai.SelectedIndex == -1 || cboMaHangSX.SelectedIndex == -1 || cboMaChip.SelectedIndex == -1 || cboMaRAM.SelectedIndex == -1)
+            {
+                MessageBox.Show("Vui lòng chọn đầy đủ các thông số cơ bản (Loại máy, Hãng SX, Chip, RAM)!", "Thông Báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
 
             string checkSql = "SELECT MaMayVT FROM MayViTinh WHERE MaMayVT = N'" + txtMaMay.Text.Trim() + "'";
-
             if (Functions.CheckKey(checkSql))
-
             {
-
                 MessageBox.Show("Mã máy vi tính này đã tồn tại, vui lòng nhập mã khác!", "Trùng Khóa", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-
                 txtMaMay.Focus();
-
                 return;
-
             }
 
-
-
-            string sqlInsert = @"INSERT INTO MayViTinh
-
-                (MaMayVT, TenMayVT, MaLoai, MaChip, MaOCung, MaDungLuong, MaTocDo, MaOCD, MaManHinh, MaCoMH,
-
-                 MaChuot, MaBanPhim, MaUSB, MaRAM, MaLoa, MaHangSX, GiaNhap, GiaBan, ThoiGianBH, SoLuong, Anh, GhiChu)
-
-                VALUES (@MaMayVT, @TenMayVT, @MaLoai, @MaChip, @MaOCung, @MaDungLuong, @MaTocDo, @MaOCD, @MaManHinh, @MaCoMH,
-
-                        @MaChuot, @MaBanPhim, @MaUSB, @MaRAM, @MaLoa, @MaHangSX, 0, 0, @ThoiGianBH, 0, @Anh, @GhiChu)";
-
-
-
             int bh = 12;
-
-            int.TryParse(txtBaoHanh.Text.Trim(), out bh);
-
-
-
-            SqlParameter[] parameters = new SqlParameter[]
-
+            if (!int.TryParse(txtBaoHanh.Text.Trim(), out bh) || bh < 0 || bh > 120)
             {
+                MessageBox.Show("Thời gian bảo hành phải là số tháng hợp lệ (từ 0 đến 120 tháng)!", "Cảnh Báo Nhập Liệu", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                txtBaoHanh.Focus();
+                return;
+            }
 
-                new SqlParameter("@MaMayVT", txtMaMay.Text.Trim()),
+            decimal giaNhap = CleanDecimal(txtGiaNhap.Text);
+            decimal giaBan = CleanDecimal(txtGiaBan.Text);
+            if (giaNhap < 0)
+            {
+                MessageBox.Show("Giá nhập không được là số âm!", "Cảnh Báo Nhập Liệu", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                txtGiaNhap.Focus();
+                return;
+            }
+            if (giaBan < 0)
+            {
+                MessageBox.Show("Giá bán không được là số âm!", "Cảnh Báo Nhập Liệu", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                txtGiaBan.Focus();
+                return;
+            }
+            if (giaBan == 0 && giaNhap > 0) giaBan = Math.Round(giaNhap * 1.10m, 0);
 
-                new SqlParameter("@TenMayVT", txtTenMay.Text.Trim()),
+            if (giaBan > 0 && giaNhap > 0 && giaBan < giaNhap)
+            {
+                if (MessageBox.Show("Giá bán (" + giaBan.ToString("N0") + " VNĐ) đang nhỏ hơn giá nhập (" + giaNhap.ToString("N0") + " VNĐ)!\nBạn có chắc chắn muốn thiết lập mức giá bán này không?",
+                    "Cảnh Báo Giá Bán", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) != DialogResult.Yes)
+                {
+                    txtGiaBan.Focus();
+                    return;
+                }
+            }
 
-                new SqlParameter("@MaLoai", cboMaLoai.SelectedValue ?? "LM01"),
+            int soLuong = CleanInt(txtSoLuong.Text);
+            if (soLuong < 0)
+            {
+                MessageBox.Show("Số lượng tồn kho không được là số âm!", "Cảnh Báo Nhập Liệu", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                txtSoLuong.Focus();
+                return;
+            }
 
-                new SqlParameter("@MaChip", cboMaChip.SelectedValue ?? "CPU01"),
+            try
+            {
+                string sqlInsert = @"INSERT INTO MayViTinh
+                    (MaMayVT, TenMayVT, MaLoai, MaChip, MaOCung, MaDungLuong, MaTocDo, MaOCD, MaManHinh, MaCoMH,
+                     MaChuot, MaBanPhim, MaUSB, MaRAM, MaLoa, MaHangSX, GiaNhap, GiaBan, ThoiGianBH, SoLuong, Anh, GhiChu)
+                    VALUES (@MaMayVT, @TenMayVT, @MaLoai, @MaChip, @MaOCung, @MaDungLuong, @MaTocDo, @MaOCD, @MaManHinh, @MaCoMH,
+                            @MaChuot, @MaBanPhim, @MaUSB, @MaRAM, @MaLoa, @MaHangSX, @GiaNhap, @GiaBan, @ThoiGianBH, @SoLuong, @Anh, @GhiChu)";
 
-                new SqlParameter("@MaOCung", cboMaOCung.SelectedValue ?? "OC01"),
+                SqlParameter[] parameters = new SqlParameter[]
+                {
+                    new SqlParameter("@MaMayVT", txtMaMay.Text.Trim()),
+                    new SqlParameter("@TenMayVT", txtTenMay.Text.Trim()),
+                    new SqlParameter("@MaLoai", cboMaLoai.SelectedValue ?? "LM01"),
+                    new SqlParameter("@MaChip", cboMaChip.SelectedValue ?? "CPU01"),
+                    new SqlParameter("@MaOCung", cboMaOCung.SelectedValue ?? "OC01"),
+                    new SqlParameter("@MaDungLuong", cboMaDungLuong.SelectedValue ?? "DL01"),
+                    new SqlParameter("@MaTocDo", cboMaTocDo.SelectedValue ?? "TD01"),
+                    new SqlParameter("@MaOCD", cboMaOCD.SelectedValue ?? "CD01"),
+                    new SqlParameter("@MaManHinh", cboMaManHinh.SelectedValue ?? "MH01"),
+                    new SqlParameter("@MaCoMH", cboMaCoMH.SelectedValue ?? "CO01"),
+                    new SqlParameter("@MaChuot", cboMaChuot.SelectedValue ?? "CH01"),
+                    new SqlParameter("@MaBanPhim", cboMaBanPhim.SelectedValue ?? "BP01"),
+                    new SqlParameter("@MaUSB", cboMaUSB.SelectedValue ?? "USB01"),
+                    new SqlParameter("@MaRAM", cboMaRAM.SelectedValue ?? "RAM01"),
+                    new SqlParameter("@MaLoa", cboMaLoa.SelectedValue ?? "LOA01"),
+                    new SqlParameter("@MaHangSX", cboMaHangSX.SelectedValue ?? "HSX01"),
+                    new SqlParameter("@GiaNhap", giaNhap),
+                    new SqlParameter("@GiaBan", giaBan),
+                    new SqlParameter("@ThoiGianBH", bh),
+                    new SqlParameter("@SoLuong", soLuong),
+                    new SqlParameter("@Anh", SqlDbType.VarBinary, -1) { Value = (object)currentImageBytes ?? DBNull.Value },
+                    new SqlParameter("@GhiChu", txtGhiChu.Text.Trim())
+                };
 
-                new SqlParameter("@MaDungLuong", cboMaDungLuong.SelectedValue ?? "DL01"),
-
-                new SqlParameter("@MaTocDo", cboMaTocDo.SelectedValue ?? "TD01"),
-
-                new SqlParameter("@MaOCD", cboMaOCD.SelectedValue ?? "CD01"),
-
-                new SqlParameter("@MaManHinh", cboMaManHinh.SelectedValue ?? "MH01"),
-
-                new SqlParameter("@MaCoMH", cboMaCoMH.SelectedValue ?? "CO01"),
-
-                new SqlParameter("@MaChuot", cboMaChuot.SelectedValue ?? "CH01"),
-
-                new SqlParameter("@MaBanPhim", cboMaBanPhim.SelectedValue ?? "BP01"),
-
-                new SqlParameter("@MaUSB", cboMaUSB.SelectedValue ?? "USB01"),
-
-                new SqlParameter("@MaRAM", cboMaRAM.SelectedValue ?? "RAM01"),
-
-                new SqlParameter("@MaLoa", cboMaLoa.SelectedValue ?? "LOA01"),
-
-                new SqlParameter("@MaHangSX", cboMaHangSX.SelectedValue ?? "HSX01"),
-
-                new SqlParameter("@ThoiGianBH", bh),
-
-                new SqlParameter("@Anh", SqlDbType.VarBinary, -1) { Value = (object)currentImageBytes ?? DBNull.Value },
-
-                new SqlParameter("@GhiChu", txtGhiChu.Text.Trim())
-
-            };
-
-
-
-            Functions.RunSQL(sqlInsert, parameters);
-
-            MessageBox.Show("Thêm mới máy vi tính thành công!", "Thông Báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
-
-            LoadDataGridView();
-
-            ResetValues();
-
+                Functions.RunSQL(sqlInsert, parameters, false);
+                MessageBox.Show("Thêm mới máy vi tính thành công!", "Thông Báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                LoadDataGridView();
+                ResetValues();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Lỗi khi thêm máy vi tính:\n" + ex.Message, "Lỗi Cơ Sở Dữ Liệu", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
-
-
         private void btnSua_Click(object sender, EventArgs e)
-
         {
-
             if (string.IsNullOrEmpty(txtMaMay.Text))
-
             {
-
                 MessageBox.Show("Vui lòng chọn máy vi tính cần sửa trên danh sách!", "Thông Báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-
                 return;
-
+            }
+            if (string.IsNullOrWhiteSpace(txtTenMay.Text))
+            {
+                MessageBox.Show("Vui lòng nhập Tên máy vi tính!", "Thông Báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                txtTenMay.Focus();
+                return;
+            }
+            if (txtTenMay.Text.Trim().Length > 150)
+            {
+                MessageBox.Show("Tên máy vi tính không được vượt quá 150 ký tự!", "Cảnh Báo Nhập Liệu", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                txtTenMay.Focus();
+                return;
             }
 
-
-
-            string sqlUpdate = @"UPDATE MayViTinh SET
-
-                TenMayVT = @TenMayVT, MaLoai = @MaLoai, MaChip = @MaChip, MaOCung = @MaOCung,
-
-                MaDungLuong = @MaDungLuong, MaTocDo = @MaTocDo, MaOCD = @MaOCD, MaManHinh = @MaManHinh,
-
-                MaCoMH = @MaCoMH, MaChuot = @MaChuot, MaBanPhim = @MaBanPhim, MaUSB = @MaUSB,
-
-                MaRAM = @MaRAM, MaLoa = @MaLoa, MaHangSX = @MaHangSX, ThoiGianBH = @ThoiGianBH,
-
-                Anh = @Anh, GhiChu = @GhiChu
-
-                WHERE MaMayVT = @MaMayVT";
-
-
-
             int bh = 12;
-
-            int.TryParse(txtBaoHanh.Text.Trim(), out bh);
-
-
-
-            SqlParameter[] parameters = new SqlParameter[]
-
+            if (!int.TryParse(txtBaoHanh.Text.Trim(), out bh) || bh < 0 || bh > 120)
             {
+                MessageBox.Show("Thời gian bảo hành phải là số tháng hợp lệ (từ 0 đến 120 tháng)!", "Cảnh Báo Nhập Liệu", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                txtBaoHanh.Focus();
+                return;
+            }
 
-                new SqlParameter("@MaMayVT", txtMaMay.Text.Trim()),
+            decimal giaNhap = CleanDecimal(txtGiaNhap.Text);
+            decimal giaBan = CleanDecimal(txtGiaBan.Text);
+            if (giaNhap < 0)
+            {
+                MessageBox.Show("Giá nhập không được là số âm!", "Cảnh Báo Nhập Liệu", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                txtGiaNhap.Focus();
+                return;
+            }
+            if (giaBan < 0)
+            {
+                MessageBox.Show("Giá bán không được là số âm!", "Cảnh Báo Nhập Liệu", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                txtGiaBan.Focus();
+                return;
+            }
+            if (giaBan == 0 && giaNhap > 0) giaBan = Math.Round(giaNhap * 1.10m, 0);
 
-                new SqlParameter("@TenMayVT", txtTenMay.Text.Trim()),
+            if (giaBan > 0 && giaNhap > 0 && giaBan < giaNhap)
+            {
+                if (MessageBox.Show("Giá bán (" + giaBan.ToString("N0") + " VNĐ) đang nhỏ hơn giá nhập (" + giaNhap.ToString("N0") + " VNĐ)!\nBạn có chắc chắn muốn thiết lập mức giá bán này không?",
+                    "Cảnh Báo Giá Bán", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) != DialogResult.Yes)
+                {
+                    txtGiaBan.Focus();
+                    return;
+                }
+            }
 
-                new SqlParameter("@MaLoai", cboMaLoai.SelectedValue ?? "LM01"),
+            int soLuong = CleanInt(txtSoLuong.Text);
+            if (soLuong < 0)
+            {
+                MessageBox.Show("Số lượng tồn kho không được là số âm!", "Cảnh Báo Nhập Liệu", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                txtSoLuong.Focus();
+                return;
+            }
 
-                new SqlParameter("@MaChip", cboMaChip.SelectedValue ?? "CPU01"),
+            try
+            {
+                string sqlUpdate = @"UPDATE MayViTinh SET
+                    TenMayVT = @TenMayVT, MaLoai = @MaLoai, MaChip = @MaChip, MaOCung = @MaOCung,
+                    MaDungLuong = @MaDungLuong, MaTocDo = @MaTocDo, MaOCD = @MaOCD, MaManHinh = @MaManHinh,
+                    MaCoMH = @MaCoMH, MaChuot = @MaChuot, MaBanPhim = @MaBanPhim, MaUSB = @MaUSB,
+                    MaRAM = @MaRAM, MaLoa = @MaLoa, MaHangSX = @MaHangSX, ThoiGianBH = @ThoiGianBH,
+                    GiaNhap = @GiaNhap, GiaBan = @GiaBan, SoLuong = @SoLuong,
+                    Anh = @Anh, GhiChu = @GhiChu
+                    WHERE MaMayVT = @MaMayVT";
 
-                new SqlParameter("@MaOCung", cboMaOCung.SelectedValue ?? "OC01"),
+                SqlParameter[] parameters = new SqlParameter[]
+                {
+                    new SqlParameter("@MaMayVT", txtMaMay.Text.Trim()),
+                    new SqlParameter("@TenMayVT", txtTenMay.Text.Trim()),
+                    new SqlParameter("@MaLoai", cboMaLoai.SelectedValue ?? "LM01"),
+                    new SqlParameter("@MaChip", cboMaChip.SelectedValue ?? "CPU01"),
+                    new SqlParameter("@MaOCung", cboMaOCung.SelectedValue ?? "OC01"),
+                    new SqlParameter("@MaDungLuong", cboMaDungLuong.SelectedValue ?? "DL01"),
+                    new SqlParameter("@MaTocDo", cboMaTocDo.SelectedValue ?? "TD01"),
+                    new SqlParameter("@MaOCD", cboMaOCD.SelectedValue ?? "CD01"),
+                    new SqlParameter("@MaManHinh", cboMaManHinh.SelectedValue ?? "MH01"),
+                    new SqlParameter("@MaCoMH", cboMaCoMH.SelectedValue ?? "CO01"),
+                    new SqlParameter("@MaChuot", cboMaChuot.SelectedValue ?? "CH01"),
+                    new SqlParameter("@MaBanPhim", cboMaBanPhim.SelectedValue ?? "BP01"),
+                    new SqlParameter("@MaUSB", cboMaUSB.SelectedValue ?? "USB01"),
+                    new SqlParameter("@MaRAM", cboMaRAM.SelectedValue ?? "RAM01"),
+                    new SqlParameter("@MaLoa", cboMaLoa.SelectedValue ?? "LOA01"),
+                    new SqlParameter("@MaHangSX", cboMaHangSX.SelectedValue ?? "HSX01"),
+                    new SqlParameter("@GiaNhap", giaNhap),
+                    new SqlParameter("@GiaBan", giaBan),
+                    new SqlParameter("@ThoiGianBH", bh),
+                    new SqlParameter("@SoLuong", soLuong),
+                    new SqlParameter("@Anh", SqlDbType.VarBinary, -1) { Value = (object)currentImageBytes ?? DBNull.Value },
+                    new SqlParameter("@GhiChu", txtGhiChu.Text.Trim())
+                };
 
-                new SqlParameter("@MaDungLuong", cboMaDungLuong.SelectedValue ?? "DL01"),
+                Functions.RunSQL(sqlUpdate, parameters, false);
+                MessageBox.Show("Cập nhật thông tin máy vi tính thành công!", "Thông Báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                LoadDataGridView();
+                ResetValues();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Lỗi khi cập nhật máy vi tính:\n" + ex.Message, "Lỗi Cơ Sở Dữ Liệu", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
 
-                new SqlParameter("@MaTocDo", cboMaTocDo.SelectedValue ?? "TD01"),
+        private decimal CleanDecimal(string text)
+        {
+            if (string.IsNullOrWhiteSpace(text)) return 0;
+            string clean = text.Replace("VNĐ", "").Replace("đ", "").Replace(",", "").Replace(".", "").Replace(" ", "").Trim();
+            decimal val;
+            decimal.TryParse(clean, out val);
+            return val;
+        }
 
-                new SqlParameter("@MaOCD", cboMaOCD.SelectedValue ?? "CD01"),
+        private int CleanInt(string text)
+        {
+            if (string.IsNullOrWhiteSpace(text)) return 0;
+            string clean = text.Replace(",", "").Replace(".", "").Replace(" ", "").Trim();
+            int val;
+            int.TryParse(clean, out val);
+            return val;
+        }
 
-                new SqlParameter("@MaManHinh", cboMaManHinh.SelectedValue ?? "MH01"),
-
-                new SqlParameter("@MaCoMH", cboMaCoMH.SelectedValue ?? "CO01"),
-
-                new SqlParameter("@MaChuot", cboMaChuot.SelectedValue ?? "CH01"),
-
-                new SqlParameter("@MaBanPhim", cboMaBanPhim.SelectedValue ?? "BP01"),
-
-                new SqlParameter("@MaUSB", cboMaUSB.SelectedValue ?? "USB01"),
-
-                new SqlParameter("@MaRAM", cboMaRAM.SelectedValue ?? "RAM01"),
-
-                new SqlParameter("@MaLoa", cboMaLoa.SelectedValue ?? "LOA01"),
-
-                new SqlParameter("@MaHangSX", cboMaHangSX.SelectedValue ?? "HSX01"),
-
-                new SqlParameter("@ThoiGianBH", bh),
-
-                new SqlParameter("@Anh", SqlDbType.VarBinary, -1) { Value = (object)currentImageBytes ?? DBNull.Value },
-
-                new SqlParameter("@GhiChu", txtGhiChu.Text.Trim())
-
-            };
-
-
-
-            Functions.RunSQL(sqlUpdate, parameters);
-
-            MessageBox.Show("Cập nhật thông tin máy vi tính thành công!", "Thông Báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
-
-            LoadDataGridView();
-
-            ResetValues();
-
+        private void txtGiaNhap_TextChanged(object sender, EventArgs e)
+        {
+            if (txtGiaNhap.Focused)
+            {
+                decimal gn = CleanDecimal(txtGiaNhap.Text);
+                if (gn > 0)
+                {
+                    txtGiaBan.Text = string.Format("{0:N0}", Math.Round(gn * 1.10m, 0));
+                }
+            }
         }
 
 

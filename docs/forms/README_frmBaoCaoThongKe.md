@@ -90,3 +90,4 @@ string sql = @"SELECT TOP 5
 - **Báo cáo Top 5 Doanh Thu (Yêu Cầu 9)**: `Screenshots/Verified/01_BaoCao_rdoTop5_Light.png`
 - **Báo cáo Doanh Thu Nhập Hàng (Yêu Cầu 7)**: `Screenshots/Verified/01_BaoCao_rdoNhapHang_Light.png`
 - **Báo cáo Sản Phẩm Tồn Kho (Yêu Cầu 6)**: `Screenshots/Verified/01_BaoCao_rdoTonKho_Light.png`
+

@@ -114,3 +114,4 @@ using (SqlCommand cmdD = new SqlCommand(sqlDetail, Functions.Conn))
 - **Chế độ Tối (Dark Mode)**: `Screenshots/frmHoaDonNhap_Dark.png`
 - **Trạng thái Tạo mới hóa đơn**: `Screenshots/Verified/05_HoaDonNhap_ClickTaoMoi.png`
 - **Chọn sản phẩm & Tính thành tiền**: `Screenshots/Verified/05_HoaDonNhap_SelectProduct_Calculated.png`
+

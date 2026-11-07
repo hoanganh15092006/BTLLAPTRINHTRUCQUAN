@@ -103,3 +103,4 @@ if (slMua > slTon)
 - **Chế độ Tối (Dark Mode)**: `Screenshots/frmHoaDonBan_Dark.png`
 - **Giao diện khi chọn sản phẩm & Tính thành tiền**: `Screenshots/Verified/04_HoaDonBan_SelectProduct_Calculated.png`
 - **Trạng thái Thêm Mới hóa đơn**: `Screenshots/Verified/04_HoaDonBan_ClickTaoMoi.png`
+

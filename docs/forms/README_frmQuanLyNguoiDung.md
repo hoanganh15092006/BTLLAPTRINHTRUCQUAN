@@ -88,3 +88,4 @@ Functions.LogAction("Quản lý tài khoản", "Đổi trạng thái tài khoả
 - **Chế độ Tối (Dark Mode)**: `Screenshots/frmQuanLyNguoiDung_Dark.png`
 - **Giao diện khi chọn tài khoản**: `Screenshots/Verified/11_NguoiDung_Selected_User.png`
 - **Trạng thái Thêm tài khoản mới**: `Screenshots/Verified/11_NguoiDung_State_ThemMoi.png`
+

@@ -109,3 +109,4 @@ bool isValid = SecurityHelper.VerifyPassword(password, storedHash, storedSalt);
 - **Chế độ Sáng (Light Mode)**: `Screenshots/frmDangNhap_Light.png`
 - **Chế độ Tối (Dark Mode)**: `Screenshots/frmDangNhap_Dark.png`
 - **Tính năng Hiện/Ẩn mật khẩu**: `Screenshots/Verified/06_DangNhap_EyeToggled.png`
+

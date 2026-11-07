@@ -103,3 +103,4 @@ using (SqlCommand cmd = new SqlCommand(sql, Functions.Conn))
 - **Tab 2: Nhà Cung Cấp**: `Screenshots/Verified/06_DanhMuc_Tab2_NhaCungCap.png`
 - **Tab 3: Nhân Viên**: `Screenshots/Verified/06_DanhMuc_Tab3_NhanVien.png`
 - **Tab 4: Danh Mục Linh Kiện**: `Screenshots/Verified/06_DanhMuc_Tab4_LinhKien_RAM.png`, `06_DanhMuc_Tab4_LinhKien_Chip.png`
+

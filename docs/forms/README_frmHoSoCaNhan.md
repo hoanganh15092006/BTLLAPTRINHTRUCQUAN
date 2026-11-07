@@ -102,3 +102,4 @@ Functions.LogAction("Đổi mật khẩu", "Người dùng [" + Functions.Curren
 - **Chế độ Sáng (Light Mode)**: `Screenshots/frmHoSoCaNhan_Light.png`
 - **Chế độ Tối (Dark Mode)**: `Screenshots/frmHoSoCaNhan_Dark.png`
 - **Giao diện chi tiết hồ sơ & lịch sử**: `Screenshots/Verified/12_HoSoCaNhan_View.png`
+

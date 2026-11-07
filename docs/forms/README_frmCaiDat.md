@@ -91,3 +91,4 @@ private void SaveConfigKey(string key, string val)
 - **Chế độ Sáng (Light Mode)**: `Screenshots/frmCaiDat_Light.png`
 - **Chế độ Tối (Dark Mode)**: `Screenshots/frmCaiDat_Dark.png`
 - **Giao diện cấu hình tổng thể**: `Screenshots/Verified/08_CaiDat_Fixed.png`
+

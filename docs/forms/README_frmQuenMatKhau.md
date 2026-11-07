@@ -88,3 +88,4 @@ Functions.LogAction("Khôi phục mật khẩu", "Tài khoản [" + username + "
 - **Chế độ Sáng (Light Mode)**: `Screenshots/frmQuenMatKhau_Light.png`
 - **Chế độ Tối (Dark Mode)**: `Screenshots/frmQuenMatKhau_Dark.png`
 - **Kiểm soát xác thực (Validation Error)**: `Screenshots/Verified/03_QuenMatKhau_Validation_Error.png`
+

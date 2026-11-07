@@ -28,3 +28,4 @@ Tại đây cung cấp đầy đủ 14 bản báo cáo độc lập cho từng F
 | 12 | **frmNhatKyHoatDong** | [README_frmNhatKyHoatDong.md](file:///d:/HOCTRENLOP/LAPTRINHTRUCQUAN/BTLLAPTRINHTRUCQUAN/docs/forms/README_frmNhatKyHoatDong.md) | Hệ thống Audit Trail truy vết lịch sử thao tác toàn diện, tích hợp cảnh báo sản phẩm sắp hết hàng. |
 | 13 | **frmHoSoCaNhan** | [README_frmHoSoCaNhan.md](file:///d:/HOCTRENLOP/LAPTRINHTRUCQUAN/BTLLAPTRINHTRUCQUAN/docs/forms/README_frmHoSoCaNhan.md) | Quản lý thông tin tài khoản đang đăng nhập, đổi mật khẩu 3 bước bảo mật, tra cứu lịch sử lập hóa đơn. |
 | 14 | **frmCaiDat** | [README_frmCaiDat.md](file:///d:/HOCTRENLOP/LAPTRINHTRUCQUAN/BTLLAPTRINHTRUCQUAN/docs/forms/README_frmCaiDat.md) | Cấu hình kết nối SQL Server chủ động, lưu trữ Key-Value thông tin cửa hàng, Sao lưu/Phục hồi CSDL .bak. |
+

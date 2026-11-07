@@ -116,3 +116,4 @@ using (SqlCommand cmd = new SqlCommand(sql, Functions.Conn))
 - **Chế độ Tối (Dark Mode)**: `Screenshots/frmMayViTinh_Dark.png`
 - **Giao diện khi chọn dòng máy tính**: `Screenshots/Verified/05_MayViTinh_Selected_Row.png`
 - **Trạng thái Thêm Mới**: `Screenshots/Verified/05_MayViTinh_State_ThemMoi.png`
+

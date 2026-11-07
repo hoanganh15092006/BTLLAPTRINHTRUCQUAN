@@ -100,3 +100,4 @@ Functions.LogAction("Đăng ký tài khoản", "Tạo tài khoản mới: [" + u
 - **Chế độ Sáng (Light Mode)**: `Screenshots/frmDangKy_Light.png`
 - **Chế độ Tối (Dark Mode)**: `Screenshots/frmDangKy_Dark.png`
 - **Kiểm soát lỗi (Validation Error)**: `Screenshots/Verified/02_DangKy_Validation_Error.png`
+

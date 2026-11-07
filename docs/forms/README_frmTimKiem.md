@@ -97,3 +97,4 @@ if (cboDoiTac.SelectedIndex > 0)
 - **Chế độ Tối (Dark Mode)**: `Screenshots/frmTimKiem_Dark.png`
 - **Tìm kiếm Hóa Đơn Nhập (Hiện đủ chữ Nhà Cung Cấp)**: `Screenshots/frmTimKiem_HoaDonNhap_Verified.png`
 - **Kết quả tìm kiếm Máy Vi Tính**: `Screenshots/Verified/02_TimKiem_MVT_Searched.png`
+

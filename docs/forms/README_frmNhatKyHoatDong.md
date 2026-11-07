@@ -87,3 +87,4 @@ public static void LogAction(string hanhDong, string chiTiet)
 - **Chế độ Sáng (Light Mode)**: `Screenshots/frmNhatKyHoatDong_Light.png`
 - **Chế độ Tối (Dark Mode)**: `Screenshots/frmNhatKyHoatDong_Dark.png`
 - **Giao diện bảng nhật ký & cảnh báo tồn kho**: `Screenshots/Verified/07_NhatKy_Fixed.png`
+

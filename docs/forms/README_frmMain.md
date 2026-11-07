@@ -108,3 +108,4 @@ private void OpenChildForm(Form childForm, Button activeBtn)
 - **Dashboard chế độ Sáng (Light Mode)**: `Screenshots/Verified/00_Main_Dashboard_Light.png`
 - **Dashboard chế độ Tối (Dark Mode)**: `Screenshots/Verified/00_Main_Dashboard_Dark.png`
 - **Điều hướng mở form con**: `Screenshots/Verified/00_Main_Nav_MayTinh.png`, `Screenshots/Verified/00_Main_Nav_HDBan.png`
+

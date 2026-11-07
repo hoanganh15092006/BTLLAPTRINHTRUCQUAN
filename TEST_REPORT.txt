@@ -1,33 +1,33 @@
 ﻿======================================================================
                    E2E TEST EXECUTION SUMMARY REPORT                  
-Generated: 2026-11-08 00:32:22
+Generated: 2026-11-08 01:33:06
 ======================================================================
 
-[PASS] T1.01   | Database Tables Count (25 3NF Tables)         |   291 ms | Found 25 normalized tables in QLBanMayViTinh schema.
+[PASS] T1.01   | Database Tables Count (25 3NF Tables)         |   233 ms | Found 25 normalized tables in QLBanMayViTinh schema.
 [PASS] T1.02   | Computer Models Volume (>= 32 Records)        |     1 ms | Verified 33 computer models present in MayViTinh table.
-[PASS] T1.03   | Computer Categories Diversity (4 Segments)    |     6 ms | Verified all 4 segments (LM01, LM02, LM03, LM04) are populated.
-[PASS] T1.04   | Image Column Data Type (VARBINARY)            |    24 ms | Verified MayViTinh.Anh is VARBINARY(MAX).
-[PASS] T1.05   | Image Binary Magic Bytes Verification         |     3 ms | Verified 5 models have valid image magic headers.
-[PASS] T1.06   | Safe Binary Image Conversion in DAL           |    23 ms | ByteArrayToImage and ImageToByteArray round-trip successfully.
-[PASS] T1.07   | Parameterized SQL Support in DAL              |     5 ms | Parameterized query executed and verified with SqlParameter.
-[PASS] T1.08   | VS Designer Compatibility (13 Forms Purity)   |   128 ms | All 13 forms instantiated with zero designtime exceptions.
+[PASS] T1.03   | Computer Categories Diversity (4 Segments)    |     4 ms | Verified all 4 segments (LM01, LM02, LM03, LM04) are populated.
+[PASS] T1.04   | Image Column Data Type (VARBINARY)            |    19 ms | Verified MayViTinh.Anh is VARBINARY(MAX).
+[PASS] T1.05   | Image Binary Magic Bytes Verification         |     2 ms | Verified 5 models have valid image magic headers.
+[PASS] T1.06   | Safe Binary Image Conversion in DAL           |    13 ms | ByteArrayToImage and ImageToByteArray round-trip successfully.
+[PASS] T1.07   | Parameterized SQL Support in DAL              |     4 ms | Parameterized query executed and verified with SqlParameter.
+[PASS] T1.08   | VS Designer Compatibility (13 Forms Purity)   |   101 ms | All 13 forms instantiated with zero designtime exceptions.
 [PASS] T1.09   | Theme Engine Color Palettes & Contrast        |     0 ms | Verified high-contrast color tokens for Dark and Light modes.
 [PASS] T1.10   | Streamlined Login Form Layout (R4)            |     1 ms | Login intro panel removed and login controls structured into card layout.
-[PASS] T1.11   | Security PBKDF2 Password Hashing              |   238 ms | PBKDF2 hashing, salting, and verification verified.
-[PASS] T1.12   | Security AES-256 Data Encryption              |     4 ms | AES-256 encryption and decryption round-trip verified.
+[PASS] T1.11   | Security PBKDF2 Password Hashing              |   225 ms | PBKDF2 hashing, salting, and verification verified.
+[PASS] T1.12   | Security AES-256 Data Encryption              |     3 ms | AES-256 encryption and decryption round-trip verified.
 [PASS] T2.01   | Null and Empty Image Handling                 |     0 ms | Null and empty byte arrays handled safely.
 [PASS] T2.02   | Malformed Corrupted Image Payload Handling    |     0 ms | Corrupted byte payload handled gracefully without GDI+ crash.
-[PASS] T2.03   | Zero and Extreme Financial Price Boundaries   |    20 ms | 0 VND and 999,999,999 VND boundaries verified.
-[PASS] T2.04   | Negative Stock Trigger Prevention             |    62 ms | Database trigger trg_ChiTietHDB_AUID successfully blocked negative inventory.
-[PASS] T2.05   | Rapid Theme Toggle Stress (50 Iterations)     |    44 ms | Form withstood 50 consecutive theme cycles with zero GDI errors.
-[PASS] T2.06   | Authentication Invalid Credentials & SQLi Guard |   227 ms | PBKDF2 verification rejected invalid and adversarial credentials.
-[PASS] T3.01   | Binary Image Insert, Search, and DAL Decode   |    15 ms | Inserted synthetic image, queried record, and verified binary integrity.
-[PASS] T3.02   | Live Theme Dispatch Across Multiple Forms     |    17 ms | Multiple child forms themed concurrently without exceptions.
-[PASS] T3.03   | Theme Mode Persistence Round-Trip in Database |     7 ms | Theme state persisted and retrieved from tblCauHinhHeThong.
-[PASS] T3.04   | Wholesale Pricing Trigger Recalculation (110%) |    69 ms | Verified 110% pricing trigger: GiaNhap = 18,000,000, GiaBan = 19,800,000 VND.
-[PASS] T4.01   | Complete Store POS & Inventory Lifecycle      |   192 ms | End-to-end POS lifecycle validated: 15 imported, 6 sold, 9 remaining, Total HDB: 145,200,000 VND.
-[PASS] T4.02   | Inventory Restoration on Invoice Item Delete  |   165 ms | Inventory successfully restored from 6 back to 10 upon removing sale item.
-[PASS] T4.03   | Zero Comments Compliance Audit (R5)           |    92 ms | Scanned 40 C# and 1 SQL files. 100% clean with 0 comments.
+[PASS] T2.03   | Zero and Extreme Financial Price Boundaries   |    14 ms | 0 VND and 999,999,999 VND boundaries verified.
+[PASS] T2.04   | Negative Stock Trigger Prevention             |    46 ms | Database trigger trg_ChiTietHDB_AUID successfully blocked negative inventory.
+[PASS] T2.05   | Rapid Theme Toggle Stress (50 Iterations)     |    35 ms | Form withstood 50 consecutive theme cycles with zero GDI errors.
+[PASS] T2.06   | Authentication Invalid Credentials & SQLi Guard |   221 ms | PBKDF2 verification rejected invalid and adversarial credentials.
+[PASS] T3.01   | Binary Image Insert, Search, and DAL Decode   |     6 ms | Inserted synthetic image, queried record, and verified binary integrity.
+[PASS] T3.02   | Live Theme Dispatch Across Multiple Forms     |    14 ms | Multiple child forms themed concurrently without exceptions.
+[PASS] T3.03   | Theme Mode Persistence Round-Trip in Database |     3 ms | Theme state persisted and retrieved from tblCauHinhHeThong.
+[PASS] T3.04   | Wholesale Pricing Trigger Recalculation (110%) |    68 ms | Verified 110% pricing trigger: GiaNhap = 18,000,000, GiaBan = 19,800,000 VND.
+[PASS] T4.01   | Complete Store POS & Inventory Lifecycle      |   186 ms | End-to-end POS lifecycle validated: 15 imported, 6 sold, 9 remaining, Total HDB: 145,200,000 VND.
+[PASS] T4.02   | Inventory Restoration on Invoice Item Delete  |   115 ms | Inventory successfully restored from 6 back to 10 upon removing sale item.
+[PASS] T4.03   | Zero Comments Compliance Audit (R5)           |    51 ms | Scanned 40 C# and 1 SQL files. 100% clean with 0 comments.
 Tier 1: Feature Coverage (R1 - R5 Contracts)      : 12/12 (100.0%)
 Tier 2: Boundary & Corner Cases (Adversarial)     :  6/ 6 (100.0%)
 Tier 3: Cross-Feature Combinations (Integration)  :  4/ 4 (100.0%)

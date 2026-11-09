@@ -223,9 +223,8 @@ namespace QLBanMayViTinh.Forms
 
             cboMaNV.Enabled = false;
             cboMaKhach.Enabled = false;
-            dtpNgayBan.Enabled = false;
-            cboMaNV.Enabled = false;
-            cboMaKhach.Enabled = false;
+            txtDienThoaiKhach.Enabled = false;
+            txtDiaChiKhach.Enabled = false;
             dtpNgayBan.Enabled = false;
             cboMaMay.Enabled = false;
             txtSoLuong.Enabled = false;
@@ -269,14 +268,9 @@ namespace QLBanMayViTinh.Forms
                 DataTable dt = Functions.GetDataToTable("SELECT TenKhach, DiaChi, DienThoai FROM KhachHang WHERE MaKhach = N'" + id + "'");
                 if (dt.Rows.Count > 0)
                 {
-                                        txtDiaChiKhach.Text = dt.Rows[0]["DiaChi"].ToString();
+                    txtDiaChiKhach.Text = dt.Rows[0]["DiaChi"].ToString();
                     txtDienThoaiKhach.Text = dt.Rows[0]["DienThoai"].ToString();
                 }
-            }
-            else
-            {
-                                txtDiaChiKhach.Text = "";
-                txtDienThoaiKhach.Text = "";
             }
         }
 
@@ -325,17 +319,26 @@ namespace QLBanMayViTinh.Forms
 
             cboMaNV.Enabled = true;
             cboMaKhach.Enabled = true;
+            txtDienThoaiKhach.Enabled = true;
+            txtDiaChiKhach.Enabled = true;
             dtpNgayBan.Enabled = true;
             cboMaMay.Enabled = true;
             txtSoLuong.Enabled = true;
-            cboMaNV.Focus();
+
+            if (cboMaNV.Items.Count > 0 && cboMaNV.SelectedIndex == -1) cboMaNV.SelectedIndex = 0;
+            if (cboMaMay.Items.Count > 0)
+            {
+                cboMaMay.SelectedIndex = 0;
+            }
+            txtSoLuong.Text = "1";
+            cboMaKhach.Focus();
         }
 
         private void btnLuuHD_Click(object sender, EventArgs e)
         {
             if (string.IsNullOrEmpty(txtMaHDB.Text))
             {
-                MessageBox.Show("Vui lòng nhấn [Thêm Hóa Đơn] để tạo mã hóa đơn bán!", "Thông Báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Vui lòng nhấn [Tạo Mới] để tạo mã hóa đơn bán!", "Thông Báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
             if (cboMaNV.SelectedIndex == -1)
@@ -344,15 +347,79 @@ namespace QLBanMayViTinh.Forms
                 cboMaNV.Focus();
                 return;
             }
-            if (cboMaKhach.SelectedIndex == -1)
+
+            string tenKhach = cboMaKhach.Text.Trim();
+            if (string.IsNullOrEmpty(tenKhach))
             {
-                MessageBox.Show("Vui lòng chọn Khách hàng!", "Thông Báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Vui lòng nhập hoặc chọn Tên khách hàng!", "Thông Báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 cboMaKhach.Focus();
                 return;
             }
-            if (cboMaMay.SelectedIndex == -1 || string.IsNullOrWhiteSpace(txtSoLuong.Text))
+
+            string dienThoai = txtDienThoaiKhach.Text.Trim();
+            string diaChi = txtDiaChiKhach.Text.Trim();
+
+            string maKhach = "";
+            if (cboMaKhach.SelectedValue != null && cboMaKhach.SelectedIndex >= 0)
             {
-                MessageBox.Show("Vui lòng chọn Mặt hàng và nhập Số lượng bán!", "Thông Báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                maKhach = cboMaKhach.SelectedValue.ToString();
+                string sqlUpdateKH = string.Format("UPDATE KhachHang SET TenKhach = N'{0}', DiaChi = N'{1}', DienThoai = N'{2}' WHERE MaKhach = N'{3}'",
+                    tenKhach.Replace("'", "''"), diaChi.Replace("'", "''"), dienThoai.Replace("'", "''"), maKhach);
+                Functions.RunSQL(sqlUpdateKH, false);
+            }
+            else
+            {
+                string findSql = "SELECT MaKhach FROM KhachHang WHERE TenKhach = N'" + tenKhach.Replace("'", "''") + "'";
+                if (!string.IsNullOrEmpty(dienThoai))
+                {
+                    findSql += " AND DienThoai = N'" + dienThoai.Replace("'", "''") + "'";
+                }
+                string existingMaKH = Functions.GetFieldValues(findSql);
+                if (!string.IsNullOrEmpty(existingMaKH))
+                {
+                    maKhach = existingMaKH;
+                    string sqlUpdateKH = string.Format("UPDATE KhachHang SET DiaChi = N'{0}', DienThoai = N'{1}' WHERE MaKhach = N'{2}'",
+                        diaChi.Replace("'", "''"), dienThoai.Replace("'", "''"), maKhach);
+                    Functions.RunSQL(sqlUpdateKH, false);
+                }
+                else
+                {
+                    string newMaKH = "";
+                    DataTable dtMax = Functions.GetDataToTable("SELECT TOP 1 MaKhach FROM KhachHang WHERE MaKhach LIKE 'KH[0-9]%' ORDER BY LEN(MaKhach) DESC, MaKhach DESC");
+                    if (dtMax.Rows.Count > 0)
+                    {
+                        string maxId = dtMax.Rows[0]["MaKhach"].ToString();
+                        if (int.TryParse(maxId.Substring(2), out int num))
+                        {
+                            newMaKH = string.Format("KH{0:D2}", num + 1);
+                        }
+                    }
+                    if (string.IsNullOrEmpty(newMaKH) || Functions.CheckKey("SELECT MaKhach FROM KhachHang WHERE MaKhach = N'" + newMaKH + "'"))
+                    {
+                        newMaKH = Functions.CreateKey("KH");
+                    }
+
+                    string sqlInsertKH = string.Format("INSERT INTO KhachHang (MaKhach, TenKhach, DiaChi, DienThoai) VALUES (N'{0}', N'{1}', N'{2}', N'{3}')",
+                        newMaKH, tenKhach.Replace("'", "''"), diaChi.Replace("'", "''"), dienThoai.Replace("'", "''"));
+                    Functions.RunSQL(sqlInsertKH, false);
+                    Functions.LogAction("Thêm khách hàng", "Tự động thêm khách hàng từ hóa đơn bán: " + tenKhach);
+                    maKhach = newMaKH;
+
+                    Functions.FillCombo("SELECT MaKhach, TenKhach FROM KhachHang", cboMaKhach, "MaKhach", "TenKhach");
+                    cboMaKhach.SelectedValue = maKhach;
+                }
+            }
+
+            if (cboMaMay.SelectedIndex == -1)
+            {
+                MessageBox.Show("Vui lòng chọn Mặt hàng máy vi tính cần bán!", "Thông Báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                cboMaMay.Focus();
+                return;
+            }
+            if (string.IsNullOrWhiteSpace(txtSoLuong.Text))
+            {
+                MessageBox.Show("Vui lòng nhập Số lượng bán!", "Thông Báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                txtSoLuong.Focus();
                 return;
             }
 
@@ -392,7 +459,7 @@ namespace QLBanMayViTinh.Forms
                 {
                     string sqlInsertHDB = string.Format(@"INSERT INTO HoaDonBan (MaHDB, NgayBan, MaNV, MaKhach, TongTien)
                                                          VALUES (N'{0}', '{1:yyyy-MM-dd HH:mm:ss}', N'{2}', N'{3}', 0)",
-                        txtMaHDB.Text.Trim(), dtpNgayBan.Value, cboMaNV.SelectedValue, cboMaKhach.SelectedValue);
+                        txtMaHDB.Text.Trim(), dtpNgayBan.Value, cboMaNV.SelectedValue, maKhach);
                     Functions.RunSQL(sqlInsertHDB, false);
                 }
 
@@ -420,20 +487,20 @@ namespace QLBanMayViTinh.Forms
 
                 txtTonKho.Text = (tonKho - slBan).ToString();
 
-                cboMaMay.SelectedIndex = -1;
-                txtTenMay.Text = "";
-                txtSoLuong.Text = "";
-                txtDonGia.Text = "";
-                txtThanhTien.Text = "0";
+                MessageBox.Show(string.Format("Đã thêm thành công mặt hàng [{0}] với số lượng {1} vào hóa đơn bán {2}!",
+                    txtTenMay.Text, slBan, txtMaHDB.Text.Trim()), "Thành Công", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                if (cboMaMay.Items.Count > 0)
+                {
+                    cboMaMay.SelectedIndex = 0;
+                }
+                txtSoLuong.Text = "1";
                 btnInHD.Enabled = true;
             }
             catch (Exception ex)
             {
                 MessageBox.Show("Lỗi khi lưu chi tiết hóa đơn bán:\n" + ex.Message, "Lỗi Cơ Sở Dữ Liệu", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-            txtSoLuong.Text = "";
-            txtThanhTien.Text = "0";
-            btnInHD.Enabled = true;
         }
 
         private void dgvChiTiet_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
@@ -521,6 +588,10 @@ namespace QLBanMayViTinh.Forms
                 btnHuyHD.Enabled = true;
                 btnInHD.Enabled = true;
                 btnThemHD.Enabled = true;
+                cboMaNV.Enabled = true;
+                cboMaKhach.Enabled = true;
+                txtDienThoaiKhach.Enabled = true;
+                txtDiaChiKhach.Enabled = true;
                 cboMaMay.Enabled = true;
                 txtSoLuong.Enabled = true;
             }

@@ -144,7 +144,7 @@ namespace QLBanMayViTinh.Forms
             this.lblDienThoaiKhach.Text = "Điện thoại:";
             this.txtDienThoaiKhach.Location = new System.Drawing.Point(410, 69);
             this.txtDienThoaiKhach.Name = "txtDienThoaiKhach";
-            this.txtDienThoaiKhach.ReadOnly = true;
+            this.txtDienThoaiKhach.ReadOnly = false;
             this.txtDienThoaiKhach.Size = new System.Drawing.Size(160, 26);
             this.txtDienThoaiKhach.TabIndex = 12;
             this.lblDiaChiKhach.Location = new System.Drawing.Point(590, 72);
@@ -154,7 +154,7 @@ namespace QLBanMayViTinh.Forms
             this.lblDiaChiKhach.Text = "Địa chỉ:";
             this.txtDiaChiKhach.Location = new System.Drawing.Point(655, 69);
             this.txtDiaChiKhach.Name = "txtDiaChiKhach";
-            this.txtDiaChiKhach.ReadOnly = true;
+            this.txtDiaChiKhach.ReadOnly = false;
             this.txtDiaChiKhach.Size = new System.Drawing.Size(320, 26);
             this.txtDiaChiKhach.TabIndex = 14;
             this.pnlDetailCard.BackColor = System.Drawing.Color.White;

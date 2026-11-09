@@ -17,6 +17,14 @@ namespace QLBanMayViTinh.Classes
         public static string CurrentRole = "Admin";
         public static string CurrentMaNV = "NV01";
 
+        public static bool IsAdmin
+        {
+            get
+            {
+                return string.Equals(CurrentRole, "Admin", StringComparison.OrdinalIgnoreCase);
+            }
+        }
+
         public static void Connect()
         {
             if (Conn != null && Conn.State == ConnectionState.Open)

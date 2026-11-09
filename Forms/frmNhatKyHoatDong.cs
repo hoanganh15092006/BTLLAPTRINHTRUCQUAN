@@ -31,7 +31,7 @@ namespace QLBanMayViTinh.Forms
             UIThemeHelper.StyleButton(btnLamMoi, Color.FromArgb(100, 116, 139), Color.White);
             UIThemeHelper.StyleButton(btnXoaNhatKy, UIThemeHelper.BtnXoaColor, Color.White);
 
-            btnXoaNhatKy.Visible = (Functions.CurrentRole == "Admin");
+            btnXoaNhatKy.Visible = Functions.IsAdmin;
             cboHanhDong.SelectedIndex = 0;
 
             LoadLogs();
@@ -121,7 +121,7 @@ namespace QLBanMayViTinh.Forms
 
         private void btnXoaNhatKy_Click(object sender, EventArgs e)
         {
-            if (Functions.CurrentRole != "Admin")
+            if (!Functions.IsAdmin)
             {
                 MessageBox.Show("Chỉ tài khoản Quản Trị Viên (Admin) mới có quyền xóa nhật ký hệ thống!", "Từ Chối Quyền", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;

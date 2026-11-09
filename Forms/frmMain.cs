@@ -69,7 +69,25 @@ namespace QLBanMayViTinh.Forms
         private void ApplyRBAC()
         {
             string role = Functions.CurrentRole;
-            if (role == "BanHang")
+            if (Functions.IsAdmin)
+            {
+                btnNavHDNhap.Visible = true;
+                btnNavHDBan.Visible = true;
+                btnNavMayTinh.Visible = true;
+                btnNavDanhMuc.Visible = true;
+                btnNavTimKiem.Visible = true;
+                btnNavBaoCao.Visible = true;
+                btnNavHoSo.Visible = true;
+                btnNavNguoiDung.Visible = true;
+                btnNavNhatKy.Visible = true;
+                btnNavCaiDat.Visible = true;
+
+                btnBentoHDNhap.Enabled = true;
+                btnBentoHDBan.Enabled = true;
+                btnBentoMayTinh.Enabled = true;
+                btnBentoBaoCao.Enabled = true;
+            }
+            else if (role == "BanHang")
             {
                 btnNavHDNhap.Visible = false;
                 btnNavNguoiDung.Visible = false;

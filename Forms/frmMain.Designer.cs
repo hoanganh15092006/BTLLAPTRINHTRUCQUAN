@@ -535,15 +535,13 @@ namespace QLBanMayViTinh.Forms
             this.lblQuickSub.Name = "lblQuickSub";
             this.lblQuickSub.Size = new System.Drawing.Size(580, 18);
             this.lblQuickSub.TabIndex = 1;
-            this.lblQuickSub.Text = "Thực hiện ngay các giao dịch kinh doanh & quản lý danh mục cốt lõi chỉ với 1 clic" +
-    "k";
             this.lblQuickHeader.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
             this.lblQuickHeader.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(15)))), ((int)(((byte)(23)))), ((int)(((byte)(42)))));
             this.lblQuickHeader.Location = new System.Drawing.Point(15, 10);
             this.lblQuickHeader.Name = "lblQuickHeader";
             this.lblQuickHeader.Size = new System.Drawing.Size(400, 20);
             this.lblQuickHeader.TabIndex = 0;
-            this.lblQuickHeader.Text = "TÁC VỤ NHANH (QUICK ACTIONS)";
+            this.lblQuickHeader.Text = "TÁC VỤ NHANH ";
             this.pnlBentoSec.BackColor = System.Drawing.Color.White;
             this.pnlBentoSec.Controls.Add(this.lblSecHash);
             this.pnlBentoSec.Controls.Add(this.lblSecDbName);
@@ -587,7 +585,6 @@ namespace QLBanMayViTinh.Forms
             this.lblSecIcon.Name = "lblSecIcon";
             this.lblSecIcon.Size = new System.Drawing.Size(34, 34);
             this.lblSecIcon.TabIndex = 0;
-            this.lblSecIcon.Text = "";
             this.pnlBentoStock.BackColor = System.Drawing.Color.White;
             this.pnlBentoStock.Controls.Add(this.lblStockValuation);
             this.pnlBentoStock.Controls.Add(this.lblStockTotalUnits);
@@ -631,7 +628,6 @@ namespace QLBanMayViTinh.Forms
             this.lblStockIcon.Name = "lblStockIcon";
             this.lblStockIcon.Size = new System.Drawing.Size(34, 34);
             this.lblStockIcon.TabIndex = 0;
-            this.lblStockIcon.Text = "";
             this.pnlBentoHero.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(15)))), ((int)(((byte)(23)))), ((int)(((byte)(42)))));
             this.pnlBentoHero.Controls.Add(this.lblHeroBadge);
             this.pnlBentoHero.Controls.Add(this.lblHeroTrend);

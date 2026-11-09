@@ -97,6 +97,11 @@ namespace QLBanMayViTinh.Forms
             txtSoLuong.KeyPress += (s, ev) => Functions.OnlyInteger(ev);
             txtBaoHanh.KeyPress += (s, ev) => Functions.OnlyInteger(ev);
 
+            txtGiaNhap.ReadOnly = false;
+            txtGiaBan.ReadOnly = false;
+            txtGiaNhap.Enabled = true;
+            txtGiaBan.Enabled = true;
+
             pnlKpiBar.Resize += (s, ev) => UpdateKpiCards();
 
             pnlHardwareCard.Resize += (s, ev) => LayoutHardwareCard();
@@ -124,6 +129,20 @@ namespace QLBanMayViTinh.Forms
             LoadDataGridView();
 
             txtGiaNhap.TextChanged += txtGiaNhap_TextChanged;
+            txtGiaNhap.Leave += (s, ev) =>
+            {
+                decimal gn = CleanDecimal(txtGiaNhap.Text);
+                txtGiaNhap.Text = string.Format("{0:N0}", gn);
+                if (gn > 0)
+                {
+                    txtGiaBan.Text = string.Format("{0:N0}", Math.Round(gn * 1.10m, 0));
+                }
+            };
+            txtGiaBan.Leave += (s, ev) =>
+            {
+                decimal gb = CleanDecimal(txtGiaBan.Text);
+                txtGiaBan.Text = string.Format("{0:N0}", gb);
+            };
 
         }
 
@@ -889,6 +908,10 @@ namespace QLBanMayViTinh.Forms
                 if (gn > 0)
                 {
                     txtGiaBan.Text = string.Format("{0:N0}", Math.Round(gn * 1.10m, 0));
+                }
+                else
+                {
+                    txtGiaBan.Text = "0";
                 }
             }
         }

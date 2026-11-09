@@ -208,6 +208,7 @@ namespace QLBanMayViTinh.Forms
             this.lblGiaNhap.Text = "Giá nhập:";
             this.txtGiaBan.Location = new System.Drawing.Point(85, 174);
             this.txtGiaBan.Name = "txtGiaBan";
+            this.txtGiaBan.ReadOnly = false;
             this.txtGiaBan.Size = new System.Drawing.Size(358, 24);
             this.txtGiaBan.TabIndex = 11;
             this.lblGiaBan.Location = new System.Drawing.Point(14, 176);

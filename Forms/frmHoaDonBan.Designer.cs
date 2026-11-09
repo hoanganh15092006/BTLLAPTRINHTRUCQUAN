@@ -241,7 +241,7 @@ namespace QLBanMayViTinh.Forms
             this.lblDonGia.Text = "Giá bán:";
             this.txtDonGia.Location = new System.Drawing.Point(770, 35);
             this.txtDonGia.Name = "txtDonGia";
-            this.txtDonGia.ReadOnly = true;
+            this.txtDonGia.ReadOnly = false;
             this.txtDonGia.Size = new System.Drawing.Size(100, 26);
             this.txtDonGia.TabIndex = 10;
             this.lblThanhTien.AutoSize = true;

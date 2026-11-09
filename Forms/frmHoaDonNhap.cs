@@ -327,7 +327,7 @@ namespace QLBanMayViTinh.Forms
             dtpNgayNhap.Enabled = true;
             cboMaMay.Enabled = true;
             txtSoLuong.Enabled = true;
-            txtDonGia.Enabled = false;
+            txtDonGia.Enabled = true;
 
             if (cboMaNV.Items.Count > 0 && cboMaNV.SelectedIndex == -1) cboMaNV.SelectedIndex = 0;
             if (cboMaNCC.Items.Count > 0 && cboMaNCC.SelectedIndex == -1) cboMaNCC.SelectedIndex = 0;

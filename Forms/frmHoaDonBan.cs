@@ -62,6 +62,10 @@ namespace QLBanMayViTinh.Forms
 
             LoadCombos();
             ResetForm();
+
+            txtDonGia.ReadOnly = false;
+            txtDonGia.KeyPress += (s, ev) => Functions.OnlyDecimal(ev, txtDonGia.Text);
+            txtDonGia.TextChanged += (s, ev) => txtSoLuong_TextChanged(null, null);
         }
 
         private void LayoutBottomPanel()
@@ -228,6 +232,7 @@ namespace QLBanMayViTinh.Forms
             dtpNgayBan.Enabled = false;
             cboMaMay.Enabled = false;
             txtSoLuong.Enabled = false;
+            txtDonGia.Enabled = false;
 
             LoadChiTietGrid("");
         }
@@ -324,6 +329,7 @@ namespace QLBanMayViTinh.Forms
             dtpNgayBan.Enabled = true;
             cboMaMay.Enabled = true;
             txtSoLuong.Enabled = true;
+            txtDonGia.Enabled = true;
 
             if (cboMaNV.Items.Count > 0 && cboMaNV.SelectedIndex == -1) cboMaNV.SelectedIndex = 0;
             if (cboMaMay.Items.Count > 0)
@@ -594,6 +600,7 @@ namespace QLBanMayViTinh.Forms
                 txtDiaChiKhach.Enabled = true;
                 cboMaMay.Enabled = true;
                 txtSoLuong.Enabled = true;
+                txtDonGia.Enabled = true;
             }
         }
 

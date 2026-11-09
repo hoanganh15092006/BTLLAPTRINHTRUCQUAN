@@ -72,6 +72,42 @@ namespace QLBanMayViTinh.Forms
             LoadDataNCC();
             LoadDataNV();
             LoadDataLK();
+
+            ApplyRBAC();
+        }
+
+        private void ApplyRBAC()
+        {
+            if (Functions.IsAdmin)
+            {
+                return;
+            }
+
+            string role = Functions.CurrentRole;
+            if (role == "BanHang")
+            {
+                btnThemNCC.Enabled = false;
+                btnSuaNCC.Enabled = false;
+                btnXoaNCC.Enabled = false;
+
+                btnThemNV.Enabled = false;
+                btnSuaNV.Enabled = false;
+                btnXoaNV.Enabled = false;
+
+                btnThemLK.Enabled = false;
+                btnSuaLK.Enabled = false;
+                btnXoaLK.Enabled = false;
+            }
+            else if (role == "ThuKho")
+            {
+                btnThemKH.Enabled = false;
+                btnSuaKH.Enabled = false;
+                btnXoaKH.Enabled = false;
+
+                btnThemNV.Enabled = false;
+                btnSuaNV.Enabled = false;
+                btnXoaNV.Enabled = false;
+            }
         }
 
         private void LayoutPanels()
@@ -586,6 +622,12 @@ namespace QLBanMayViTinh.Forms
 
         private void btnThemNV_Click(object sender, EventArgs e)
         {
+            if (!Functions.IsAdmin)
+            {
+                MessageBox.Show("Chỉ tài khoản Quản Trị Viên (Admin) mới có quyền thêm nhân viên!", "Từ Chối Quyền", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
             if (string.IsNullOrWhiteSpace(txtMaNV.Text))
             {
                 MessageBox.Show("Vui lòng nhập Mã nhân viên!", "Thông Báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -671,6 +713,12 @@ namespace QLBanMayViTinh.Forms
 
         private void btnSuaNV_Click(object sender, EventArgs e)
         {
+            if (!Functions.IsAdmin)
+            {
+                MessageBox.Show("Chỉ tài khoản Quản Trị Viên (Admin) mới có quyền sửa thông tin nhân viên!", "Từ Chối Quyền", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
             if (string.IsNullOrWhiteSpace(txtMaNV.Text))
             {
                 MessageBox.Show("Vui lòng chọn nhân viên cần sửa trên danh sách!", "Thông Báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -736,6 +784,12 @@ namespace QLBanMayViTinh.Forms
 
         private void btnXoaNV_Click(object sender, EventArgs e)
         {
+            if (!Functions.IsAdmin)
+            {
+                MessageBox.Show("Chỉ tài khoản Quản Trị Viên (Admin) mới có quyền xóa nhân viên!", "Từ Chối Quyền", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
             if (string.IsNullOrWhiteSpace(txtMaNV.Text))
             {
                 MessageBox.Show("Vui lòng chọn nhân viên cần xóa!", "Thông Báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);

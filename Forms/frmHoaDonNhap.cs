@@ -216,9 +216,6 @@ namespace QLBanMayViTinh.Forms
             cboMaNV.Enabled = false;
             cboMaNCC.Enabled = false;
             dtpNgayNhap.Enabled = false;
-            cboMaNV.Enabled = false;
-            cboMaNCC.Enabled = false;
-            dtpNgayNhap.Enabled = false;
             cboMaMay.Enabled = false;
             txtSoLuong.Enabled = false;
             txtDonGia.Enabled = false;
@@ -331,14 +328,24 @@ namespace QLBanMayViTinh.Forms
             cboMaMay.Enabled = true;
             txtSoLuong.Enabled = true;
             txtDonGia.Enabled = false;
-            cboMaNV.Focus();
+
+            if (cboMaNV.Items.Count > 0 && cboMaNV.SelectedIndex == -1) cboMaNV.SelectedIndex = 0;
+            if (cboMaNCC.Items.Count > 0 && cboMaNCC.SelectedIndex == -1) cboMaNCC.SelectedIndex = 0;
+            if (cboMaMay.Items.Count > 0)
+            {
+                cboMaMay.SelectedIndex = 0;
+            }
+            txtSoLuong.Text = "1";
+            TinhThanhTienLine();
+            txtSoLuong.Focus();
+            txtSoLuong.SelectAll();
         }
 
         private void btnLuuHD_Click(object sender, EventArgs e)
         {
             if (string.IsNullOrEmpty(txtMaHDN.Text))
             {
-                MessageBox.Show("Vui lòng nhấn [Thêm Hóa Đơn] để tạo mã hóa đơn nhập!", "Thông Báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Vui lòng nhấn [Tạo Mới] để tạo mã hóa đơn nhập!", "Thông Báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
             if (cboMaNV.SelectedIndex == -1)
@@ -353,9 +360,16 @@ namespace QLBanMayViTinh.Forms
                 cboMaNCC.Focus();
                 return;
             }
-            if (cboMaMay.SelectedIndex == -1 || string.IsNullOrWhiteSpace(txtSoLuong.Text) || string.IsNullOrWhiteSpace(txtDonGia.Text))
+            if (cboMaMay.SelectedIndex == -1)
             {
-                MessageBox.Show("Vui lòng chọn Mặt hàng, nhập Số lượng và Đơn giá nhập!", "Thông Báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Vui lòng chọn Mặt hàng máy vi tính cần nhập!", "Thông Báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                cboMaMay.Focus();
+                return;
+            }
+            if (string.IsNullOrWhiteSpace(txtSoLuong.Text))
+            {
+                MessageBox.Show("Vui lòng nhập Số lượng mặt hàng cần nhập!", "Thông Báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                txtSoLuong.Focus();
                 return;
             }
 
@@ -410,11 +424,15 @@ namespace QLBanMayViTinh.Forms
                     lblBangChu.Text = "Bằng chữ: " + Functions.ChuyenSoSangChu((double)tongTien);
                 }
 
-                cboMaMay.SelectedIndex = -1;
-                txtTenMay.Text = "";
-                txtSoLuong.Text = "";
-                txtDonGia.Text = "";
-                txtThanhTien.Text = "0";
+                MessageBox.Show(string.Format("Đã thêm thành công mặt hàng [{0}] với số lượng {1} vào hóa đơn nhập {2}!",
+                    txtTenMay.Text, sl, txtMaHDN.Text.Trim()), "Thành Công", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                if (cboMaMay.Items.Count > 0)
+                {
+                    cboMaMay.SelectedIndex = 0;
+                }
+                txtSoLuong.Text = "1";
+                TinhThanhTienLine();
                 btnInHD.Enabled = true;
             }
             catch (Exception ex)

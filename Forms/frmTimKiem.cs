@@ -249,20 +249,28 @@ namespace QLBanMayViTinh.Forms
                 dgvKetQua.Columns["TenHangSX"].HeaderText = "Hãng SX";
                 dgvKetQua.Columns["TenChip"].HeaderText = "Chip (CPU)";
                 dgvKetQua.Columns["TenRAM"].HeaderText = "RAM";
-                dgvKetQua.Columns["SoLuong"].HeaderText = "Tồn Kho";
+                dgvKetQua.Columns["SoLuong"].HeaderText = "Số Lượng Tồn (Chiếc)";
                 dgvKetQua.Columns["GiaNhap"].HeaderText = "Giá Nhập";
                 dgvKetQua.Columns["GiaBan"].HeaderText = "Giá Bán";
                 dgvKetQua.Columns["ThoiGianBH"].HeaderText = "BH (Tháng)";
 
                 UIThemeHelper.FormatCurrencyColumns(dgvKetQua, "GiaNhap", "GiaBan");
+
+                int tongTon = 0;
+                foreach (DataRow r in tblKetQua.Rows)
+                {
+                    tongTon += Convert.ToInt32(r["SoLuong"]);
+                }
+                lblSoKetQua.Text = string.Format("Tìm thấy: {0} sản phẩm | Tổng tồn kho: {1:N0} chiếc", tblKetQua.Rows.Count, tongTon);
             }
             else if (rdoHoaDonNhap.Checked)
             {
-                string sql = @"SELECT DISTINCT h.MaHDN, h.NgayNhap, nv.TenNV, ncc.TenNCC, h.TongTien
+                string sql = @"SELECT h.MaHDN, h.NgayNhap, nv.TenNV, ncc.TenNCC, m.TenMayVT, ct.SoLuong, ct.DonGia, ct.ThanhTien
                                FROM HoaDonNhap h
                                INNER JOIN NhanVien nv ON h.MaNV = nv.MaNV
                                INNER JOIN NhaCungCap ncc ON h.MaNCC = ncc.MaNCC
-                               LEFT JOIN ChiTietHDN ct ON h.MaHDN = ct.MaHDN
+                               INNER JOIN ChiTietHDN ct ON h.MaHDN = ct.MaHDN
+                               INNER JOIN MayViTinh m ON ct.MaMayVT = m.MaMayVT
                                WHERE 1=1";
 
                 if (!string.IsNullOrWhiteSpace(txtMaHD.Text))
@@ -291,17 +299,30 @@ namespace QLBanMayViTinh.Forms
                 dgvKetQua.Columns["NgayNhap"].HeaderText = "Ngày Nhập";
                 dgvKetQua.Columns["TenNV"].HeaderText = "Nhân Viên Nhập";
                 dgvKetQua.Columns["TenNCC"].HeaderText = "Nhà Cung Cấp";
-                dgvKetQua.Columns["TongTien"].HeaderText = "Tổng Tiền Nhập";
+                dgvKetQua.Columns["TenMayVT"].HeaderText = "Tên Máy Vi Tính";
+                dgvKetQua.Columns["SoLuong"].HeaderText = "Số Lượng (Chiếc)";
+                dgvKetQua.Columns["DonGia"].HeaderText = "Đơn Giá Nhập";
+                dgvKetQua.Columns["ThanhTien"].HeaderText = "Thành Tiền";
 
-                UIThemeHelper.FormatCurrencyColumns(dgvKetQua, "TongTien");
+                UIThemeHelper.FormatCurrencyColumns(dgvKetQua, "DonGia", "ThanhTien");
+
+                int tongMay = 0;
+                decimal tongTien = 0;
+                foreach (DataRow r in tblKetQua.Rows)
+                {
+                    tongMay += Convert.ToInt32(r["SoLuong"]);
+                    tongTien += Convert.ToDecimal(r["ThanhTien"]);
+                }
+                lblSoKetQua.Text = string.Format("Tìm thấy: {0} dòng | Tổng máy nhập: {1:N0} chiếc | Tổng tiền: {2:N0} VNĐ", tblKetQua.Rows.Count, tongMay, tongTien);
             }
             else
             {
-                string sql = @"SELECT DISTINCT h.MaHDB, h.NgayBan, nv.TenNV, kh.TenKhach, h.TongTien
+                string sql = @"SELECT h.MaHDB, h.NgayBan, nv.TenNV, kh.TenKhach, m.TenMayVT, ct.SoLuong, ct.DonGia, ct.ThanhTien
                                FROM HoaDonBan h
                                INNER JOIN NhanVien nv ON h.MaNV = nv.MaNV
                                INNER JOIN KhachHang kh ON h.MaKhach = kh.MaKhach
-                               LEFT JOIN ChiTietHDB ct ON h.MaHDB = ct.MaHDB
+                               INNER JOIN ChiTietHDB ct ON h.MaHDB = ct.MaHDB
+                               INNER JOIN MayViTinh m ON ct.MaMayVT = m.MaMayVT
                                WHERE 1=1";
 
                 if (!string.IsNullOrWhiteSpace(txtMaHD.Text))
@@ -330,9 +351,21 @@ namespace QLBanMayViTinh.Forms
                 dgvKetQua.Columns["NgayBan"].HeaderText = "Ngày Bán";
                 dgvKetQua.Columns["TenNV"].HeaderText = "Nhân Viên Bán";
                 dgvKetQua.Columns["TenKhach"].HeaderText = "Khách Hàng";
-                dgvKetQua.Columns["TongTien"].HeaderText = "Tổng Tiền Bán";
+                dgvKetQua.Columns["TenMayVT"].HeaderText = "Tên Máy Vi Tính";
+                dgvKetQua.Columns["SoLuong"].HeaderText = "Số Lượng (Chiếc)";
+                dgvKetQua.Columns["DonGia"].HeaderText = "Đơn Giá Bán";
+                dgvKetQua.Columns["ThanhTien"].HeaderText = "Thành Tiền";
 
-                UIThemeHelper.FormatCurrencyColumns(dgvKetQua, "TongTien");
+                UIThemeHelper.FormatCurrencyColumns(dgvKetQua, "DonGia", "ThanhTien");
+
+                int tongMay = 0;
+                decimal tongTien = 0;
+                foreach (DataRow r in tblKetQua.Rows)
+                {
+                    tongMay += Convert.ToInt32(r["SoLuong"]);
+                    tongTien += Convert.ToDecimal(r["ThanhTien"]);
+                }
+                lblSoKetQua.Text = string.Format("Tìm thấy: {0} dòng | Tổng máy bán: {1:N0} chiếc | Tổng tiền: {2:N0} VNĐ", tblKetQua.Rows.Count, tongMay, tongTien);
             }
 
             lblSoKetQua.Text = "Tìm thấy: " + tblKetQua.Rows.Count + " kết quả.";

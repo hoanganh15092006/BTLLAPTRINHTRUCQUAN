@@ -253,16 +253,21 @@ namespace QLBanMayViTinh.Forms
                 dgvBaoCao.Columns["TenMayVT"].HeaderText = "Tên Máy Vi Tính";
                 dgvBaoCao.Columns["TenLoai"].HeaderText = "Loại Máy";
                 dgvBaoCao.Columns["TenHangSX"].HeaderText = "Hãng SX";
-                dgvBaoCao.Columns["SoLuong"].HeaderText = "Số Lượng Tồn";
+                dgvBaoCao.Columns["SoLuong"].HeaderText = "Số Lượng Tồn (Chiếc)";
                 dgvBaoCao.Columns["GiaNhap"].HeaderText = "Giá Nhập";
                 dgvBaoCao.Columns["GiaBan"].HeaderText = "Giá Bán";
                 dgvBaoCao.Columns["TongGiaTriTon"].HeaderText = "Tổng Trị Giá Tồn";
 
                 UIThemeHelper.FormatCurrencyColumns(dgvBaoCao, "GiaNhap", "GiaBan", "TongGiaTriTon");
 
+                int tongTon = 0;
                 decimal tongKho = 0;
-                foreach (DataRow row in tblBaoCao.Rows) tongKho += Convert.ToDecimal(row["TongGiaTriTon"]);
-                lblTongKet.Text = string.Format("Tổng mặt hàng: {0} | Tổng giá trị tồn: {1:N0} VNĐ", tblBaoCao.Rows.Count, tongKho);
+                foreach (DataRow row in tblBaoCao.Rows)
+                {
+                    tongTon += Convert.ToInt32(row["SoLuong"]);
+                    tongKho += Convert.ToDecimal(row["TongGiaTriTon"]);
+                }
+                lblTongKet.Text = string.Format("Tổng mặt hàng: {0} | Tổng tồn kho: {1:N0} chiếc | Tổng giá trị tồn: {2:N0} VNĐ", tblBaoCao.Rows.Count, tongTon, tongKho);
             }
             else if (rdoNhapHang.Checked)
             {
@@ -275,8 +280,10 @@ namespace QLBanMayViTinh.Forms
                 else
                     whereTime = string.Format("YEAR(h.NgayNhap) = {0}", nam);
 
-                string sql = string.Format(@"SELECT h.MaHDN, h.NgayNhap, nv.TenNV, ncc.TenNCC, h.TongTien
+                string sql = string.Format(@"SELECT h.MaHDN, h.NgayNhap, nv.TenNV, ncc.TenNCC, m.TenMayVT, ct.SoLuong, ct.DonGia, ct.ThanhTien
                                             FROM HoaDonNhap h
+                                            INNER JOIN ChiTietHDN ct ON h.MaHDN = ct.MaHDN
+                                            INNER JOIN MayViTinh m ON ct.MaMayVT = m.MaMayVT
                                             INNER JOIN NhanVien nv ON h.MaNV = nv.MaNV
                                             INNER JOIN NhaCungCap ncc ON h.MaNCC = ncc.MaNCC
                                             WHERE {0}
@@ -288,13 +295,21 @@ namespace QLBanMayViTinh.Forms
                 dgvBaoCao.Columns["NgayNhap"].HeaderText = "Ngày Nhập";
                 dgvBaoCao.Columns["TenNV"].HeaderText = "Nhân Viên Thực Hiện";
                 dgvBaoCao.Columns["TenNCC"].HeaderText = "Nhà Cung Cấp";
-                dgvBaoCao.Columns["TongTien"].HeaderText = "Tổng Tiền Nhập";
+                dgvBaoCao.Columns["TenMayVT"].HeaderText = "Tên Máy Vi Tính";
+                dgvBaoCao.Columns["SoLuong"].HeaderText = "Số Lượng (Chiếc)";
+                dgvBaoCao.Columns["DonGia"].HeaderText = "Đơn Giá Nhập";
+                dgvBaoCao.Columns["ThanhTien"].HeaderText = "Thành Tiền";
 
-                UIThemeHelper.FormatCurrencyColumns(dgvBaoCao, "TongTien");
+                UIThemeHelper.FormatCurrencyColumns(dgvBaoCao, "DonGia", "ThanhTien");
 
+                int tongMay = 0;
                 decimal tongTien = 0;
-                foreach (DataRow row in tblBaoCao.Rows) tongTien += Convert.ToDecimal(row["TongTien"]);
-                lblTongKet.Text = string.Format("Tổng số hóa đơn nhập: {0} | Tổng tiền nhập: {1:N0} VNĐ", tblBaoCao.Rows.Count, tongTien);
+                foreach (DataRow row in tblBaoCao.Rows)
+                {
+                    tongMay += Convert.ToInt32(row["SoLuong"]);
+                    tongTien += Convert.ToDecimal(row["ThanhTien"]);
+                }
+                lblTongKet.Text = string.Format("Tổng lượt nhập: {0} | Tổng số máy nhập: {1:N0} chiếc | Tổng tiền nhập: {2:N0} VNĐ", tblBaoCao.Rows.Count, tongMay, tongTien);
             }
             else if (rdoBanHang.Checked)
             {
@@ -307,8 +322,10 @@ namespace QLBanMayViTinh.Forms
                 else
                     whereTime = string.Format("YEAR(h.NgayBan) = {0}", nam);
 
-                string sql = string.Format(@"SELECT h.MaHDB, h.NgayBan, nv.TenNV, kh.TenKhach, h.TongTien
+                string sql = string.Format(@"SELECT h.MaHDB, h.NgayBan, nv.TenNV, kh.TenKhach, m.TenMayVT, ct.SoLuong, ct.DonGia, ct.ThanhTien
                                             FROM HoaDonBan h
+                                            INNER JOIN ChiTietHDB ct ON h.MaHDB = ct.MaHDB
+                                            INNER JOIN MayViTinh m ON ct.MaMayVT = m.MaMayVT
                                             INNER JOIN NhanVien nv ON h.MaNV = nv.MaNV
                                             INNER JOIN KhachHang kh ON h.MaKhach = kh.MaKhach
                                             WHERE {0}
@@ -320,13 +337,21 @@ namespace QLBanMayViTinh.Forms
                 dgvBaoCao.Columns["NgayBan"].HeaderText = "Ngày Bán";
                 dgvBaoCao.Columns["TenNV"].HeaderText = "Nhân Viên Bán";
                 dgvBaoCao.Columns["TenKhach"].HeaderText = "Khách Hàng";
-                dgvBaoCao.Columns["TongTien"].HeaderText = "Tổng Tiền Bán";
+                dgvBaoCao.Columns["TenMayVT"].HeaderText = "Tên Máy Vi Tính";
+                dgvBaoCao.Columns["SoLuong"].HeaderText = "Số Lượng (Chiếc)";
+                dgvBaoCao.Columns["DonGia"].HeaderText = "Đơn Giá Bán";
+                dgvBaoCao.Columns["ThanhTien"].HeaderText = "Thành Tiền";
 
-                UIThemeHelper.FormatCurrencyColumns(dgvBaoCao, "TongTien");
+                UIThemeHelper.FormatCurrencyColumns(dgvBaoCao, "DonGia", "ThanhTien");
 
+                int tongMay = 0;
                 decimal tongTien = 0;
-                foreach (DataRow row in tblBaoCao.Rows) tongTien += Convert.ToDecimal(row["TongTien"]);
-                lblTongKet.Text = string.Format("Tổng số hóa đơn bán: {0} | Tổng tiền bán: {1:N0} VNĐ", tblBaoCao.Rows.Count, tongTien);
+                foreach (DataRow row in tblBaoCao.Rows)
+                {
+                    tongMay += Convert.ToInt32(row["SoLuong"]);
+                    tongTien += Convert.ToDecimal(row["ThanhTien"]);
+                }
+                lblTongKet.Text = string.Format("Tổng lượt bán: {0} | Tổng số máy bán: {1:N0} chiếc | Tổng tiền bán: {2:N0} VNĐ", tblBaoCao.Rows.Count, tongMay, tongTien);
             }
             else
             {
@@ -340,10 +365,12 @@ namespace QLBanMayViTinh.Forms
                     whereTime = string.Format("YEAR(h.NgayBan) = {0}", nam);
 
                 string sql = string.Format(@"SELECT TOP 5 WITH TIES nv.MaNV, nv.TenNV, nv.DienThoai,
-                                                    COUNT(h.MaHDB) AS SoHoaDonDaBan,
-                                                    ISNULL(SUM(h.TongTien), 0) AS TongTienBan
+                                                    COUNT(DISTINCT h.MaHDB) AS SoHoaDonDaBan,
+                                                    ISNULL(SUM(ct.SoLuong), 0) AS TongSoMayBan,
+                                                    ISNULL(SUM(ct.ThanhTien), 0) AS TongTienBan
                                             FROM NhanVien nv
                                             INNER JOIN HoaDonBan h ON nv.MaNV = h.MaNV
+                                            LEFT JOIN ChiTietHDB ct ON h.MaHDB = ct.MaHDB
                                             WHERE {0}
                                             GROUP BY nv.MaNV, nv.TenNV, nv.DienThoai
                                             ORDER BY TongTienBan DESC", whereTime);
@@ -354,13 +381,19 @@ namespace QLBanMayViTinh.Forms
                 dgvBaoCao.Columns["TenNV"].HeaderText = "Họ Và Tên Nhân Viên";
                 dgvBaoCao.Columns["DienThoai"].HeaderText = "Số Điện Thoại";
                 dgvBaoCao.Columns["SoHoaDonDaBan"].HeaderText = "Số Lượng Đơn Bán";
+                dgvBaoCao.Columns["TongSoMayBan"].HeaderText = "Số Máy Bán (Chiếc)";
                 dgvBaoCao.Columns["TongTienBan"].HeaderText = "Tổng Doanh Thu Đạt Được";
 
                 UIThemeHelper.FormatCurrencyColumns(dgvBaoCao, "TongTienBan");
 
+                int tongMay = 0;
                 decimal tongTien = 0;
-                foreach (DataRow row in tblBaoCao.Rows) tongTien += Convert.ToDecimal(row["TongTienBan"]);
-                lblTongKet.Text = string.Format("Tổng doanh thu Top 5 nhân viên: {0:N0} VNĐ", tongTien);
+                foreach (DataRow row in tblBaoCao.Rows)
+                {
+                    tongMay += Convert.ToInt32(row["TongSoMayBan"]);
+                    tongTien += Convert.ToDecimal(row["TongTienBan"]);
+                }
+                lblTongKet.Text = string.Format("Top 5 nhân viên: Tổng số máy bán: {0:N0} chiếc | Tổng doanh thu: {1:N0} VNĐ", tongMay, tongTien);
             }
 
             CapNhatSummaryCards();
